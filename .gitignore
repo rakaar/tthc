@@ -2,3 +2,4 @@
 *.mat
 *.fig
 ephys_arranged/*
+*.png

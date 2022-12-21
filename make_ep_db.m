@@ -3,7 +3,7 @@ animals_dir_path = dir(ephys_data_path);
 unit_counter = 1;
 
 ephys_rms_match_db = cell(500, 20);
-% 1500 max rows
+% 500 max rows
 % cols: 1,2- HC file,tone file, 3,4 - HC(d),tone(d-5) intensity,
 % 5-11 : HC res, 12-18: Tone res, 19-sig in HC,sig in tone
 % 29 - animal-location, 30- channel number

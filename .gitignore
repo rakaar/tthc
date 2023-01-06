@@ -3,3 +3,4 @@
 *.fig
 ephys_arranged/*
 *.png
+TTHC_single_units/*

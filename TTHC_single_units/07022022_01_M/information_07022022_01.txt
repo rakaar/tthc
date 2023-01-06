@@ -1,0 +1,15 @@
+Animal:M/wt jax
+
+file1 np
+file2 hc 45db
+file3 tp 40db
+file4 hc 35db
+file5 tp 30db
+file6 hc 25db
+file7 tp 20db
+file8 hc 15db
+file9 tp 10db
+file10 hc 5db
+file11 tp 0db
+
+

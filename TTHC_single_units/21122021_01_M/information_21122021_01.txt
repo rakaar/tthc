@@ -1,0 +1,19 @@
+animal details: wtjax/M
+
+file1 np
+file2 np
+file3 np
+file4 hc 25db
+file5 tp 20db
+file6 hc 15db
+file7 tp 10db
+file8 hc 5db
+file9 tp 0 db
+file10 hc 0db
+file11 tp30db
+file12 hc 35db
+file13 tp 40db
+file14 hc 45db
+file15 np
+
+response in ch5 and ch9

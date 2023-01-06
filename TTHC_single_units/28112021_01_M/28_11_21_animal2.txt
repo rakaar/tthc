@@ -1,0 +1,117 @@
+GCTR00561
+dob:16/9/21,22/9/21
+male -ve animal
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+res 5,6,7,8, 3,4
+
+res 3,6,8 consistently
+file 1
+np
+
+file 2 (good example, representative)
+tp
+0 db
+
+file 3
+hc 35 db
+
+file 4
+hc 25db
+
+file 5
+tp 30 db
+
+file 6
+hc 15db
+
+
+file 7
+tp 20 db
+
+file 8
+hc 5 db
+
+file 9
+hc 0 db
+
+file 10
+tp 10 db
+
+
+%%%%%%%%%%%%%%%%%%%%
+changed loc
+res: 3, 5, 6,8
+file 11
+np
+
+
+file 12
+tp
+0 db
+
+
+file 13
+hc
+0db
+
+
+file 14
+hc 5db
+
+file 15
+tp 10 db
+
+file 16
+hc 15 db
+
+
+file 17
+tp 20 db
+
+file 18
+hc 25db
+
+
+file 19
+tp 30 db
+
+file 20
+hc 35db
+
+%%%%%%%%%%%%%%%%%%
+res: 3, 5, 6,8, 14(check)
+changed loc
+
+file 21
+np
+
+file 22
+tp 0db
+
+file 23
+hc 0db
+
+file 24
+hc 5db
+
+file 25
+tp 10 db
+
+file 26
+hc 15db
+
+
+file 27
+hc 25 db
+
+file 28
+tp 30 db
+
+
+file 29
+hc 35 db
+
+
+file 30
+tp 20 db
+

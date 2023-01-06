@@ -1,0 +1,3 @@
+file1 np
+file2 tp 0db
+file3 hc 0 db

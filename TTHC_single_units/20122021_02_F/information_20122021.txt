@@ -1,0 +1,14 @@
+file1 np
+file2 tp 10db
+file3 hc 15db
+file4 hc 5db
+file5 tp 20db
+file6 hc 25db
+file7 tp 30db
+file8 hc 35db
+
+
+
+
+
+

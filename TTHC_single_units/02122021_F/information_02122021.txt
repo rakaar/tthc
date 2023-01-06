@@ -1,0 +1,106 @@
+female
+dob:16/09/21
+file 1
+np
+res 1,3,5,6,7,8
+file 2
+tp 20db
+
+file3
+hc 25db
+
+file4
+hc 15db
+
+file5
+tp 10db
+
+file6
+hc 5 db
+
+file7
+tp 30db
+
+file 8
+hc 35db
+
+file 9
+tp 0 db
+
+file 10
+hc 0db
+
+file 11
+tp 40db
+
+file 12
+hc 45db
+
+
+%%%%%%%%%%%%changed loc
+
+file 13
+np
+
+file 14
+tp 20 db
+
+file 15
+hc 25db
+
+file 16
+hc 15 db
+
+file 17
+tp 10 db
+
+file 18
+hc 5 db
+
+file 19
+tp 30 db
+
+file 20
+hc 35 db
+
+
+file 21
+tp 0 db
+
+file 22
+hc 0db
+
+%%%%%new loc
+file 23
+np
+
+file 24
+tp 20 db
+
+file 25
+hc 25 db
+
+file 26
+hc 15 db
+
+file 27
+tp 10 db
+
+file 28
+hc 5db
+
+file 29
+tp 30 db
+
+file 30
+hc 35 db
+
+file 31
+tp 0 db
+
+file 32
+hc 0 db
+
+file 33
+hc 35db
+

@@ -18,7 +18,7 @@ for u=1:445
     if sum(res) == -7 % if no significant res to all freqs
         ephys_rms_match_db{u,21} = -1;
     else
-        [max_res idx] = max(res);
+        [max_res, idx] = max(res);
         bf = fs(idx);
         ephys_rms_match_db{u,21} = bf;
     end

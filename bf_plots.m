@@ -1,17 +1,51 @@
+%%  get bf,bf0
 bf_keys = keys(bf_map);
 bfs_hc = [];
 bfs_t = [];
 
+hc_keys = cell(120,1);
+hc_key_counter = 1;
+
+tone_keys = cell(120,1);
+tone_key_counter  = 1;
 for k=1:324
     key = bf_keys(k);
     key = key{1,1};
     if contains(key, 'bf_hc')
         bfs_hc = [bfs_hc bf_map(key)];
+        hc_keys{hc_key_counter,1} = key;
+        hc_key_counter = hc_key_counter + 1;
     elseif contains(key, 'bf_t')
         bfs_t = [bfs_t bf_map(key)];
+        tone_keys{tone_key_counter,1} = key;
+        tone_key_counter = tone_key_counter + 1;
+
     end
 end
 
+
+%% verify keys
+c = 0;
+for k=1:108
+    hc_location = hc_keys{k,1};
+    hc_location = strsplit(hc_location, '-bf_hc');
+    hc_location = hc_location{1,1};
+
+
+    tone_location = tone_keys{k,1};
+    tone_location = strsplit(tone_location, '-bf_t');
+    tone_location = tone_location{1,1};
+        
+    if ~strcmp(hc_location, tone_location)
+        disp('issue')
+        c = c + 1;
+
+        disp(hc_location)
+        disp(tone_location)
+        disp(strcmp(hc_location, tone_location))
+    end
+
+end
 %% TODO
 % scatter plot bfs_hc, bfs_t   
 f = [6 8.5 12 17 24 34 48]
@@ -48,8 +82,11 @@ for a=1:7
     plot(prob3(a,:));
     hold on;
 end
-imagesc(prob3)
+imagesc(prob3.')
 colorbar()
+title('s code')
+axis image
+
 %% fraction of neurons with bf, bf0
 tone=[sum(bfs_t(:)==6), sum(bfs_t(:)==8.5), sum(bfs_t(:)==12), sum(bfs_t(:)==17), sum(bfs_t(:)==24), sum(bfs_t(:)==34), sum(bfs_t(:)==48)]
 tone=tone./108

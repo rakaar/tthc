@@ -1,0 +1,145 @@
+GCTR00562
+dob:16/9/21,22/9/21
+female -ve animal
+res 3,5,6 ,8
+file 1
+np
+
+file 2
+tp 30 db
+
+file 3
+hc 35db
+
+file 4
+hc 25db
+
+file 5
+tp 20db
+
+
+file 6
+hc 15db
+
+
+file 7
+tp 10 db
+
+file 8
+hc 5 db
+
+file 9
+tp 0db
+
+file 10
+hc 0 db
+
+file 11
+tp 40 db
+
+file 12
+hc 45 db
+
+%%%%change loc
+
+file 13
+np
+
+file 14
+tp 0 db
+
+file 15
+hc 0 db
+
+file 16
+hc 5 db
+
+file 17
+tp 10 db
+
+file 18 (ch 8,6,5,3)
+hc 15 db
+
+file 19
+tp 20
+db
+
+file 20 
+hc 25 db
+
+file 21
+tp 30 db
+
+file 22
+hc 35 db
+
+%%%%%%%%%%chaged loc
+
+file 23
+np
+
+file 24
+tp
+0db
+
+file 25
+hc
+0 db
+
+file 26
+hc 
+5db
+above_ch+14
+file 27
+tp 10 db
+
+file 28
+hc
+15 db
+
+file 29
+tp 20 db
+
+file 30
+hc 25 db
+
+file 31
+tp 30 db
+
+file 32
+hc 35db
+
+%%%%%%%changed loc
+res 1 2 3 4 5 6 7 8 14 (may be)
+
+file 33
+ np
+
+file 34
+tp 0 db
+
+file 35
+hc 0 db
+
+file 36
+hc 5 db
+
+file 37
+tp 10 db
+
+file 38
+hc 15 db
+
+file 39
+tp 20 db
+
+file 40
+hc 25 db
+
+file 41
+tp 30 db
+
+file 42
+hc 35 db
+
+

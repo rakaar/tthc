@@ -1,0 +1,18 @@
+Animal details: wtjax/M
+
+file1 np response in ch1,5,6,8,4(?),7
+file2 tp 0db
+file3 hc 0 db
+file4 hc 35db
+file5 tp 30db
+file6 hc 25db
+file7 tp 20db
+file8 hc 15db
+file9 tp 10db
+file10 hc 5db
+file11 tp 40db
+file12 hc 45db
+file13 tp 0db
+file14 hc 0db
+file15 np
+

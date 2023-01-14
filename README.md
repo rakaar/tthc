@@ -9,6 +9,7 @@ cols: 1,2- HC file,tone file,
 21,22 - bf hc, bf t
 29 - animal-location,
 30- channel number
+23 - spont
 
 bf_map: for each animal-location-channel - at lowest intensity : bf_t, bf_h
 

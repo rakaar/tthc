@@ -7,6 +7,7 @@ ephys_rms_match_db = cell(500, 20);
 % cols: 1,2- HC file,tone file, 3,4 - HC(d),tone(d-5) intensity,
 % 5-11 : HC res, 12-18: Tone res, 19-sig in HC,sig in tone
 % 29 - animal-location, 30- channel number
+% 23 - HC spont, 24 - T spont
 
 
 for i=3:length(animals_dir_path)

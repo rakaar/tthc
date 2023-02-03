@@ -16,8 +16,8 @@ bf_map: for each animal-location-channel - at lowest intensity : bf_t, bf_h
 
 files:-
 1. make_ep_db - make this db - ephys_rms_match_db
-2. calc_sig_units - adds significance test for each freq in db
-3. bf.m - calculate bf based on significance
+2. calc_sig_units - adds significance test for each freq in db using ttest2/ calc_sig_by_dprime.m - calculate same sig using d prime
+3. bfs.m - calculate bf based on significance
 4. bf_location-wise_lowest_db - bf at lowest db
 5. bf_plots - analysis of bf and bf0
 

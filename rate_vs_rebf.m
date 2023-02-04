@@ -78,7 +78,7 @@ all4mats(3,:,:) = reshape(hc_scale_tone_response_mat, 1,11,2500);
 all4mats(4,:,:) = reshape(hc_scale_hc_response_mat, 1,11,2500);
 disp('all 4 mats')
 %%
-bin_size = 25;
+bin_size = 10;
 % assume 301 to 1000 is fixed: 700 1ms bins
 stim_start = 500/bin_size - 300/bin_size + 1;
 stim_end = 550/bin_size - 300/bin_size;
@@ -108,13 +108,15 @@ for i=1:4
 %         title('near')
 %     grid
 
-    bf_off_num = 2;
+    bf_off_num = 0;
+%     arr = [1:5 7:11];
+    arr = 6-bf_off_num:6+bf_off_num;
     figure
         hold on 
-            plot( mean(bin_mat1(6-bf_off_num:6+bf_off_num, :) ,1)./max(mean(bin_mat1(6-bf_off_num:6+bf_off_num, :) ,1)) )
-            x = mean(bin_mat1(6-bf_off_num:6+bf_off_num, :) ,1);
+            plot( mean(bin_mat1(arr, :) ,1)./max(mean(bin_mat1(arr, :) ,1)) )
+            x = mean(bin_mat1(arr, :) ,1);
             x_spont = mean(x(spont_start:spont_end));
-            yline(x_spont./max(mean(bin_mat1(6-bf_off_num:6+bf_off_num, :) ,1)));
+            yline(x_spont./max(mean(bin_mat1(arr, :) ,1)));
             xline(stim_start)
             xline(stim_end)
         hold off
@@ -124,6 +126,79 @@ for i=1:4
 
 end
 
+%% tests
+bin_size = 10;
+t_pts = 550:10:1000-bin_size;
+scale_res_rates = cell(4, length(t_pts));
+all4cells = cell(4,1);
+all4cells{1,1} = tone_scale_tone_response{1,6};
+all4cells{2,1} = tone_scale_hc_response{1,6};
+all4cells{3,1} = hc_scale_tone_response{1,6};
+all4cells{4,1} = hc_scale_hc_response{1,6};
+
+for i=1:4
+   for t=1:length(t_pts)
+       t_start = t_pts(t);
+        scale_res_rates{i,t} =  mean(all4cells{i,1}(:, t_start+1:t_start+bin_size),  2);
+   end
+end 
+disp('---')
+%% for all rebfs
+bin_size = 10;
+t_pts = 550:10:1000-bin_size;
+mat1 = tone_scale_tone_response;
+mat2 = tone_scale_hc_response;
+% mat1 = hc_scale_tone_response{1,6};
+% mat2 = hc_scale_hc_response{1,6};
+dir = "left";
+h_matrix_t_vs_hc = zeros(11,length(t_pts));
+for re=1:11
+    for t=1:length(t_pts)
+        t_start = t_pts(t) + 1;
+        t_end = t_start + bin_size;
+        rates1 = mean(mat1{1,re}(:, t_start:t_end),  2);
+        rates2 = mean(mat2{1,re}(:, t_start:t_end),  2);
+        h_matrix_t_vs_hc(re,t) = ttest(rates1, rates2, "Tail", "left");
+    end % t
+end % re
+
+disp('scale')
+%% 
+clc
+title('tone scale, t-blue,h-red----+++++')
+hold on
+y = 0.055;
+for i=1:length(t_pts)
+    if ttest_th_scale(2,i) == 1
+        disp(t_pts(i)+5)
+        text(round( (t_pts(i)+(bin_size/2)-300)/10 ), y, '*','FontSize', 20,'color', 'black')
+    end
+end
+%% ranksum and ttsts
+clc
+ttest_th_scale = zeros(2, length(t_pts)); % 1 - t scale, 2 - hc scale
+ranksum_th_scale = zeros(2, length(t_pts)); % 1 - t, 2 - hc
+for t=1:length(t_pts)
+    [ttest_th_scale(1,t),~] = ttest(scale_res_rates{1,t}, scale_res_rates{2,t}, "Tail","left");
+    [ttest_th_scale(2,t),~] = ttest(scale_res_rates{3,t}, scale_res_rates{4,t}, "Tail","right");
+    
+    [~,ranksum_th_scale(1,t)] = ranksum(scale_res_rates{1,t}, scale_res_rates{2,t});
+    [~,ranksum_th_scale(2,t)] = ranksum(scale_res_rates{3,t}, scale_res_rates{4,t});
+end
+disp('222')
+
+%% at every re bf, compare tone
+% ttest_th_scale
+% ranksum_th_scale4
+%% 
+
+for t=1:length(t_pts)
+    [~,ttest_th_scale(1,t)] = ttest(scale_res_rates{1,t}, scale_res_rates{3,t});
+    [~,ttest_th_scale(2,t)] = ttest(scale_res_rates{2,t}, scale_res_rates{4,t});
+    
+    ranksum_th_scale(1,t) = ranksum(scale_res_rates{1,t}, scale_res_rates{3,t});
+    ranksum_th_scale(2,t) = ranksum(scale_res_rates{2,t}, scale_res_rates{4,t});
+end
 
 
 
@@ -171,30 +246,4 @@ all4(3,:,:) = reshape(hc_scale_tone_response_mat_small./hc_scale_tone_response_m
 all4(4,:,:) = reshape(hc_scale_hc_response_mat_small./hc_scale_hc_response_mat_small(6,23)   ,1,11,70);
 %%
 
-%%   
-figure
-    plot(mean(hc_scale_tone_response_mat_small(4:8,:), 1)./max(mean(hc_scale_tone_response_mat_small(4:8,:), 1)));
-    title('h t')
-grid
-
-figure
-    plot(mean(hc_scale_hc_response_mat_small(4:8,:), 1)./max(mean(hc_scale_hc_response_mat_small(4:8,:), 1)));
-    title('h h')
-grid
-
-%%
-close all
-scale_res_mat = hc_scale_tone_response_mat;
-scale_res_mat_low_time = scale_res_mat(:, 301:1000);
-bin_size = 10;
-scale_res_mat_low_time_resize = reshape(scale_res_mat_low_time,     11,bin_size,size(scale_res_mat_low_time,2)/bin_size);
-scale_res_final_mat = squeeze(mean(scale_res_mat_low_time_resize, 2));
-% figure
-%     imagesc(scale_res_final_mat')
-%     colorbar()
-% grid
-% 
-% figure
-%     plot(scale_res_final_mat')
-% grid
-disp('sss')
+%   

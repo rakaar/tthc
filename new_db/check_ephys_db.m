@@ -1,6 +1,6 @@
 close all
 % random_row = randi([1 537]) ;random_f = randi([1 7]);
-for random_row=1:537
+for random_row=1:size(ephys_db,1)
 for random_f=1:7
     fdata = load(ephys_db{random_row, 4});
 

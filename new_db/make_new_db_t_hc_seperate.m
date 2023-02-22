@@ -10,8 +10,8 @@
 ephys_data_path = 'F:\RK_code_TTHC\ephys_arranged';
 animals_dir_path = dir(ephys_data_path);
 
-stim_type = 'TonePipSweep';
-% stim_type = 'HC';
+% stim_type = 'TonePipSweep';
+stim_type = 'HC';
 
 ephys_db = cell(500,3);
 
@@ -47,7 +47,7 @@ for i=3:length(animals_dir_path)
 
                  if strcmp(protochol_type, stim_type)
                     % each channel
-                    for ch=1:16
+                    for ch=1:length(unit_data.unit_record_spike)
                         if isempty(unit_data.unit_record_spike(ch).negspiketime)
                             continue
                         end

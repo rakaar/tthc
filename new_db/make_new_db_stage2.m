@@ -1,24 +1,31 @@
-ephys_db_final_stage = cell(500,4);
+ephys_db_final_stage = cell(1000,4);
 location_index_map = containers.Map;
-% 0,10,20,30
-db_vals = zeros(4,1);
-db_rates = cell(4,2);
-for d=1:4
-    db_rates{d,1} = (d-1)*10;
-    db_vals(d) = (d-1)*10;
+% 0,10,20,30,40
+% db_vals = zeros(5,1);
+% db_rates = cell(5,2);
+% for d=1:5
+%     db_rates{d,1} = (d-1)*10;
+%     db_vals(d) = (d-1)*10;
+% end
+% 0 5 15... 35 45
+db_vals = zeros(10,1);
+db_rates = cell(10,2);
+for d=1:10
+    db_rates{d,1} = (d-1)*5;
+    db_vals(d) = (d-1)*5;
 end
 
-for i=1:500
+for i=1:1000
     ephys_db_final_stage{i,4} = db_rates;
 end
 
 unit_counter = 1;
-for i=1:537
+for i=1:size(ephys_db,1)
     animal_name = ephys_db{i,1};
     location_name = ephys_db{i,2};
     channel_name = ephys_db{i,3};
     combiner = '***';
-    combined_name = strcat(animal_name,combiner,location_name,combiner,channel_name);
+    combined_name = strcat(animal_name,combiner,location_name,combiner,num2str(channel_name));
     if isKey(location_index_map,combined_name)
         unit_index = location_index_map(combined_name);
         old_rates = ephys_db_final_stage{unit_index,4};
@@ -48,14 +55,14 @@ for i=1:537
 end
 
 %% 
-x = [];
-for i=1:180
-    c=0;
-    for j=1:4
-       if ~isempty(ephys_db_final_stage{i,4}{j,2})
-         c = c + 1;
-       end
-    end
-    x = [x c];
-end
-hist(x)
+% x = [];
+% for i=1:180
+%     c=0;
+%     for j=1:4
+%        if ~isempty(ephys_db_final_stage{i,4}{j,2})
+%          c = c + 1;
+%        end
+%     end
+%     x = [x c];
+% end
+% hist(x)

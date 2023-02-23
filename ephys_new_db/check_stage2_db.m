@@ -20,13 +20,13 @@ for i=1:size(ephys_db_final_stage,1)
    channel_name = num2str(ephys_db_final_stage{i,3}); 
    
    partial_combined_name = strcat(animal_name, combiner, location_name, combiner, channel_name);
-   for j=1:10
+   for j=1:num_db_vals
     rates_2 = ephys_db_final_stage{i,4}{j,2};
     if isempty(rates_2)
         continue
     end
 
-    db_str = num2str((j-1)*5);
+    db_str = num2str(db_atts(j));
     full_combined_name = strcat(partial_combined_name, combiner, db_str);
     unit_index = stage1_map(full_combined_name);
     rates_1 = ephys_db{unit_index,6};

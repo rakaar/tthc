@@ -8,11 +8,21 @@ location_index_map = containers.Map;
 %     db_vals(d) = (d-1)*10;
 % end
 % 0 5 15... 35 45
-db_vals = zeros(10,1);
-db_rates = cell(10,2);
-for d=1:10
-    db_rates{d,1} = (d-1)*5;
-    db_vals(d) = (d-1)*5;
+
+if strcmp(stim_type, 'TonePipSweep')
+    db_atts = 0:10:40;
+    num_db_vals = length(db_atts);
+    
+elseif strcmp(stim_type, 'HC')
+    db_atts = 0:5:45;
+    num_db_vals = length(db_atts);
+end
+
+db_vals = zeros(num_db_vals,1);
+db_rates = cell(num_db_vals,2);
+for d=1:num_db_vals
+    db_rates{d,1} = db_atts(d);
+    db_vals(d) = db_atts(d);
 end
 
 for i=1:1000

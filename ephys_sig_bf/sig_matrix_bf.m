@@ -16,7 +16,7 @@ for u=1:n_units
     rate_matrix = nan(7,length(db_lvls));
     h = nan;
     bf = -1;
-    
+  
     
     for d=1:length(db_lvls)
         each_db_rates = u_rates{d,2};
@@ -37,12 +37,6 @@ for u=1:n_units
             spont_durn_rate = each_db_each_f_rates(:,431:500);
             spont_mean_across_time = mean(spont_durn_rate, 2);
             spont = [spont; spont_mean_across_time];
-            % stim res
-            res_rate = each_db_each_f_rates(:,501:570);
-            res_rate_across_time = mean(res_rate, 2);
-            rates{f,1} = res_rate_across_time;
-            % mean res
-            mean_rates(f,1) = mean(res_rate_across_time);
         end
 
         mean_spont = mean(spont);
@@ -50,7 +44,7 @@ for u=1:n_units
 
         % do tests and get fill matrix
         for f=1:7
-            rates_f = rates{f,1};
+            rates_f = mean(each_db_rates{f,1}(:,501:570),2);
             mean_rates_f = mean(rates_f);
             std_rates_f = std(rates_f);
 

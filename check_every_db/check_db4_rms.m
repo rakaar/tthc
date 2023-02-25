@@ -116,22 +116,34 @@ for u=1:size(rms_match_db,1)
     sig = rms_match_db{u,8};
     r = rms_match_db{u,10};
     sig1 = find(sig == 1);
-    r1 = r(sig1);
-    [~, mindex] = max(r1);
-    if sig1(mindex) ~= rms_match_db{u,12}
-        disp('9999999999999999999999999')
-        break
+    if isempty(sig1)
+        if rms_match_db{u,12} ~= -1
+            disp(u)
+            disp('------------------------')
+        end
+    else
+        r1 = r(sig1);
+        [~, mindex] = max(r1);
+        if sig1(mindex) ~= rms_match_db{u,12}
+            disp('99999999999-------------------99999999999999')
+            break
+        end
     end
-
 
     % 9-11-13
     sig = rms_match_db{u,9};
     r = rms_match_db{u,11};
     sig1 = find(sig == 1);
-    r1 = r(sig1);
-    [~, mindex] = max(r1);
-    if sig1(mindex) ~= rms_match_db{u,13}
-        disp('99999999999-------------------99999999999999')
-        break
+    if isempty(sig1)
+        if rms_match_db{u,13} ~= -1
+            disp('------------------------')
+        end
+    else
+        r1 = r(sig1);
+        [~, mindex] = max(r1);
+        if sig1(mindex) ~= rms_match_db{u,13}
+            disp('99999999999-------------------99999999999999')
+            break
+        end
     end
 end

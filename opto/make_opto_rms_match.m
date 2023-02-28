@@ -24,7 +24,8 @@ for u=1:size(opto_tone,1)
    animal = opto_tone{u,1};
     loc = opto_tone{u,2};
     ch = num2str(opto_tone{u,3});
-    db_spl = num2str( opto_tone{u,4} + 5 );
+%     db_spl = num2str( opto_tone{u,4} + 5 );
+    db_spl = num2str( opto_tone{u,4} - 5 );
 
     name = strcat(animal, combiner, loc, combiner, ch, combiner, db_spl);
     if isKey(hc_map, name)
@@ -47,3 +48,6 @@ for u=1:size(opto_tone,1)
         counter = counter + 1;
     end
 end
+
+opto_amp_match_db = rms_match_db;
+save('opto_amp_match_db.mat', 'opto_amp_match_db')

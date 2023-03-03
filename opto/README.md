@@ -2,6 +2,10 @@ PP_PARAMS.protocol.AUD - protochol
 PP_PARAMS.protocol.AUD.stim_protocol.level_hi - db spl
 PP_PARAMS.type - Opto-Ephys for Opto
 
+## Opto making
+1. Run `make_opto_db_stage1.m`
+2. Run `make_opto_rms_match.m`
+
 Opto analysis
 1. opto_analysis_individual_tuning.m - individual units, tuning curves.
 2. opto_analysis_bf_offset_opto.m -  at bf and bf offset, ctrl and opto rates

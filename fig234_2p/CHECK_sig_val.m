@@ -1,5 +1,4 @@
-% TODO
-% - from file, take rates, cal sig and bf, compare it with db
+
 rms_match_db_with_sig_bf = load('rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 % 8 - 10
 % 9 - 12

@@ -1,43 +1,23 @@
-clear ;close all;
-load('rms_match_db.mat')
+function he_hs_type = he_hs_classifier(tone_rates, hc_rates, tone_sig, hc_sig)
+    all_cases = [];
+    for hf=1:5
+        t1_i = hf;
+        t2_i = hf + 2;
+        t1t2_i = hf;
 
-near_counter = 0;
-far_counter = 0;
+        t1_all_iters = mean(tone_rates{t1_i,1}(:,501:570), 2);
+        t2_all_iters = mean(tone_rates{t2_i,1}(:,501:570), 2);
+        t1t2_all_iters = mean(hc_rates{t1t2_i,1}(:,501:570), 2);
 
-near_far_stats = zeros(2,4);
-near_far_units = cell(2,4);
-% he, hs, ne, ns
+        t1_mean_rate = mean(t1_all_iters);
+        t2_mean_rate = mean(t2_all_iters);
+        t1t2_mean_rate = mean(t1t2_all_iters);
 
-for u=1:size(rms_match_db,1)
-   tone_bfi = rms_match_db{u,12};
-   if tone_bfi == -1
-       continue
-   end
 
-   for hf=1:5
-        t1_index = hf;
-        t2_index = hf + 2;
-        t1t2_index = hf;
-
-        t1_sig = rms_match_db{u,8}(t1_index);
-        t2_sig = rms_match_db{u,8}(t2_index);
-        t1t2_sig = rms_match_db{u,9}(t1t2_index);
-
-        t1_mean_rate = rms_match_db{u,10}(t1_index);
-        t2_mean_rate = rms_match_db{u,10}(t2_index);
-        t1t2_mean_rate = rms_match_db{u,11}(t1t2_index);
-
-        t1_all_iters = mean(rms_match_db{u,6}{t1_index,1}(:,501:570),2);
-        t2_all_iters = mean(rms_match_db{u,6}{t2_index,1}(:,501:570),2);
-        t1t2_all_iters = mean(rms_match_db{u,7}{t1t2_index,1}(:,501:570),2);
+        t1_sig = tone_sig(t1_i);
+        t2_sig = tone_sig(t2_i);
+        t1t2_sig = hc_sig(t1t2_i);
         
-        d1 = abs(tone_bfi - t1_index)*0.5;
-        d2 = abs(tone_bfi - t2_index)*0.5;
-        if d1 <= 1 && d2 <= 1
-            nf = 1;
-        else 
-            nf = 2;
-        end
 
         if t1_sig + t2_sig + t1t2_sig == 0
             type = 4;
@@ -151,22 +131,22 @@ for u=1:size(rms_match_db,1)
                     
             end
         end % DONE
+    
+        all_cases = [all_cases type];
+    end % hf
 
-
-        near_far_stats(nf,type) = near_far_stats(nf,type) + 1;
-        near_far_units{nf,type} = [near_far_units{nf,type};u];
-
-
-
-
-   end
+    if length(find(all_cases == 4)) >= 3
+        he_hs_type = 4;
+    else 
+        he_score = length(find(all_cases == 1));
+        hs_score = -length(find(all_cases == 2));
+        if he_score + hs_score > 0
+            he_hs_type = 1;
+        elseif he_score + hs_score < 0
+            he_hs_type = 2;
+        elseif he_score + hs_score == 0
+            he_hs_type = 3;
+        end
+    end
 
 end
-%%
-close all
-figure
-    bar(near_far_stats(1,:))
-    title('near')
-figure
-    bar(near_far_stats(2,:))
-    title('far')

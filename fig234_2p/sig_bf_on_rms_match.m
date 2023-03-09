@@ -75,3 +75,8 @@ for u=1:size(rms_match_db,1)
     rms_match_db{u,12} = sig;
     rms_match_db{u,13} = bf;
 end
+
+%%
+
+rms_match_db_with_sig_bf = rms_match_db;
+save('rms_match_db_with_sig_bf.mat', 'rms_match_db_with_sig_bf')

@@ -54,13 +54,13 @@ end
 disp('d')
 
 %% 
-x = [];
-for u=1:size(hc_stage1,1)
-    animal = hc_stage1{u,1};
-    loc = hc_stage1{u,2};
-
-    if strcmp(animal, 'animal_4_M') && strcmp(loc, '12042022') && hc_stage1{u,5} == 15
-        x = [x u];
-    end
-
-end
+% x = [];
+% for u=1:size(hc_stage1,1)
+%     animal = hc_stage1{u,1};
+%     loc = hc_stage1{u,2};
+% 
+%     if strcmp(animal, 'animal_4_M') && strcmp(loc, '12042022') && hc_stage1{u,5} == 15
+%         x = [x u];
+%     end
+% 
+% end

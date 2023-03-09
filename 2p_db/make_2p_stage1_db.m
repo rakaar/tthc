@@ -3,7 +3,9 @@ clear ; close all;
 % stim = 'TonePipSweep';
 stim = 'HC';
 
-data_path = 'Q:\2p_anesthetised\pv_gcampflox';
+
+% data_path = 'Q:\2p_anesthetised\pv_gcampflox';
+data_path = 'Q:\2p_anesthetised\thy1_gcamp_6f';
 animals_dir_path = dir(data_path);
 
 

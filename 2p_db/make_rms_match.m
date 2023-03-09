@@ -60,3 +60,6 @@ for u=1:size(tone_stage1,1)
    
 
 end
+
+%%
+save('rms_match_db', 'rms_match_db')

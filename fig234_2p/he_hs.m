@@ -14,6 +14,7 @@ for u=1:size(rms_match_db_with_sig_bf)
 
 
         d1 = abs(t1_i - tone_bf)*0.5;
+
         d2 = abs(t2_i - tone_bf)*0.5;
 
         if d1 <= 1 && d2 <= 1

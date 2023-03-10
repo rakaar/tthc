@@ -148,3 +148,4 @@ end
 
 figure
     imagesc(he_hs_conn_avg)
+    caxis([0, 0.2])

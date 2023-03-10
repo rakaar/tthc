@@ -64,7 +64,7 @@ sig_mat = tone_opto_during_sig(setdiff(1:19,remove_these),:);
 figure
 imagesc(tone_opto_change_during(setdiff(1:19,remove_these),:))
 title('t')
-caxis([-2,5])
+caxis([-2,2])
     hold on
     for r=1:size(sig_mat,1)
         for c=1:size(sig_mat,2)
@@ -93,7 +93,7 @@ sig_mat = hc_opto_during_sig(setdiff(1:19,remove_these),:);
 figure
 imagesc(hc_opto_change_during(setdiff(1:19,remove_these),:))
 title('hc')
-caxis([-2,5])
+caxis([-2,2])
     hold on
     for r=1:size(sig_mat,1)
         for c=1:size(sig_mat,2)

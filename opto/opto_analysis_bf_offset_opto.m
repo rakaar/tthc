@@ -2,7 +2,7 @@ opto_amp_match_db = load('opto_amp_match_db.mat').opto_amp_match_db;
 ctrl = [];
 opto = [];
 
-stim = 'hc';
+stim = 't';
 if strcmp(stim, 't')
     ctrl_ind = 6;
     opto_ind = 7;
@@ -19,8 +19,8 @@ for u=1:19
         r_opto = [r_opto mean(mean(opto_amp_match_db{u,opto_ind}{f,1}(:, 501:570),2))];
     end
 
-    r_ctrl = r_ctrl./max(r_ctrl);
-    r_opto = r_opto./max(r_opto);
+%     r_ctrl = r_ctrl./max(r_ctrl);
+%     r_opto = r_opto./max(r_opto);
 
     [~,max_ind] = max(r_ctrl);
     [~,max_ind1] = max(r_opto);

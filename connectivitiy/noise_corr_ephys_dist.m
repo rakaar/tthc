@@ -28,6 +28,7 @@ for u=1:size(rms_match_db,1)
 end
 %%
 
+% stim = 't';
 stim = 'hc';
 if strcmp(stim, 't')
     rate_ind = 6;
@@ -92,6 +93,7 @@ end
 
 %%
 
+% stim = 't';
 stim = 'hc';
 if strcmp(stim, 't')
     nc_dist = load('tone_noise_corr_vs_dist').tone_noise_corr_vs_dist;
@@ -100,12 +102,15 @@ elseif strcmp(stim, 'hc')
 end
 
 mean_nc = zeros(9,1);
+median_nc = zeros(9,1);
+
 err = zeros(9,1);
 nc_indiv = [];
 nc_label = [];
 for i=1:length(dist)
     ncvec = cell2mat(nc_dist(1:157,i)');
     mean_nc(i) = mean(ncvec);
+    median_nc(i) = median(ncvec);
     err(i) = std(ncvec)/sqrt(length(ncvec));
 
     nc_indiv = [nc_indiv ncvec];
@@ -113,17 +118,40 @@ for i=1:length(dist)
 end
 
 if strcmp(stim, 't')
+    tone_mean_nc = mean_nc;
+    tone_median_nc = median_nc;
     tone_mean = ncvec;
     tone_indiv = nc_indiv;
     tone_label = nc_label;
     tone_indiv_with_label = [tone_indiv ;tone_label]';
 elseif strcmp(stim, 'hc')
+    hc_median_nc = median_nc;
+    hc_mean_nc = mean_nc;
     hc_mean = ncvec;
     hc_indiv = nc_indiv;
     hc_label = nc_label;
     hc_indiv_with_label = [hc_indiv; hc_label]';
 end
 
+%%
+% tonenc = [];
+% hcnc = [];
+% for i=1:7
+%     tone_indiv_with_label(,)
+% end
+figure
+    hold on
+    plot(sqrt(dist),tone_mean_nc)
+    plot(sqrt(dist),hc_mean_nc)
+
+
+    figure
+    hold on
+    plot(sqrt(dist),tone_median_nc)
+    plot(sqrt(dist),hc_median_nc)
+
+    figure
+    boxplot(tone_indiv_with_label(:,1), tone_indiv_with_label(:,2))
 %%
 beta_t = regress(tone_indiv_with_label(:,1), [tone_indiv_with_label(:,2) ones(length(tone_indiv_with_label(:,1)), 1)]);
 beta_hc = regress(hc_indiv_with_label(:,1), [hc_indiv_with_label(:,2) ones(length(hc_indiv_with_label(:,1)), 1)]);

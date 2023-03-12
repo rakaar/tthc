@@ -26,6 +26,14 @@ bf_bf0 = bf_bf0./n;
 
 %%
 figure
+    hold on
+        plot(bf_counter)
+        plot(bf0_counter)
+    hold off
+    legend('T','hc')
+    title('bf bf0')
+%%
+figure
     bar(bf_counter)
     title('bf')
 
@@ -38,4 +46,18 @@ figure
     colorbar()
     title('transpose')
 
+%%
+octave_shift_counter = zeros(13,1);
 
+for tf=1:7
+    for hf=1:7
+        shift = (hf - tf)*0.5;
+        shift_index = 7 + shift*2;
+        
+        octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+    end
+end
+
+figure
+    bar(-3:0.5:3, octave_shift_counter./sum(octave_shift_counter))
+    title('octave shift')

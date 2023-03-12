@@ -91,6 +91,46 @@ elseif strcmp(stim, 'hc')
     save('hc_noise_corr_vs_dist', 'hc_noise_corr_vs_dist')
 end
 
+%% figure FOR noise corr with distance
+% tone
+mean_nc = zeros(9,1);
+median_nc = zeros(9,1);
+err = zeros(9,1);
+mad_err = zeros(9,1);
+for i=1:9
+    all_nc = cell2mat(tone_noise_corr_vs_dist(1:180, i)');
+    mean_nc(i,1) = mean(all_nc);
+    median_nc(i,1) = median(all_nc);
+    err(i,1) = std(all_nc)/sqrt(length(all_nc));
+    mad_err(i,1) = mad(all_nc,1);
+end
+
+% hc
+mean_nc1 = zeros(9,1);
+median_nc1 = zeros(9,1);
+err1 = zeros(9,1);
+mad_err1 = zeros(9,1);
+for i=1:9
+    all_nc1 = cell2mat(hc_noise_corr_vs_dist(1:180, i)');
+    mean_nc1(i,1) = mean(all_nc1);
+    median_nc1(i,1) = median(all_nc1);
+    err1(i,1) = std(all_nc1)/sqrt(length(all_nc1));
+    mad_err1(i,1) = mad(all_nc1,1);
+end
+
+% plot
+figure
+hold on    
+errorbar(1:9, mean_nc, err)
+errorbar(1:9, mean_nc1, err1)
+hold off 
+
+
+figure
+    hold on
+       errorbar(1:9, median_nc, mad_err)
+       errorbar(1:9, median_nc1, mad_err1)
+    hold off
 %%
 
 % stim = 't';

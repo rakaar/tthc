@@ -12,6 +12,9 @@ end
 
 dist = unique(nonzeros(dist));
 %% map
+
+load('rms_match_db.mat')
+
 map = containers.Map;
 combiner = '***';
 for u=1:size(rms_match_db,1)
@@ -27,8 +30,72 @@ for u=1:size(rms_match_db,1)
      end
 end
 %%
+% - STIM - T
+stim = 't';
 
-% stim = 't';
+if strcmp(stim, 't')
+    rate_ind = 6;
+elseif strcmp(stim, 'hc')
+    rate_ind = 7;
+end
+
+noise_corr_vs_dist = cell(180,length(dist));
+counter = 1;
+
+keynames = keys(map);
+
+for k=1:length(keynames)
+    key = keynames{k};
+    units = map(key);
+    
+    channels = zeros(length(units),1);
+    noise_vecs = zeros(35, length(units));
+    for u=1:length(units)
+        unit = units(u);
+        channels(u) = str2num(rms_match_db{unit,3});
+        
+        rates = rms_match_db{unit,rate_ind};
+        rate_35 = zeros(7,5);
+        for freq=1:7
+            for iter=1:5
+                rate_35(freq,iter) = mean(rates{freq,1}(iter,501:570));
+            end
+        end
+
+        rate_35_mean = mean(rate_35,2);
+        rate_35_mean_repeated = [rate_35_mean rate_35_mean rate_35_mean rate_35_mean rate_35_mean];
+        noise_7v5 = rate_35 - rate_35_mean_repeated;
+        noise_35 = reshape(noise_7v5, 35,1);
+        noise_vecs(:,u) = noise_35;
+    end
+
+    for i=1:length(channels)-1
+        for j=i+1:length(channels)
+            [r1,c1] = ind2sub([4 4], find(loc_mat == channels(i)));
+            [r2,c2] = ind2sub([4 4], find( loc_mat == channels(j)));
+
+            d = (r1-r2)^2 + (c1-c2)^2;
+            dpos = find(dist == d);
+            corrmat = corrcoef( noise_vecs(:,i)', noise_vecs(:,j)' );
+            noise_corr_vs_dist{counter,dpos} = [ noise_corr_vs_dist{counter, dpos}  corrmat(1,2)];
+        end
+    end
+    
+
+    counter = counter + 1;
+end
+
+
+if strcmp(stim, 't')
+    tone_noise_corr_vs_dist = noise_corr_vs_dist;
+    save('tone_noise_corr_vs_dist', 'tone_noise_corr_vs_dist')
+elseif strcmp(stim, 'hc')
+    hc_noise_corr_vs_dist = noise_corr_vs_dist;
+    save('hc_noise_corr_vs_dist', 'hc_noise_corr_vs_dist')
+end
+
+
+% - STIM - HC
 stim = 'hc';
 if strcmp(stim, 't')
     rate_ind = 6;
@@ -121,16 +188,20 @@ end
 % plot
 figure
 hold on    
-errorbar(1:9, mean_nc, err)
-errorbar(1:9, mean_nc1, err1)
+errorbar(sqrt(dist)*125, mean_nc, err)
+errorbar(sqrt(dist)*125, mean_nc1, err1)
 hold off 
+title('mean')
 
 
 figure
     hold on
-       errorbar(1:9, median_nc, mad_err)
-       errorbar(1:9, median_nc1, mad_err1)
+       errorbar(sqrt(dist)*125, median_nc, mad_err)
+       errorbar(sqrt(dist)*125, median_nc1, mad_err1)
     hold off
+    title('median')
+
+    % - MEAN AND MEDIAN ENDS HERE ---------
 %%
 
 % stim = 't';
@@ -181,14 +252,15 @@ end
 % end
 figure
     hold on
-    plot(sqrt(dist),tone_mean_nc)
-    plot(sqrt(dist),hc_mean_nc)
-
-
-    figure
+    plot(sqrt(dist).*125,tone_mean_nc)
+    plot(sqrt(dist).*125,hc_mean_nc)
+    title('mean')
+    
+figure
     hold on
-    plot(sqrt(dist),tone_median_nc)
-    plot(sqrt(dist),hc_median_nc)
+    plot(sqrt(dist).*125,tone_median_nc)
+    plot(sqrt(dist).*125,hc_median_nc)
+    title('median')
 
     figure
     boxplot(tone_indiv_with_label(:,1), tone_indiv_with_label(:,2))

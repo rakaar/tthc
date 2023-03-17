@@ -91,3 +91,130 @@ end
 %%
 rates_corr_distance = all_files_rate_tensors;
 save('rates_corr_distance', 'rates_corr_distance')
+
+%% using sig, classify he hs
+load('rms_match_db_with_sig_bf.mat')
+keynames = keys(tone_map);
+for k=1:length(keynames)
+    key = keynames{k};
+    units = tone_map(key);
+    unit_types = zeros(length(units),1);
+    for u=1:length(units)
+        unit = units(u);
+        tone_rates = rms_match_db_with_sig_bf{unit,8};
+        hc_rates = rms_match_db_with_sig_bf{unit,9};
+        tone_sig = rms_match_db_with_sig_bf{unit,10};
+        hc_sig = rms_match_db_with_sig_bf{unit,12};
+
+        each_unit_type = he_hs_classifier(tone_rates, hc_rates, tone_sig, hc_sig);
+        unit_types(u) = each_unit_type;
+    end
+    rates_corr_distance{k,4} = unit_types;
+end
+
+save('rates_corr_distance', 'rates_corr_distance')
+%% based on type, 4 x 4 matrix
+
+% 4 - connection exists or not
+
+for u=1:size(rates_corr_distance,1)
+    disp(u)
+    all_rates = rates_corr_distance{u,1};
+    n_cells = size(all_rates,1);
+
+    connected_or_not = [];
+    for i=1:n_cells-1
+        for j=i+1:n_cells
+            r1 = squeeze(all_rates(i,:,:));
+            r2 = squeeze(all_rates(j,:,:));
+            
+            chance_dist = zeros(1000,1);
+            actual_dist = zeros(1000,1);
+
+            for b=1:1000
+                chance_shuff1 = randi([1 35], 35,1);
+                chance_shuff2 = randi([1 35], 35,1);
+                r1_shuff = r1(chance_shuff1, :);
+                r2_shuff = r2(chance_shuff2, :);
+
+                chance_dist(b) = corr_btn_2p_rates(r1_shuff, r2_shuff);
+
+                chance_shuff0 = randi([1 35], 35,1);
+                r1_shuff = r1(chance_shuff0, :);
+                r2_shuff = r2(chance_shuff0, :);
+
+                actual_dist(b) = corr_btn_2p_rates(r1_shuff, r2_shuff);
+            end % b
+
+            chance_dist_sort = sort(chance_dist);
+            actual_dist_sort = sort(actual_dist);
+
+            chance_ci = [chance_dist_sort(50), chance_dist_sort(950)];
+            actual_ci = [actual_dist_sort(50), actual_dist_sort(950)];
+            
+            if actual_ci(1) > chance_ci(2)
+                connected_or_not = [connected_or_not 1];
+            else
+                connected_or_not = [connected_or_not 0];
+            end
+        end % j
+    end % i
+
+    rates_corr_distance{u,5} = connected_or_not;
+end
+save('rates_corr_distance.mat', 'rates_corr_distance')
+%%
+type = 4; % see which type
+connected_distances = [];
+connected_types = [];
+for u=1:size(rates_corr_distance,1)
+    connections = rates_corr_distance{u,5};
+    neuron_types = rates_corr_distance{u,4};
+    distances = rates_corr_distance{u,3};
+
+
+    neuron_ind = 0;
+    for i=1:length(neuron_types)-1
+        for j=i+1:length(neuron_types)
+            neuron_ind = neuron_ind + 1;
+            if connections(neuron_ind) == 1
+                
+                if neuron_types(i) == type
+                    connected_distances = [connected_distances distances(neuron_ind)];
+                    connected_types = [connected_types neuron_types(j)];
+                elseif neuron_types(j) == type
+                    connected_distances = [connected_distances distances(neuron_ind)];
+                    connected_types = [connected_types neuron_types(i)];
+                end
+            end
+        end
+    end
+end
+%%
+figure
+    scatter(connected_distances, connected_types)
+    title(['type-',num2str(type)])
+
+bin_size = 10;
+ type_bins = zeros(fix(max(connected_distances)/bin_size) + 1, 4);
+ for c=1:length(connected_types)
+    c_type = connected_types(c);
+    d_bin = fix(connected_distances(c)/bin_size) + 1;
+
+    type_bins(d_bin, c_type) = type_bins(d_bin, c_type) + 1;
+ end
+
+ prob_types = zeros(fix(max(connected_distances)/bin_size) + 1, 4);
+ for b=1:fix(max(connected_distances)/bin_size) + 1
+     all4 = type_bins(b,:);
+     if sum(all4) ~= 0
+        prob_types(b,1) = length(find(all4 == 1));
+        prob_types(b,2) = length(find(all4 == 2));
+        prob_types(b,3) = length(find(all4 == 3));
+        prob_types(b,4) = length(find(all4 == 4));
+     end
+ end
+figure
+      plot(prob_types)
+      legend('he','hs','ne', 'ns')
+      title(['type-', num2str(type)])

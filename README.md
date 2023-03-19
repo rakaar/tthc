@@ -9,8 +9,9 @@ To generate database
 6. Go to folder `ephys_sig_bf` 
 7. Run `sig_matrix_bf.m`
 8. Name it `ephys_tone_33_5_and_6_sig_7_rates_8_bf`, `ephys_hc_33_5_and_6_sig_7_rates_8_bf`
-9. Run `make_rms_match_db.m`
-10. Name it `make_rms_match_db`
+9. Run make_map_t_hc_locations.m 
+10. Run `make_rms_match_db.m`
+11. Name it `make_rms_match_db`
 
 To check DB
 1. Go to folder `check_every_db`

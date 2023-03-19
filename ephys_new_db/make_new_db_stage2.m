@@ -8,14 +8,15 @@ location_index_map = containers.Map;
 %     db_vals(d) = (d-1)*10;
 % end
 % 0 5 15... 35 45
-
+stim_type = 'HC';
 if strcmp(stim_type, 'TonePipSweep')
     db_atts = 0:10:40;
     num_db_vals = length(db_atts);
-    
+    ephys_db = load('tone_db_stage1.mat').tone_db_stage1;
 elseif strcmp(stim_type, 'HC')
     db_atts = 0:5:45;
     num_db_vals = length(db_atts);
+    ephys_db = load('hc_db_stage1.mat').hc_db_stage1;
 end
 
 db_vals = zeros(num_db_vals,1);
@@ -64,15 +65,10 @@ for i=1:size(ephys_db,1)
     
 end
 
-%% 
-% x = [];
-% for i=1:180
-%     c=0;
-%     for j=1:4
-%        if ~isempty(ephys_db_final_stage{i,4}{j,2})
-%          c = c + 1;
-%        end
-%     end
-%     x = [x c];
-% end
-% hist(x)
+if strcmp(stim_type, 'TonePipSweep')
+       ephys_tone_33 = ephys_db_final_stage;
+       save('ephys_tone_33', 'ephys_tone_33')
+elseif strcmp(stim_type, 'HC')
+        ephys_hc_33 = ephys_db_final_stage;
+        save('ephys_hc_33', 'ephys_hc_33')
+end

@@ -41,3 +41,5 @@ figure
     xline(0, 'lineWidth', 5,'Color','r')
     xline(mean(all_hc_corrs), 'lineWidth', 5)
     title('hc noise')
+    %%
+    [h,p] = ttest2(all_tone_corrs, all_hc_corrs);

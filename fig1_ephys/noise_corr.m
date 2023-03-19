@@ -1,8 +1,7 @@
 ephys_data_path = 'F:\RK_code_TTHC\ephys_arranged';
 animals_dir_path = dir(ephys_data_path);
 
-% stim_type = 'TonePipSweep';
-% stim_type = 'HC';
+
 
 tone_noise_corr_db = cell(100,5);
 hc_noise_corr_db = cell(100,5);
@@ -89,3 +88,7 @@ for i=3:length(animals_dir_path)
         end
      end
 end
+
+
+save('tone_noise_corr_db', 'tone_noise_corr_db')
+save('hc_noise_corr_db', 'hc_noise_corr_db')

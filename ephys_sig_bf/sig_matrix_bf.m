@@ -1,4 +1,5 @@
 stim = 'hc';
+% stim = 'tone';
 
 if strcmp(stim, 'tone')
     db_lvls = 0:10:40;
@@ -48,8 +49,9 @@ for u=1:n_units
             mean_rates_f = mean(rates_f);
             std_rates_f = std(rates_f);
 
-            d_prime = (mean_rates_f - mean_spont)/((std_rates_f^2  +  std_spont^2)^0.5);
-            if d_prime > 1
+            % Commenting d_prime and using ttest
+%             d_prime = (mean_rates_f - mean_spont)/((std_rates_f^2  +  std_spont^2)^0.5);
+            if ttest2(rates_f, spont) == 1
                 sig_matrix(f,d) = 1;
             else
                 sig_matrix(f,d) = 0;
@@ -97,5 +99,11 @@ end % end of u
 
 
 
-
+if strcmp(stim, 'tone')
+    ephys_tone_33_5_and_6_sig_7_rates_8_bf = units_db;
+    save('ephys_tone_33_5_and_6_sig_7_rates_8_bf', 'ephys_tone_33_5_and_6_sig_7_rates_8_bf')
+elseif strcmp(stim, 'hc')
+    ephys_hc_33_5_and_6_sig_7_rates_8_bf = units_db;
+    save('ephys_hc_33_5_and_6_sig_7_rates_8_bf', 'ephys_hc_33_5_and_6_sig_7_rates_8_bf')
+end
 

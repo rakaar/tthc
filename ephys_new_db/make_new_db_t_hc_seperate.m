@@ -93,3 +93,11 @@ for i=3:length(animals_dir_path)
         end
      end
 end
+
+if strcmp(stim_type, 'TonePipSweep')
+        tone_db_stage1 = ephys_db;
+        save('tone_db_stage1', 'tone_db_stage1')
+else
+    hc_db_stage1 = ephys_db;
+    save('hc_db_stage1', 'hc_db_stage1')
+end

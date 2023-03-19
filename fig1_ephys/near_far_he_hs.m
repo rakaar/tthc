@@ -165,8 +165,10 @@ end
 %%
 close all
 figure
-    bar(near_far_stats(1,:))
+    bar(near_far_stats(1,:)./sum(near_far_stats(1,:)))
     title('near')
+    ylim([0 0.8])
 figure
-    bar(near_far_stats(2,:))
+    bar(near_far_stats(2,:)./sum(near_far_stats(2,:)))
     title('far')
+    ylim([0 0.8])

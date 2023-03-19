@@ -61,3 +61,5 @@ end
 figure
     bar(-3:0.5:3, octave_shift_counter./sum(octave_shift_counter))
     title('octave shift')
+%%
+[h,p] = kstest2(bf_counter, bf0_counter);

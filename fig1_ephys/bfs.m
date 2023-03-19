@@ -22,7 +22,8 @@ end
 
 bf_counter = bf_counter./n;
 bf0_counter = bf0_counter./n;
-bf_bf0 = bf_bf0./n;
+% bf_bf0 = bf_bf0./n;
+bf_bf0 = bf_bf0;
 
 %%
 figure
@@ -42,7 +43,7 @@ figure
     title('bf0')
 
 figure
-    imagesc(bf_bf0')
+    imagesc((bf_bf0./n)')
     colorbar()
     title('transpose')
 
@@ -57,9 +58,25 @@ for tf=1:7
         octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
     end
 end
+figure
+    bar(octave_shift_counter)
+    title('octave shift counter')
+
+    %%
+abs_octave_shift_counter = zeros(13,1);
+
+for tf=1:7
+    for hf=1:7
+        shift = (hf - tf)*0.5;
+        shift_index = 7 + abs(shift)*2;
+        
+        abs_octave_shift_counter(shift_index,1) = abs_octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+    end
+end
 
 figure
-    bar(-3:0.5:3, octave_shift_counter./sum(octave_shift_counter))
-    title('octave shift')
+    bar(abs_octave_shift_counter(7:13)./sum(abs_octave_shift_counter(7:13)))
+    title('abs octave shift')
+
 %%
 [h,p] = kstest2(bf_counter, bf0_counter);

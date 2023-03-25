@@ -39,3 +39,18 @@ figure
     title('bf bf0')
     caxis([0 0.032])
     colorbar()
+
+    %%
+octave_shift_counter = zeros(13,1);
+
+for tf=1:7
+    for hf=1:7
+        shift = (hf - tf)*0.5;
+        shift_index = 7 + shift*2;
+        
+        octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+    end
+end
+figure
+    bar(octave_shift_counter./sum(octave_shift_counter))
+    title('octave shift counter')

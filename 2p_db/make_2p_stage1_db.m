@@ -5,7 +5,9 @@ stim = 'HC';
 
 
 % data_path = 'Q:\2p_anesthetised\pv_gcampflox';
-data_path = 'Q:\2p_anesthetised\thy1_gcamp_6f';
+% data_path = 'Q:\2p_anesthetised\thy1_gcamp_6f';
+% data_path = 'G:\TTHC_2p_21032023_data\pv_gf_21032023';
+data_path = 'G:\TTHC_2p_21032023_data\sst_gf_21032023';
 animals_dir_path = dir(data_path);
 
 

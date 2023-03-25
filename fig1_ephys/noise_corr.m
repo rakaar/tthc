@@ -41,6 +41,7 @@ for i=3:length(animals_dir_path)
 
                 db = unit_data.PP_PARAMS.protocol.stim_protocol.level_hi;
                 noise_vecs = [];
+                resp_channels = [];
                 for ch=1:length(unit_data.unit_record_spike)
                     if isempty(unit_data.unit_record_spike(ch).negspiketime)
                         continue
@@ -49,6 +50,8 @@ for i=3:length(animals_dir_path)
                     if length(fieldnames(sp_times)) ~= 35
                         continue
                     end
+
+                    resp_channels = [resp_channels ch];
         	        all_35_res = zeros(35,1);
                     for iter=1:35
                         times = sp_times.(strcat('iter', num2str(iter)));
@@ -75,6 +78,7 @@ for i=3:length(animals_dir_path)
                     tone_noise_corr_db{tone_counter,3} = unit_path;
                     tone_noise_corr_db{tone_counter,4} = db;
                     tone_noise_corr_db{tone_counter,5} = corr_matrix;
+                    tone_noise_corr_db{tone_counter,6} = resp_channels;
                     tone_counter = tone_counter + 1;
                 elseif strcmp(protochol_type, 'HC')
                     hc_noise_corr_db{hc_counter,1} = animal;
@@ -82,6 +86,7 @@ for i=3:length(animals_dir_path)
                     hc_noise_corr_db{hc_counter,3} = unit_path;
                     hc_noise_corr_db{hc_counter,4} = db;
                     hc_noise_corr_db{hc_counter,5} = corr_matrix;
+                    hc_noise_corr_db{hc_counter,6} = resp_channels;
                     hc_counter = hc_counter + 1;
                 end
              end % u

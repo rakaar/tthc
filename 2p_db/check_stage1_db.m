@@ -1,5 +1,5 @@
 % random_u = randi([1 size(stage1_db,1)]);
-stim = 'hc';
+stim = 't';
 if strcmp(stim, 't')
     stage1_db = tone_stage1;
 else
@@ -30,6 +30,7 @@ for freq=1:7
 
     if sum(sum(abs(r1-r2))) ~= 0
         disp('*********************************DANGER***********')
+        disp(random_u)
     end
 end
 end

@@ -4,7 +4,9 @@ To get near far
 3. To check, run `test_he_hs_ne_ns.m`
 
 To get noise corr plots
-1. Run `noise_corr_plots` to get the figures
+0. `noise_corr.m`
+1. `noise_corr_db.m`
+2. Run `noise_corr_plots` to get the figures
 
 To get noise corr db
 1. Run noise_corr.m

@@ -84,6 +84,21 @@ for u=1:size(tone_db,1)
 
             tone_noise{counter,2} = tone_db{u,5};
             hc_noise{counter, 2} = hc_db{hc_key,5};
+
+            tone_noise{counter,3} = tone_db{u,6};
+            hc_noise{counter, 3} = hc_db{hc_key,6};
+
+            %%% - random test ----
+            if length(tone_noise{counter,3}) ~= size(tone_noise{counter,2},1)
+                disp('============')
+                break
+            end
+
+            if length(hc_noise{counter, 3}) ~= size(hc_noise{counter, 2},1)
+                disp('============')
+                break
+            end
+            %%% -----------------
             counter = counter + 1;
 
             if hc_db{hc_key,4} - tone_db{u,4} ~= 5

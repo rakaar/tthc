@@ -1,6 +1,37 @@
 tone_stage1 = load('tone_stage1.mat').tone_stage1;
 hc_stage1 = load('hc_stage1.mat').hc_stage1;
 
+stim = 't';
+if strcmp(stim, 't')
+    database = tone_stage1;
+else
+    database = hc_stage1;
+end
+
+map = containers.Map;
+combiner = '***';
+
+for u=1:size(database,1)
+    animal = database{u,1};
+    loc = database{u,2};
+    spl = num2str(database{u,5});
+    name = strcat(animal, combiner, loc, combiner, spl);
+    
+    if isKey(map, name)
+        map(name) = map(name) + 1;
+    else
+        map(name) = 1;
+    end
+
+end
+
+if strcmp(stim, 't')
+    tone_map = map;
+else
+    hc_map = map;
+end
+
+
 stim = 'hc';
 if strcmp(stim, 't')
     database = tone_stage1;

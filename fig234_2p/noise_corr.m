@@ -4,9 +4,9 @@ for u=1:size(rms_match_db_with_sig_bf,1)
     tbf = rms_match_db_with_sig_bf{u,11};
     hbf = rms_match_db_with_sig_bf{u,13};
 
-    if tbf == -1 && hbf == -1
-        continue
-    end
+%     if tbf == -1 && hbf == -1
+%         continue
+%     end
 
     % tone
     rate_ind = 8;
@@ -44,9 +44,9 @@ for u=1:size(rms_match_db_with_sig_bf_and_noise,1)
     tbf = rms_match_db_with_sig_bf{u,11};
     hbf = rms_match_db_with_sig_bf{u,13};
 
-    if tbf == -1 && hbf == -1
-        continue
-    end
+%     if tbf == -1 && hbf == -1
+%         continue
+%     end
 
     animal = rms_match_db_with_sig_bf_and_noise{u,1};
     loc = rms_match_db_with_sig_bf_and_noise{u,2};
@@ -117,6 +117,17 @@ for u=1:size(rms_match_noise_corr_db,1)
     t_nc = rms_match_noise_corr_db{u,3};
     h_nc = rms_match_noise_corr_db{u,4};
 
+    if sum(sum(isnan(t_nc))) ~= 0 || sum(sum(isnan(h_nc))) ~= 0
+        disp('uuuuuuuuuuuuu')
+        disp(u)
+        continue
+    end
+
+    if length(t_nc) ~= length(h_nc)
+        disp('================================')
+        disp(u)
+    end
+
     nc = t_nc;
     for r=1:size(nc,1)
         for c=1:size(nc,2)
@@ -146,18 +157,23 @@ figure
         plot(xlim, ylim, '-b')
        hold off
        title('noise')
-figure
-    hist(tone_noise_corr_vec)
-    hold on
-        xline(0, 'LineWidth',4)
-        xline(mean(tone_noise_corr_vec), 'LineWidth',4)
-    hold off
-    title('tone noise')
 
- figure
-    hist(hc_noise_corr_vec)
+
+figure
+    histogram(tone_noise_corr_vec, 'Normalization', 'probability')
     hold on
-        xline(0,'LineWidth',4)
-        xline(mean(hc_noise_corr_vec),'LineWidth',4)
+        xline(mean(tone_noise_corr_vec), 'LineStyle','--', 'LineWidth',2,'Color','r')
+        xline(0,'LineStyle','--','LineWidth',2)
     hold off
-    title('hc noise')
+    xlim([-1 1])
+    title('tone nc')
+
+    figure
+    histogram(hc_noise_corr_vec, 'Normalization', 'probability')
+    hold on
+        xline(mean(hc_noise_corr_vec), 'LineStyle','--', 'LineWidth',2,'Color','r')
+        xline(0,'LineStyle','--','LineWidth',2)
+    hold off
+    xlim([-1 1])
+    title('hc nc')
+

@@ -1,3 +1,4 @@
+% PROBLEM - too less data in aharmonic, bcoz base freq of aharmonic freq
 % for each f, cover all units' rates at following stimulus
 % 1-(f) 2-(2^0.25f) 3-(2^0.5f) 4-(2^1.25f) 5-(2^1.75f) 6-(2f) 
 % 7-(f 2^0.25f) 8-(f 2^0.5f) 9-(f 2^1.25f) 10-(f 2^1.75f) 
@@ -35,12 +36,16 @@ for u=1:size(stage3_db,1)
         unit_rates_t_ahc_hc{tbf,3} = [unit_rates_t_ahc_hc{tbf,3} mean(mean(tone_rates{tbf+2,1}(:,501:570),2))];
     end
 
-    if tbf + 3 <= 13
-        unit_rates_t_ahc_hc{tbf,4} = [unit_rates_t_ahc_hc{tbf,4} mean(mean(tone_rates{tbf+3,1}(:,501:570),2))];
+    if tbf + 5 <= 13
+        unit_rates_t_ahc_hc{tbf,4} = [unit_rates_t_ahc_hc{tbf,4} mean(mean(tone_rates{tbf+5,1}(:,501:570),2))];
     end
 
-     if tbf + 4 <= 13
-        unit_rates_t_ahc_hc{tbf,5} = [unit_rates_t_ahc_hc{tbf,5} mean(mean(tone_rates{tbf+4,1}(:,501:570),2))];
+     if tbf + 7 <= 13
+        unit_rates_t_ahc_hc{tbf,5} = [unit_rates_t_ahc_hc{tbf,5} mean(mean(tone_rates{tbf+7,1}(:,501:570),2))];
+     end
+
+     if tbf + 8 <= 13
+        unit_rates_t_ahc_hc{tbf,6} = [unit_rates_t_ahc_hc{tbf,6} mean(mean(tone_rates{tbf+8,1}(:,501:570),2))];
      end
 
      ahc_units = stage3_db{u,8};

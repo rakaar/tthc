@@ -56,6 +56,8 @@ for u=1:size(stage2_db,1)
             text(ti+4,ti,'HC','Color','white','FontSize',12, 'FontWeight','bold');
         end
     hold off
+    title(strcat(stage2_db{u,1}, '@', stage2_db{u,2}, '-ch=', stage2_db{u,3}, '-Tspl=',num2str(stage2_db{u,4}), '-HCspl=', num2str(stage2_db{u,5}) ))
     pause
+    
 
 end % u

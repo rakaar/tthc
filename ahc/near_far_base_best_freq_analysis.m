@@ -90,6 +90,7 @@ figure
     imagesc(near_unit_rates_avg, 'AlphaData', alpha);
     xticks(1:3)
     xticklabels({'T', 'AHC', 'HC'})
+    clim([0 max(max(near_unit_rates_avg))])
     colorbar
     title('Near')
 
@@ -98,5 +99,18 @@ figure
     imagesc(far_unit_rates_avg, 'AlphaData', alpha);
     xticks(1:3)
     xticklabels({'T', 'AHC', 'HC'})
+    clim([0 max(max(near_unit_rates_avg))])
     colorbar
+    
     title('Far')
+    %% ttest
+    ttest_results = nan(13,3); % t,ah ah,h, t,h;
+    for f=1:13
+        if isempty(near_unit_rates{f,1}) || isempty(near_unit_rates{f,2}) || isempty(near_unit_rates{f,3})
+            continue
+        end
+        ttest_results(f,1) = ttest2(near_unit_rates{f,1}, near_unit_rates{f,2});
+        ttest_results(f,2) = ttest2(near_unit_rates{f,2}, near_unit_rates{f,3});
+        ttest_results(f,3) = ttest2(near_unit_rates{f,3}, near_unit_rates{f,1});
+    end
+    disp('d')

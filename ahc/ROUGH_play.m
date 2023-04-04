@@ -13,3 +13,11 @@ for i=4:length(pdir)
 end
 
 %%
+
+r = stage3_db{100,6};
+x = zeros(13,1);
+for f=1:13
+    x(f) = mean(mean(r{f,1}(:,501:570),2));
+end
+plot(x)
+%%

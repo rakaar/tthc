@@ -13,6 +13,7 @@ all_spont = [];
 for u=1:size(stage3_db,1)
     % T BF
     tone_bf = stage3_db{u,9};
+%     tone_bf = stage3_db{u,10}; % BF0
     if tone_bf == -1
         continue
     end

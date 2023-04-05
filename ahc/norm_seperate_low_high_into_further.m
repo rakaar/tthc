@@ -1,8 +1,8 @@
 % remove insig units
 % ttest btn low ahc and hc
 % ttest btn high ahc and hc
-% - NO NORMALISATION
-clear;close all
+% - NORMALISED by Harmonic rates
+clc;clear;close all;
 load('stage1_db.mat')
 all_sg_triples = [];
 for u=1:size(stage1_db,1)
@@ -26,14 +26,14 @@ for u=1:size(stage1_db,1)
         end
         
         
-        if sum(sig6([1,3,5])) ~= 0
-            % 1 3 5
-            all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5)] ];
-        end
+%         if sum(sig6([1,3,5])) ~= 0 && rates6(1) ~= 0
+%             % 1 3 5
+%             all_sg_triples = [ all_sg_triples; [rates6(1)/rates6(1) rates6(3)/rates6(1) rates6(5)/rates6(1)] ];
+%         end
 
-        if sum(sig6([2,4,6])) ~= 0
-            % 1 3 5
-            all_sg_triples = [ all_sg_triples; [rates6(2) rates6(4) rates6(6)] ];
+        if sum(sig6([2,4,6])) ~= 0 && rates6(2) ~= 0
+            % 2 4 6
+            all_sg_triples = [ all_sg_triples; [rates6(2)/rates6(2) rates6(4)/rates6(2) rates6(6)/rates6(2)] ];
         end
 
     end % if 
@@ -76,4 +76,4 @@ boxplot(data,'Labels', {'HC','AHC low', 'AHC high'},'Orientation', 'vertical')
 ylabel('rates')
 
 
-title('unit rates-non normalised')
+title('unit rates  normalised by harmonic rates')

@@ -2,7 +2,7 @@
 % ttest btn low ahc and hc
 % ttest btn high ahc and hc
 % - NO NORMALISATION
-clear;close all
+clc;clear;close all
 load('stage1_db.mat')
 all_sg_triples = [];
 for u=1:size(stage1_db,1)
@@ -26,11 +26,11 @@ for u=1:size(stage1_db,1)
         end
         
         
-        if sum(sig6([1,3,5])) ~= 0
-            % 1 3 5
-            all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5)] ];
-        end
-
+%         if sum(sig6([1,3,5])) ~= 0
+%             % 1 3 5
+%             all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5)] ];
+%         end
+% 
         if sum(sig6([2,4,6])) ~= 0
             % 1 3 5
             all_sg_triples = [ all_sg_triples; [rates6(2) rates6(4) rates6(6)] ];

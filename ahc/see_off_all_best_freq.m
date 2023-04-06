@@ -1,10 +1,10 @@
-clc;clear;close all;
+clc;clear;
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
+close all
 
-
-bin_size = 25;
+bin_size = 10;
 t_end = 1500;
 
 all_freq_at_once_rate = cell(1,3);

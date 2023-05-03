@@ -1,4 +1,6 @@
 clc;clear;close all
+
+%  subtract spont 
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
@@ -89,9 +91,22 @@ hc_mean = mean(hc);
 ahc_low_mean = mean(ahc_low);
 ahc_high_mean = mean(ahc_high);
 
-hc_mean_norm = hc_mean./max(hc_mean);
-ahc_low_mean_norm = ahc_low_mean./max(ahc_low_mean);
-ahc_high_mean_norm = ahc_high_mean./max(ahc_high_mean);
+% Subtract spont
+spont_bin_start = 300/window_size + 1;
+spont_bin_end = (500 - bin_size)/window_size + 1;
+
+hc_mean_spont_mean = mean(hc_mean(spont_bin_start:spont_bin_end));
+ahc_low_mean_spont_mean = mean(ahc_low_mean(spont_bin_start:spont_bin_end));
+ahc_high_mean_spont_mean = mean(ahc_high_mean(spont_bin_start:spont_bin_end));
+
+hc_mean_spont_removed = hc_mean - hc_mean_spont_mean;
+ahc_low_mean_spont_removed = ahc_low_mean - ahc_low_mean_spont_mean;
+ahc_high_mean_spont_removed = ahc_high_mean - ahc_high_mean_spont_mean;
+
+
+hc_mean_norm = hc_mean_spont_removed./max(hc_mean_spont_removed);
+ahc_low_mean_norm = ahc_low_mean_spont_removed./max(ahc_low_mean_spont_removed);
+ahc_high_mean_norm = ahc_high_mean_spont_removed./max(ahc_high_mean_spont_removed);
 
 
 
@@ -144,9 +159,4 @@ hold off
 legend('HC', 'AHC Low', 'AHC High')
 title(['t end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])
 
-%%
-% 1. subtract spont from each unit data
-% 2. do tests
-% 3. plot
-% NEW FILE - see_off_at_bf_and_beside_bf_moving_mean_subtracted_spont.m
-%%
+

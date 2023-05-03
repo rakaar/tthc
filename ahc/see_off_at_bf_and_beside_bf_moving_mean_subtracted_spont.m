@@ -118,20 +118,13 @@ ahc_low_each_row_norm = [];
 ahc_high_each_row_norm = [];
 
 for r=1:size(hc,1)
-    h_t_each_row_norm = [h_t_each_row_norm; hc(r,:)./max(hc(r,:))];
-    ahc_low_each_row_norm = [ahc_low_each_row_norm; ahc_low(r,:)./max(ahc_low(r,:))];
-    ahc_high_each_row_norm = [ahc_high_each_row_norm; ahc_high(r,:)./max(ahc_high(r,:))];
+    h_t_each_row_norm = [h_t_each_row_norm; ( hc(r,:) - mean(hc(r,spont_bin_start:spont_bin_end)) )./max( ( hc(r,:) - mean(hc(r,spont_bin_start:spont_bin_end)) ) )];
+    ahc_low_each_row_norm = [ahc_low_each_row_norm; ( ahc_low(r,:) - mean(ahc_low(r,spont_bin_start:spont_bin_end)) )./max( ( ahc_low(r,:) - mean(ahc_low(r,spont_bin_start:spont_bin_end)) ) )];
+    ahc_high_each_row_norm = [ahc_high_each_row_norm; ( ahc_high(r,:) - mean(ahc_high(r,spont_bin_start:spont_bin_end)) )./max( ( ahc_high(r,:) - mean(ahc_high(r,spont_bin_start:spont_bin_end)) ) )];
 end
 
 hvals = zeros(3,size(hc,2));
 for t=1:size(hc,2)
-%     h_t = hc(:,t);
-%     ahc_low_t = ahc_low(:,t);
-%     ahc_high_t = ahc_high(:,t);
-
-%     hvals(1,t) = ttest(h_t,ahc_low_t);
-%     hvals(2,t) = ttest(h_t,ahc_high_t);
-%     hvals(3,t) = ttest(ahc_low_t, ahc_high_t);
 
     hvals(1,t) = ttest(h_t_each_row_norm(:,t),ahc_low_each_row_norm(:,t));
     hvals(2,t) = ttest(h_t_each_row_norm(:,t),ahc_high_each_row_norm(:,t));

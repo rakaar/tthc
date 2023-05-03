@@ -6,8 +6,8 @@ load('f13.mat')
 
 tone_dup_counter = [];
 
-bin_size = 20;
-window_size = 10;
+bin_size = 100;
+window_size = 20;
 t_end = 1500;
 
 all_freq_at_once_rate = cell(21,7);
@@ -138,21 +138,10 @@ for i=index_range
 
 end % i
 
-hc_mean = mean(hc);
-ahc_low_mean = mean(ahc_low);
-ahc_high_mean = mean(ahc_high);
-tone_og_mean = mean(tone_og);
-tone_2x_mean = mean(tone_2x);
-tone_low_mean = mean(tone_low);
-tone_high_mean = mean(tone_high);
-
-hc_mean_norm = hc_mean./max(hc_mean);
-ahc_low_mean_norm = ahc_low_mean./max(ahc_low_mean);
-ahc_high_mean_norm = ahc_high_mean./max(ahc_high_mean);
-tone_og_mean_norm = tone_og_mean./max(tone_og_mean);
-tone_2x_mean_norm = tone_2x_mean./max(tone_2x_mean);
-tone_low_mean_norm = tone_low_mean./max(tone_low_mean);
-tone_high_mean_norm = tone_high_mean./max(tone_high_mean);
+% 
+% % Subtract spont
+spont_bin_start = 300/window_size + 1;
+spont_bin_end = (500 - bin_size)/window_size + 1;
 
 
 %%
@@ -161,51 +150,79 @@ tone_high_mean_norm = tone_high_mean./max(tone_high_mean);
 h_t_each_row_norm = [];
 ahc_low_each_row_norm = [];
 ahc_high_each_row_norm = [];
-
+tone_all_each_row_norm = [];
 for r=1:size(hc,1)
-    h_t_each_row_norm = [h_t_each_row_norm; hc(r,:)./max(hc(r,:))];
-    ahc_low_each_row_norm = [ahc_low_each_row_norm; ahc_low(r,:)./max(ahc_low(r,:))];
-    ahc_high_each_row_norm = [ahc_high_each_row_norm; ahc_high(r,:)./max(ahc_high(r,:))];
+    h_t_each_row_norm = [h_t_each_row_norm; ( hc(r,:) - mean(hc(r,spont_bin_start:spont_bin_end)) )./max(hc(r,:))];
+    ahc_low_each_row_norm = [ahc_low_each_row_norm; ( ahc_low(r,:) - mean(ahc_low(r,spont_bin_start:spont_bin_end)) )./max(ahc_low(r,:))];
+    ahc_high_each_row_norm = [ahc_high_each_row_norm; ( ahc_high(r,:) - mean(ahc_high(r,spont_bin_start:spont_bin_end)) )./max(ahc_high(r,:))];
 end
 
-hvals = zeros(3,size(hc,2));
+for r=1:size(tone_og,1)
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) )./max( ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) ) )];
+end
+for r=1:size(tone_2x,1)
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) )./max( ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) ) )];
+end
+for r=1:size(tone_low,1)
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) )./max( ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) ) )];
+end
+for r=1:size(tone_high,1)
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) )./max( ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) ) )];
+end
+
+
+hvals = zeros(6,size(hc,2));
+pvals = zeros(6, size(hc,2));
 for t=1:size(hc,2)
-    %     h_t = hc(:,t);
-    %     ahc_low_t = ahc_low(:,t);
-    %     ahc_high_t = ahc_high(:,t);
+    [hvals(1,t), pvals(1,t)] = ttest(h_t_each_row_norm(:,t),ahc_low_each_row_norm(:,t), 'Tail', 'right');
+    [hvals(2,t), pvals(2,t)] = ttest(h_t_each_row_norm(:,t),ahc_high_each_row_norm(:,t), 'Tail', 'right');
+    [hvals(3,t), pvals(3,t)] = ttest(ahc_low_each_row_norm(:,t), ahc_high_each_row_norm(:,t));
 
-    %     hvals(1,t) = ttest(h_t,ahc_low_t);
-    %     hvals(2,t) = ttest(h_t,ahc_high_t);
-    %     hvals(3,t) = ttest(ahc_low_t, ahc_high_t);
-
-    hvals(1,t) = ttest(h_t_each_row_norm(:,t),ahc_low_each_row_norm(:,t));
-    hvals(2,t) = ttest(h_t_each_row_norm(:,t),ahc_high_each_row_norm(:,t));
-    hvals(3,t) = ttest(ahc_low_each_row_norm(:,t), ahc_high_each_row_norm(:,t));
-
-
+    [hvals(4,t), pvals(4,t)] = ttest2(h_t_each_row_norm(:,t),tone_all_each_row_norm(:,t), 'Tail', 'right');
+    [hvals(5,t), pvals(5,t)] = ttest2(ahc_low_each_row_norm(:,t),tone_all_each_row_norm(:,t),'Tail', 'right');
+    [hvals(6,t), pvals(6,t)] = ttest2(ahc_high_each_row_norm(:,t),tone_all_each_row_norm(:,t));
 end % t
 
 %%
 figure
 hold on
-plot(hc_mean_norm, 'LineWidth',2)
-plot(ahc_low_mean_norm, 'LineWidth',2)
-plot(ahc_high_mean_norm, 'LineWidth',2)
+h1 = mean(h_t_each_row_norm);
+ahc_low1 = mean(ahc_low_each_row_norm);
+ahc_high1 = mean(ahc_high_each_row_norm);
+tone_all1 = mean(tone_all_each_row_norm);
 
-plot(tone_og_mean_norm, 'LineWidth',3)
-plot(tone_2x_mean_norm, 'LineWidth',3)
-plot(tone_low_mean_norm, 'LineWidth',3)
-plot(tone_high_mean_norm, 'LineWidth',3)
-
+plot(h1, 'LineWidth',2)
+plot(ahc_low1, 'LineWidth',2)
+plot(ahc_high1, 'LineWidth',2)
+plot(tone_all1, 'LineWidth',3)
 for t=1:size(hc,2)
     if hvals(1,t) == 1
-        text(t, hc_mean_norm(t), 'H-AL', 'color', 'black','FontWeight','bold')
-    elseif hvals(2,t) == 1
-        text(t, hc_mean_norm(t), 'H-AH', 'color', 'black', 'FontWeight','bold')
-    elseif hvals(3,t) == 1
-        text(t, ahc_low_mean_norm(t), 'AL-AH', 'color', 'black','FontWeight','bold')
+        text(t, h1(t), 'H > AL', 'color', 'red','FontWeight','bold','VerticalAlignment', 'bottom')
+    end
+    if hvals(2,t) == 1
+        text(t, h1(t), 'H > AH', 'color', 'blue', 'FontWeight','bold','VerticalAlignment', 'top')
+    end
+    if hvals(3,t) == 1
+        text(t, h1(t), 'AL-AH', 'color', 'green','FontWeight','bold','VerticalAlignment', 'bottom')
+    end
+    if hvals(4,t) == 1
+         text(t, tone_all1(t), '!!!', 'color', 'black','FontWeight','bold','VerticalAlignment', 'top', 'FontSize',15)
+    end
+     if hvals(5,t) == 1
+        text(t, tone_all1(t), '@@@@@', 'color', 'black','FontWeight','bold', 'VerticalAlignment', 'top');
+     end
+    if hvals(6,t) == 1
+        text(t, tone_all1(t), '########', 'color', 'black','FontWeight','bold','VerticalAlignment', 'top')
     end
 end
+    
+%          text(t, h1(t), num2str(pvals(4,t)), 'color', 'black','FontWeight','bold','FontSize', 15)
+%     
+%         text(t, ahc_low1(t), num2str(pvals(5,t)), 'color', 'black','FontWeight','bold', 'FontSize', 15);
+%     
+%         text(t, ahc_high1(t), num2str(pvals(6,t)), 'color', 'black','FontWeight','bold', 'FontSize', 15)
+       
+
 hold off
-legend('HC', 'AHC Low', 'AHC High', 'T', 'T 2x', 'T Low', 'T high')
+legend('HC', 'AHC Low', 'AHC High', 'T all')
 title(['t end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])

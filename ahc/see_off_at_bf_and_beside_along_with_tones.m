@@ -7,11 +7,11 @@ load('f13.mat')
 
 tone_dup_counter = [];
 
-bin_size = 49;
-window_size = 50;
-t_end = 1500;
+bin_size = 100;
+window_size = 20;
+t_end = 1000;
 
-all_freq_at_once_rate = cell(21,7);
+all_freq_at_once_rate = cell(25,7);
 % 1 - hc, 2 - ahc low, 3 - ahc high,
 % 4- Tone Base, 5 - Tone 2xBase, 6 - Tone low, 7 - Tone high
 
@@ -46,7 +46,7 @@ for u=1:size(stage3_db,1)
 
         basef = my_find(f13,ahc_freqs(1,1));
         bfi = 1;
-        octaves_apart_index = 11 + (basef - tone_bf);
+        octaves_apart_index = 13 + (basef - tone_bf);
         the_indices = [bfi, bfi+2, bfi+4];
         if sum(sig6(the_indices)) ~= 0
             for i=1:3
@@ -58,7 +58,7 @@ for u=1:size(stage3_db,1)
 
         basef = my_find(f13,ahc_freqs(1,2));
         bfi = 2;
-        octaves_apart_index = 11 + (basef - tone_bf);
+        octaves_apart_index = 13 + (basef - tone_bf);
         the_indices = [bfi, bfi+2, bfi+4];
         if sum(sig6(the_indices)) ~= 0
             for i=1:3
@@ -118,7 +118,7 @@ end % u
 
 %% averaging together
 n_quart_oct_from_bf = 0;
-index_range = 11-n_quart_oct_from_bf:11+n_quart_oct_from_bf;
+index_range = 13-n_quart_oct_from_bf:13+n_quart_oct_from_bf;
 hc = [];
 ahc_low = [];
 ahc_high = [];
@@ -191,7 +191,7 @@ h1 = mean(h_t_each_row_norm);
 ahc_low1 = mean(ahc_low_each_row_norm);
 ahc_high1 = mean(ahc_high_each_row_norm);
 tone_all1 = mean(tone_all_each_row_norm);
-xaxis = 1:50:1500;
+
 plot(h1, 'LineWidth',2)
 plot(ahc_low1, 'LineWidth',2)
 plot(ahc_high1, 'LineWidth',2)
@@ -222,5 +222,45 @@ hold off
 legend('HC', 'AHC Low', 'AHC High', 'T all')
 title(['t end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])
 %%
+the_bin = 41;
+A = h_t_each_row_norm(:,the_bin)';
+B = ahc_low_each_row_norm(:, the_bin)';
+C = ahc_high_each_row_norm(:, the_bin)';
+D = tone_all_each_row_norm(:, the_bin)';
 
+% Combine the vectors into a cell array
+data = {A, B, C, D};
 
+% Calculate means and standard errors
+means = cellfun(@mean, data);
+std_errors = cellfun(@std, data) ./ sqrt(cellfun(@numel, data));
+
+% Create a bar graph with error bars
+figure;
+bar(1:4, means, 'FaceColor', 'flat');
+hold on;
+
+% Plot error bars only on the top side
+for i = 1:numel(data)
+    if i  <= 3
+    line([i, i], [means(i), means(i) + std_errors(i)], 'Color', 'k', 'LineWidth', 1.5);
+    else
+        line([i, i], [means(i), means(i) - std_errors(i)], 'Color', 'k', 'LineWidth', 1.5);
+    end
+end
+
+hold off;
+
+% Set x-axis labels
+xticks(1:4);
+xticklabels({'HC', 'AHC Low', 'AHC High', 'Tone'});
+
+% Set y-axis label
+ylabel('Mean Value');
+
+% Add a title
+title('off');
+%%
+disp(['H & AHL, ', num2str(hvals(1,the_bin)), ' ', num2str(pvals(1,the_bin)) ])
+disp(['H & AHH, ', num2str(hvals(2,the_bin)), ' ', num2str(pvals(2,the_bin)) ])
+disp(['H & T ', num2str(hvals(4,the_bin)), ' ', num2str(pvals(4,the_bin))])

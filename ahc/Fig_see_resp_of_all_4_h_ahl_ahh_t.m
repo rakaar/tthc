@@ -1,19 +1,15 @@
-clc;clear;close all
+% COMPARE with Tones in Moving avg fashion
+% Spont removed and normalised
 % generating bar graph and ttest results
+clc;clear;close all
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
 
 tone_dup_counter = [];
 
-
-
-
-% t_durn = 801:900;
-% t_end = 1500;
-
-bin_size = 100;
-window_size = 20;
+bin_size = 70;
+window_size = 10;
 t_end = 1000;
 
 all_freq_at_once_rate = cell(25,7);
@@ -55,8 +51,8 @@ for u=1:size(stage3_db,1)
         the_indices = [bfi, bfi+2, bfi+4];
         if sum(sig6(the_indices)) ~= 0
             for i=1:3
+                %                 r = mean(reshape(mean(ahc_rates{the_indices(i),1}(:,1:t_end)), bin_size, t_end/bin_size));
                 r = moving_mean(mean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
-%                 
                 all_freq_at_once_rate{octaves_apart_index,i} = [all_freq_at_once_rate{octaves_apart_index,i}; r];
             end % for
         end % if
@@ -67,8 +63,8 @@ for u=1:size(stage3_db,1)
         the_indices = [bfi, bfi+2, bfi+4];
         if sum(sig6(the_indices)) ~= 0
             for i=1:3
-%                
-                 r = moving_mean(mean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
+                %                 r = mean(reshape(mean(ahc_rates{the_indices(i),1}(:,1:t_end)), bin_size, t_end/bin_size));
+                r = moving_mean(mean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,i} = [all_freq_at_once_rate{octaves_apart_index,i}; r];
             end % for
         end % if
@@ -81,7 +77,7 @@ for u=1:size(stage3_db,1)
 
             % 2 Base
             if tone_bf + 4 <= 13
-                 r = moving_mean(mean(tone_rates{tone_bf+4,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(mean(tone_rates{tone_bf+4,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,5} = [all_freq_at_once_rate{octaves_apart_index,5}; r];
             end
 
@@ -99,13 +95,13 @@ for u=1:size(stage3_db,1)
 
             % 2 ^1.25 base
             if tone_bf + 1 <= 13
-               r = moving_mean(mean(tone_rates{tone_bf + 1,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(mean(tone_rates{tone_bf + 1,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,7} = [all_freq_at_once_rate{octaves_apart_index,7}; r];
             end
 
             % 2 ^1.75 base
             if tone_bf + 3 <= 13
-               r = moving_mean(mean(tone_rates{tone_bf + 3,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(mean(tone_rates{tone_bf + 3,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,7} = [all_freq_at_once_rate{octaves_apart_index,7}; r];
             end
 
@@ -146,8 +142,8 @@ end % i
 
 % 
 % % Subtract spont
-spont_bin_start = 300/bin_size + 1;
-spont_bin_end = 500/bin_size;
+spont_bin_start = 300/window_size + 1;
+spont_bin_end = (500 - bin_size)/window_size + 1;
 
 
 %%
@@ -164,71 +160,75 @@ for r=1:size(hc,1)
 end
 
 for r=1:size(tone_og,1)
-    x = ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) )./max( ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) ) );
-    if sum(isnan(x)) == 0
-        tone_all_each_row_norm = [tone_all_each_row_norm; x];
-    end
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) )./max( ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) ) )];
 end
 for r=1:size(tone_2x,1)
-    x = ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) )./max( ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) ) );
-    
-    if sum(isnan(x)) == 0
-            tone_all_each_row_norm = [tone_all_each_row_norm; x];
-    end
-
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) )./max( ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) ) )];
 end
 for r=1:size(tone_low,1)
-    x = ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) )./max( ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) ) );
-    if sum(isnan(x)) == 0
-        tone_all_each_row_norm = [tone_all_each_row_norm; x];
-    end
-   
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) )./max( ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) ) )];
 end
 for r=1:size(tone_high,1)
-    x = ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) )./max( ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) ) );
-    if sum(isnan(x)) == 0
-        tone_all_each_row_norm = [tone_all_each_row_norm; x];
-    end
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) )./max( ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) ) )];
 end
 
 
 hvals = zeros(6,size(hc,2));
 pvals = zeros(6, size(hc,2));
 for t=1:size(hc,2)
-    [hvals(1,t), pvals(1,t)] = ttest(h_t_each_row_norm(:,t),ahc_low_each_row_norm(:,t), 'Tail', 'right');
-    [hvals(2,t), pvals(2,t)] = ttest(h_t_each_row_norm(:,t),ahc_high_each_row_norm(:,t), 'Tail', 'right');
+    [hvals(1,t), pvals(1,t)] = ttest(h_t_each_row_norm(:,t),ahc_low_each_row_norm(:,t), 'Tail', 'left');
+    [hvals(2,t), pvals(2,t)] = ttest(h_t_each_row_norm(:,t),ahc_high_each_row_norm(:,t), 'Tail', 'left');
     [hvals(3,t), pvals(3,t)] = ttest(ahc_low_each_row_norm(:,t), ahc_high_each_row_norm(:,t));
 
     [hvals(4,t), pvals(4,t)] = ttest2(h_t_each_row_norm(:,t),tone_all_each_row_norm(:,t), 'Tail', 'right');
     [hvals(5,t), pvals(5,t)] = ttest2(ahc_low_each_row_norm(:,t),tone_all_each_row_norm(:,t),'Tail', 'right');
-    [hvals(6,t), pvals(6,t)] = ttest2(ahc_high_each_row_norm(:,t),tone_all_each_row_norm(:,t));
+    [hvals(6,t), pvals(6,t)] = ttest2(ahc_high_each_row_norm(:,t),tone_all_each_row_norm(:,t),'Tail', 'right');
 end % t
 
 %%
-off_start = 41;
-off_end = 41;
+figure
+hold on
+h1 = mean(h_t_each_row_norm);
+ahc_low1 = mean(ahc_low_each_row_norm);
+ahc_high1 = mean(ahc_high_each_row_norm);
+tone_all1 = mean(tone_all_each_row_norm);
 
-h_t_all_off = mean(h_t_each_row_norm(:,off_start:off_end),2);
-ahc_low_all_off = mean(ahc_low_each_row_norm(:,off_start:off_end),2);
-ahc_high_all_off = mean(ahc_high_each_row_norm(:,off_start:off_end),2);
-tone_all_off = mean(tone_all_each_row_norm(:,off_start:off_end),2);
+plot(h1, 'LineWidth',2)
+plot(ahc_low1, 'LineWidth',2)
+plot(ahc_high1, 'LineWidth',2)
+plot(tone_all1, 'LineWidth',3)
+for t=1:size(hc,2)
+    if hvals(1,t) == 1
+        text(t, h1(t), 'H > AL', 'color', 'red','FontWeight','bold','VerticalAlignment', 'bottom')
+    end
+    if hvals(2,t) == 1
+        text(t, h1(t), 'H > AH', 'color', 'blue', 'FontWeight','bold','VerticalAlignment', 'top')
+    end
+    if hvals(3,t) == 1
+        text(t, h1(t), 'AL-AH', 'color', 'green','FontWeight','bold','VerticalAlignment', 'bottom')
+    end
+    if hvals(4,t) == 1
+         text(t, tone_all1(t), '!!!', 'color', 'black','FontWeight','bold','VerticalAlignment', 'top', 'FontSize',15)
+    end
+     if hvals(5,t) == 1
+        text(t, tone_all1(t), '@@@@@', 'color', 'black','FontWeight','bold', 'VerticalAlignment', 'top');
+     end
+    if hvals(6,t) == 1
+        text(t, tone_all1(t), '########', 'color', 'black','FontWeight','bold','VerticalAlignment', 'top')
+    end
+end
+    
 
-
-spont_start = 400/bin_size + 1;
-spont_end = spont_start;
-
-h_t_all_spont = mean(h_t_each_row_norm(:,spont_start:spont_end),2);
-ahc_low_all_spont = mean(ahc_low_each_row_norm(:,spont_start:spont_end),2);
-ahc_high_all_spont = mean(ahc_high_each_row_norm(:,spont_start:spont_end),2);
-tone_all_spont = mean(tone_all_each_row_norm(:,spont_start:spont_end),2);
-
-
+hold off
+legend('HC', 'AHC Low', 'AHC High', 'T all')
+title(['t end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])
 %%
-% Your four vectors
-A = h_t_all_off';
-B = ahc_low_all_off';
-C = ahc_high_all_off';
-D = tone_all_off';
+% the_bin = 51;
+the_bin = 51;
+A = h_t_each_row_norm(:,the_bin)';
+B = ahc_low_each_row_norm(:, the_bin)';
+C = ahc_high_each_row_norm(:, the_bin)';
+D = tone_all_each_row_norm(:, the_bin)';
 
 % Combine the vectors into a cell array
 data = {A, B, C, D};
@@ -257,58 +257,9 @@ xticklabels({'HC', 'AHC Low', 'AHC High', 'Tone'});
 ylabel('Mean Value');
 
 % Add a title
-title('off');
+title('stim res');
 %%
-disp('----------- H and AH-L')
-[h,p] = ttest(h_t_all_off, ahc_low_all_off, 'Tail', 'right');
-disp('H AH-L')
-disp([h,p])
-
-[p,h] = ranksum(h_t_all_off, ahc_low_all_off, 'Tail', 'right');
-disp('H AH-L')
-disp([h,p])
-
-disp('----------- H and AH-H')
-[h,p] = ttest(h_t_all_off, ahc_high_all_off, 'Tail', 'right');
-disp('H AH-H')
-disp([h,p])
-
-[p,h] = ranksum(h_t_all_off, ahc_high_all_off, 'Tail', 'right');
-disp('H AH-H')
-disp([h,p])
-
-disp('----------- AH L and AH-H')
-[h,p] = ttest(ahc_low_all_off, ahc_high_all_off, 'Tail', 'right');
-disp('AH-L AH-H')
-disp([h,p])
-
-[p,h] = ranksum(ahc_low_all_off, ahc_high_all_off, 'Tail', 'right');
-disp('AH-L AH-H')
-disp([h,p])
-
-disp('----------- H and T')
-[h,p] = ttest2(h_t_all_off, tone_all_off, 'Tail', 'right');
-disp('H T')
-disp([h,p])
-
-[p,h] = ranksum(h_t_all_off, tone_all_off, 'Tail', 'right');
-disp('H T')
-disp([h,p])
-
-disp('----------- AH-L and T')
-[h,p] = ttest2(ahc_low_all_off, tone_all_off, 'Tail', 'right');
-disp('AH-L T')
-disp([h,p])
-
-[p,h] = ranksum(ahc_low_all_off, tone_all_off, 'Tail', 'right');
-disp('AH-L T')
-disp([h,p])
-
-disp('----------- AH-H and T')
-[h,p] = ttest2(ahc_high_all_off, tone_all_off, 'Tail', 'left');
-disp('AH-H T')
-disp([h,p])
-
-[p,h] = ranksum(ahc_high_all_off, tone_all_off, 'Tail', 'left');
-disp('AH-H T')
-disp([h,p])
+disp(['H & AHL, ', num2str(hvals(1,the_bin)), ' ', num2str(pvals(1,the_bin)) ])
+disp(['H & AHH, ', num2str(hvals(2,the_bin)), ' ', num2str(pvals(2,the_bin)) ])
+disp(['H & T ', num2str(hvals(4,the_bin)), ' ', num2str(pvals(4,the_bin))])
+disp(['AHL & AHH ', num2str(hvals(3,the_bin)), ' ', num2str(pvals(3,the_bin))])

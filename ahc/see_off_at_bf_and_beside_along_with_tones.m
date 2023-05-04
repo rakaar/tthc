@@ -1,5 +1,6 @@
 % COMPARE with Tones in Moving avg fashion
 % Spont removed and normalised
+% generating bar graph and ttest results
 clc;clear;close all
 load('stage3_db.mat')
 load('stage1_db.mat')

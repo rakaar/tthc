@@ -265,3 +265,4 @@ title('off');
 disp(['H & AHL, ', num2str(hvals(1,the_bin)), ' ', num2str(pvals(1,the_bin)) ])
 disp(['H & AHH, ', num2str(hvals(2,the_bin)), ' ', num2str(pvals(2,the_bin)) ])
 disp(['H & T ', num2str(hvals(4,the_bin)), ' ', num2str(pvals(4,the_bin))])
+disp(['AHL & AHH ', num2str(hvals(3,the_bin)), ' ', num2str(pvals(3,the_bin))])

@@ -6,7 +6,7 @@ clc; clear; close all;
 % NOTE-THIS WILL NOT INCLUDE ALL TONES - T, 2T, 1.25T, 1.75T, 
 % ONLY BF
 
-situation = 'far'; % bf, near, far, all
+situation = 'all'; % bf, near, far, all
 
 load('stage1_db.mat')
 tone_keys = containers.Map;
@@ -137,7 +137,7 @@ for u=1:size(stage1_db,1)
 %             end % for
 
             % 1 3 5
-            all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5) mean(tone135_rates)] ];
+            all_sg_triples = [ all_sg_triples; [rates6(1)/mean(tone135_rates) rates6(3)/mean(tone135_rates) rates6(5)/mean(tone135_rates) mean(tone135_rates)/mean(tone135_rates)] ];
         end
 
         tone246_rates = [];
@@ -168,7 +168,7 @@ for u=1:size(stage1_db,1)
 % 
 %             end % for
 
-            all_sg_triples = [ all_sg_triples; [rates6(2) rates6(4) rates6(6) mean(tone246_rates)] ];
+            all_sg_triples = [ all_sg_triples; [rates6(2)/mean(tone246_rates) rates6(4)/mean(tone246_rates) rates6(6)/mean(tone246_rates) mean(tone246_rates)/mean(tone246_rates)] ];
         end
 
     end % if 
@@ -177,7 +177,7 @@ end % u
 %%
 non_nan_sg_quadples = [];
 for i=1:size(all_sg_triples,1)
-    if ~isnan(all_sg_triples(i,4))
+    if ~isnan(all_sg_triples(i,4)) && ~isnan(all_sg_triples(i,3)) && ~isnan(all_sg_triples(i,2)) && ~isnan(all_sg_triples(i,1))
         non_nan_sg_quadples = [non_nan_sg_quadples; all_sg_triples(i,:)];
     end
 end % i
@@ -247,4 +247,4 @@ boxplot(data,'Labels', {'HC','AHC low', 'AHC high', 'T'},'Orientation', 'vertica
 ylabel('rates')
 
 
-title([situation, ' unit rates-non normalised'])
+title([situation, ' unit rates normalised'])

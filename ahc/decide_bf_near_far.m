@@ -6,13 +6,13 @@ function condition_tf = decide_bf_near_far(situation, abs_dist)
             condition_tf = false;
         end
     elseif strcmp(situation, 'near')
-        if abs_dist <= 1
+        if abs_dist <= 0.5
             condition_tf = true;
         else
             condition_tf = false;
         end
     elseif strcmp(situation, 'far')
-        if abs_dist > 1
+        if abs_dist > 0.5
             condition_tf = true;
         else
             condition_tf = false;

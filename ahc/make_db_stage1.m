@@ -107,4 +107,20 @@ for i=3:length(data_dir)
     end % j  
 end % i
 
+%%
+rows_to_del = [];
+for u=1:size(stage1_db,1)
+    if stage1_db{u,4} == 1 || stage1_db{u,4} == 0
+        freqs = stage1_db{u,6};
+        if freqs(13) < 20e3
+            rows_to_del = [rows_to_del u];
+        end
+    end
+end % u
+
+%%  
+stage1_db(rows_to_del, :) = [];
+%%
+
+
 save('stage1_db.mat', 'stage1_db')

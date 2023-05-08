@@ -1,11 +1,12 @@
 % In near and far cases, enh/sup/no_eff, no sig diff
-% clear;close all; clc;
-clear; clc;
+clear;close all; clc;
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
 
 near_far_data = zeros(2,4);
+
+
 % 1 - near, 2 - far
 % 1 - enh, 2 - sup, 3 - ne, 4 - ns
 for u=1:size(stage3_db,1)
@@ -41,7 +42,7 @@ for u=1:size(stage3_db,1)
             spont = [spont; mean(ahc_rates{col,1}(:, 431:500),2)];
         end % col 1
 
-        for col=3:6
+        for col=1:2
             f1 = ahc_freqs(1,col);
             f2 = ahc_freqs(2,col);
 
@@ -229,7 +230,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title('Near');
+title('Near - Harmonic');
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 
@@ -242,6 +243,6 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title('Far');
+title('Far - Harmonic');
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});

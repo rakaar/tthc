@@ -19,4 +19,6 @@
 12. Fig_ttests_btn_ahc_hc_t.m - Generate box plot of stim response of H, AHC, T with ttest and ranksum between them
 13. Fig_ttests_btn_ahc_hc_t_at_bf_near_far.m  - same as above, BUT ONLY BASE FREQUENCIES IN ALL,BF,NEAR,FAR
 14. Fig_ttests_btn_ahc_hc_t_at_bf_near_far_normalised.m - same as above, but normalised by best freq
-15. Fig_near_far_enh_sup.m - In case of aharmonic, Near Far    
+15. Fig_near_far_enh_sup.m - In case of aharmonic, Near Far
+16. Fig_near_far_enh_sup_with_harmonic.m - Same as above, but with harmonic
+    

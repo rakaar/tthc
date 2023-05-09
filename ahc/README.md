@@ -21,4 +21,5 @@
 14. Fig_ttests_btn_ahc_hc_t_at_bf_near_far_normalised.m - same as above, but normalised by best freq
 15. Fig_near_far_enh_sup.m - In case of aharmonic, Near Far
 16. Fig_near_far_enh_sup_with_harmonic.m - Same as above, but with harmonic
+17. test_btn_near_far_in_hc_ahc.m - Chi square test, Fisher exact test for hc vs ahc in near far for num of cases - enh,sup,ne,ns
     

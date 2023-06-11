@@ -13,7 +13,7 @@ for u=1:size(rms_match_db,1)
     end
 end % u
 
-n_limit = 20;
+n_limit = 10;
 tone_map_keys = keys(tone_map);
 for k=1:length(tone_map_keys)
     key = tone_map_keys{k};

@@ -123,3 +123,43 @@ if p_value < alpha
 else
     fprintf('There is no significant difference in proportions between the two scenarios.\n');
 end
+%%
+disp('############## CHI SQUARE TEST ############')
+% Example frequency data
+A = hc_near_far(1,:);
+B = ahc_near_far(1,:);
+
+
+% Combine the frequency vectors into a contingency table
+contingencyTable = [A; B];
+
+% Calculate the row and column sums
+rowSums = sum(contingencyTable, 2);
+colSums = sum(contingencyTable, 1);
+
+% Calculate the total number of observations
+totalObservations = sum(rowSums);
+
+% Compute expected frequencies
+expectedFrequencies = (rowSums./totalObservations) * colSums;
+
+% Calculate the chi-square statistic
+chiSquareStat = sum(sum(((contingencyTable - expectedFrequencies).^2) ./ expectedFrequencies));
+
+% Calculate the degrees of freedom
+df = (size(contingencyTable, 1) - 1) * (size(contingencyTable, 2) - 1);
+
+% Calculate the p-value
+p = 1 - chi2cdf(chiSquareStat, df);
+
+% Calculate the standardized residuals
+standardizedResiduals = (contingencyTable - expectedFrequencies) ./ sqrt(expectedFrequencies);
+
+% Display the standardized residuals
+disp(standardizedResiduals);
+
+% Find which categories are significantly different (assuming a 5% significance level)
+[rowIdx, colIdx] = find(abs(standardizedResiduals) > 1.96);
+
+% Display the category indices
+disp(colIdx);

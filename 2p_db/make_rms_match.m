@@ -13,6 +13,8 @@ for u=1:size(hc_stage1,1)
     hc_map(name) = u;
 end
 
+x_cord_diff_dist = [];
+y_cord_diff_dist = [];
 %%
 combiner = '***';
 rms_match_db = cell(1000,9);
@@ -55,6 +57,21 @@ for u=1:size(tone_stage1,1)
     rms_match_db{counter,7} = hc_stage1{hc_u,5};
     rms_match_db{counter,8} = tone_rate;
     rms_match_db{counter,9} = hc_rate;
+    rms_match_db{counter,10} = tone_stage1{u,7};
+    rms_match_db{counter,11} = tone_stage1{u,8};
+
+    % if tone_stage1{u,7} ~= hc_stage1{hc_u,7}
+    %     disp('x cord not matching')
+    %     break
+    % end
+    % if tone_stage1{u,8} ~= hc_stage1{hc_u,8}
+    %     disp('y cord not matching')
+    %     break
+    % end
+    % there will obv be difference
+    disp([num2str(tone_stage1{u,7} - hc_stage1{hc_u,7}), ' ', num2str(tone_stage1{u,8} - hc_stage1{hc_u,8})])
+    x_cord_diff_dist = [x_cord_diff_dist, tone_stage1{u,7} - hc_stage1{hc_u,7}];
+    y_cord_diff_dist = [y_cord_diff_dist, tone_stage1{u,8} - hc_stage1{hc_u,8}];
 
     counter = counter + 1;
    

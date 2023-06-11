@@ -1,4 +1,8 @@
 function he_hs_type = he_hs_classifier(tone_rates, hc_rates, tone_sig, hc_sig)
+    if anynan(tone_sig) || anynan(hc_sig)
+        he_hs_type = 0;
+        return
+    end
     all_cases = [];
     for hf=1:5
         t1_i = hf;

@@ -8,7 +8,8 @@ stim = 'HC';
 % data_path = 'Q:\2p_anesthetised\thy1_gcamp_6f';
 % data_path = 'G:\TTHC_2p_21032023_data\pv_gf_21032023';
 % data_path = 'G:\TTHC_2p_21032023_data\sst_gf_21032023';
-data_path = 'G:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
+% data_path = 'G:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
+data_path = 'D:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
 animals_dir_path = dir(data_path);
 
 
@@ -64,6 +65,8 @@ for i=3:length(animals_dir_path)
                     end
                     
                     stage1_db{counter,6} = all7_dff;
+                    stage1_db{counter,7} = fdata.CellData.x(cell_no);
+                    stage1_db{counter,8} = fdata.CellData.y(cell_no);
                     
                     counter = counter + 1;
                 end % cell no

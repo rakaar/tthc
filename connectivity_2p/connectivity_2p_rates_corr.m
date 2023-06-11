@@ -1,5 +1,6 @@
 % map of filename - units
-load('rms_match_db.mat')
+% load('rms_match_db.mat')
+% TEMP commenting to take only few rows for Thy
 
 tone_map = containers.Map;
 
@@ -11,6 +12,18 @@ for u=1:size(rms_match_db,1)
         tone_map(keyname) = [u]; %#ok<NBRAK2> 
     end
 end % u
+
+n_limit = 20;
+tone_map_keys = keys(tone_map);
+for k=1:length(tone_map_keys)
+    key = tone_map_keys{k};
+    units = tone_map(key);
+    if length(units) > n_limit
+        random_unit_indices = randperm(length(units), n_limit);
+        tone_map(key) = units(random_unit_indices);
+    end
+end
+    
 
 %% each file, all cells rate
 keynames = keys(tone_map);
@@ -37,10 +50,10 @@ end
 
 
 %% find corr 
-
 for u=1:size(all_files_rate_tensors,1)
     rates = all_files_rate_tensors{u,1};
     all_corrs = [];
+    
     for i=1:size(rates,1)-1
         for j=i+1:size(rates,1)
             r1 = squeeze(rates(i,:,:));
@@ -54,11 +67,14 @@ for u=1:size(all_files_rate_tensors,1)
             all_corrs = [all_corrs mean(all35_corrs)];
         end
     end
+
     
-    if length(all_corrs) ~= nchoosek(size(rates,1), 2)
-        disp('------------')
-        break
-    end
+
+    % TEMP commented bcoz testing on small rows
+    % if length(all_corrs) ~= nchoosek(size(rates,1), 2)
+    %     disp('------------')
+    %     break
+    % end
 
     all_files_rate_tensors{u,1} = all_files_rate_tensors{u,1};
     all_files_rate_tensors{u,2} = all_corrs;
@@ -69,21 +85,40 @@ keynames = keys(tone_map);
 for k=1:length(keynames)
     fname = keynames{k};
     fdata = load(fname).CellData;
-    xcord = fdata.x;
-    ycord = fdata.y;
+    % temporarily bcoz hard disk in D
+    % fdata = load(strrep(fname, 'G:', 'D:')).CellData;
+    % xcord = fdata.x;
+    % ycord = fdata.y;
     all_dist = [];
-    for i=1:length(xcord)-1
-        for j=i+1:length(xcord)
-            dist = sqrt( (xcord(i) - xcord(j))^2 + (ycord(i) - ycord(j))^2 );
+
+    % for i=1:length(xcord)-1
+    %     for j=i+1:length(xcord)
+    %         dist = sqrt( (xcord(i) - xcord(j))^2 + (ycord(i) - ycord(j))^2 );
+    %         all_dist = [all_dist dist];
+    %     end
+    % end
+
+    selected_cells = tone_map(keynames{k});
+    for iii=1:length(selected_cells)-1
+        for jjj=iii+1:length(selected_cells)
+            i = selected_cells(iii);
+            j = selected_cells(jjj);
+            
+            x1 = rms_match_db{i,10};
+            x2 = rms_match_db{j,10};
+
+            y1 = rms_match_db{i,11};
+            y2 = rms_match_db{j,11};
+            dist = sqrt( (x1 - x2)^2 + (y1 - y2)^2 );
             all_dist = [all_dist dist];
         end
     end
 
-    % check
-    if length(all_dist) ~= length(all_files_rate_tensors{k,2})
-        disp('------------')
-        break
-    end
+    % check - TEMP
+    % if length(all_dist) ~= length(all_files_rate_tensors{k,2})
+    %     disp('------------')
+    %     break
+    % end
 
     all_files_rate_tensors{k,3} = all_dist;
 end
@@ -118,13 +153,18 @@ save('rates_corr_distance', 'rates_corr_distance')
 % 4 - connection exists or not
 
 for u=1:size(rates_corr_distance,1)
-    disp(u)
+    disp([num2str(u) ' of ' num2str(size(rates_corr_distance,1))])
     all_rates = rates_corr_distance{u,1};
     n_cells = size(all_rates,1);
-
+    n_selected_cells = 1:n_cells;
+    
     connected_or_not = [];
-    for i=1:n_cells-1
-        for j=i+1:n_cells
+    for iii=1:length(n_selected_cells)-1
+        for jjj=iii+1:length(n_selected_cells)
+            
+            i = n_selected_cells(iii);
+            j = n_selected_cells(jjj);
+
             r1 = squeeze(all_rates(i,:,:));
             r2 = squeeze(all_rates(j,:,:));
             
@@ -152,6 +192,7 @@ for u=1:size(rates_corr_distance,1)
             chance_ci = [chance_dist_sort(50), chance_dist_sort(950)];
             actual_ci = [actual_dist_sort(50), actual_dist_sort(950)];
             
+            
             if actual_ci(1) > chance_ci(2)
                 connected_or_not = [connected_or_not 1];
             else
@@ -160,61 +201,63 @@ for u=1:size(rates_corr_distance,1)
         end % j
     end % i
 
+    
     rates_corr_distance{u,5} = connected_or_not;
 end
 save('rates_corr_distance.mat', 'rates_corr_distance')
+disp('----rates_corr_distance_saved----')
 %%
-type = 4; % see which type
-connected_distances = [];
-connected_types = [];
-for u=1:size(rates_corr_distance,1)
-    connections = rates_corr_distance{u,5};
-    neuron_types = rates_corr_distance{u,4};
-    distances = rates_corr_distance{u,3};
+% type = 4; % see which type
+% connected_distances = [];
+% connected_types = [];
+% for u=1:size(rates_corr_distance,1)
+%     connections = rates_corr_distance{u,5};
+%     neuron_types = rates_corr_distance{u,4};
+%     distances = rates_corr_distance{u,3};
 
 
-    neuron_ind = 0;
-    for i=1:length(neuron_types)-1
-        for j=i+1:length(neuron_types)
-            neuron_ind = neuron_ind + 1;
-            if connections(neuron_ind) == 1
+%     neuron_ind = 0;
+%     for i=1:length(neuron_types)-1
+%         for j=i+1:length(neuron_types)
+%             neuron_ind = neuron_ind + 1;
+%             if connections(neuron_ind) == 1
                 
-                if neuron_types(i) == type
-                    connected_distances = [connected_distances distances(neuron_ind)];
-                    connected_types = [connected_types neuron_types(j)];
-                elseif neuron_types(j) == type
-                    connected_distances = [connected_distances distances(neuron_ind)];
-                    connected_types = [connected_types neuron_types(i)];
-                end
-            end
-        end
-    end
-end
-%%
-figure
-    scatter(connected_distances, connected_types)
-    title(['type-',num2str(type)])
+%                 if neuron_types(i) == type
+%                     connected_distances = [connected_distances distances(neuron_ind)];
+%                     connected_types = [connected_types neuron_types(j)];
+%                 elseif neuron_types(j) == type
+%                     connected_distances = [connected_distances distances(neuron_ind)];
+%                     connected_types = [connected_types neuron_types(i)];
+%                 end
+%             end
+%         end
+%     end
+% end
+% %%
+% figure
+%     scatter(connected_distances, connected_types)
+%     title(['type-',num2str(type)])
 
-bin_size = 10;
- type_bins = zeros(fix(max(connected_distances)/bin_size) + 1, 4);
- for c=1:length(connected_types)
-    c_type = connected_types(c);
-    d_bin = fix(connected_distances(c)/bin_size) + 1;
+% bin_size = 10;
+%  type_bins = zeros(fix(max(connected_distances)/bin_size) + 1, 4);
+%  for c=1:length(connected_types)
+%     c_type = connected_types(c);
+%     d_bin = fix(connected_distances(c)/bin_size) + 1;
 
-    type_bins(d_bin, c_type) = type_bins(d_bin, c_type) + 1;
- end
+%     type_bins(d_bin, c_type) = type_bins(d_bin, c_type) + 1;
+%  end
 
- prob_types = zeros(fix(max(connected_distances)/bin_size) + 1, 4);
- for b=1:fix(max(connected_distances)/bin_size) + 1
-     all4 = type_bins(b,:);
-     if sum(all4) ~= 0
-        prob_types(b,1) = length(find(all4 == 1));
-        prob_types(b,2) = length(find(all4 == 2));
-        prob_types(b,3) = length(find(all4 == 3));
-        prob_types(b,4) = length(find(all4 == 4));
-     end
- end
-figure
-      plot(prob_types)
-      legend('he','hs','ne', 'ns')
-      title(['type-', num2str(type)])
+%  prob_types = zeros(fix(max(connected_distances)/bin_size) + 1, 4);
+%  for b=1:fix(max(connected_distances)/bin_size) + 1
+%      all4 = type_bins(b,:);
+%      if sum(all4) ~= 0
+%         prob_types(b,1) = length(find(all4 == 1));
+%         prob_types(b,2) = length(find(all4 == 2));
+%         prob_types(b,3) = length(find(all4 == 3));
+%         prob_types(b,4) = length(find(all4 == 4));
+%      end
+%  end
+% figure
+%       plot(prob_types)
+%       legend('he','hs','ne', 'ns')
+%       title(['type-', num2str(type)])

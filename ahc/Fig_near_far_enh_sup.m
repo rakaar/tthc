@@ -245,3 +245,10 @@ ylabel('Fraction');
 title('Far');
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
+
+% for proportion test
+disp('---- Non-Harmonic: HE,HS,NE,NS ----')
+disp('Near case')
+disp(near_far_data(1,:))
+disp('Far Case')
+disp(near_far_data(2,:))

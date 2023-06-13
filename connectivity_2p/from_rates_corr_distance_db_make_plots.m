@@ -1,7 +1,7 @@
 % connection prob to each type vs distance
 close all
 num_to_type_map = containers.Map([1 2 3 4],{'HE','HS','NE','NS'});
-dist_bin_size = 50;
+dist_bin_size = 36;
 for neuron_type=1:4
     disp(['neuron_type = ' num2str(neuron_type)'])
     numb_of_connections = zeros(4,length(0:dist_bin_size:250));

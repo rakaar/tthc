@@ -6,7 +6,10 @@ clc; clear; close all;
 % NOTE-THIS WILL NOT INCLUDE ALL TONES - T, 2T, 1.25T, 1.75T, 
 % ONLY BF
 
-situation = 'far'; % bf, near, far, all
+% situation = 'all'; % bf, near, far, all
+% situation = 'bf';
+% situation = 'near';
+situation = 'all';
 
 load('stage1_db.mat')
 tone_keys = containers.Map;
@@ -137,7 +140,7 @@ for u=1:size(stage1_db,1)
 %             end % for
 
             % 1 3 5
-            all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5) mean(tone135_rates)] ];
+            % all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5) mean(tone135_rates)] ];
         end
 
         tone246_rates = [];
@@ -167,7 +170,7 @@ for u=1:size(stage1_db,1)
 %                 end
 % 
 %             end % for
-
+            % 2 4 6
             all_sg_triples = [ all_sg_triples; [rates6(2) rates6(4) rates6(6) mean(tone246_rates)] ];
         end
 

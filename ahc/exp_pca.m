@@ -1,25 +1,43 @@
 % try PCA btn tone, harmonic and non-harmonic rates
 
 %% make a matrix for PCA, HC, AHC Low, AHC High
-clear;close all
+% clear;close all
 load('stage1_db.mat')
 harmonic_mat = [];
 nonharmonic_low_mat = [];
 nonharmonic_high_mat = [];
 
-for u=1:size(stage1_db,1)
+% units_to_be_checked = 1:size(stage1_db,1); % all
+% units_to_be_checked = only_ahc; % only AHC responding not HC
+units_to_be_checked = only_hc; % only HC responding not AHC
+for uuu=1:length(units_to_be_checked)
+    u = units_to_be_checked(uuu);
     if stage1_db{u,4} ~= 2
         continue
     end
 
     res = stage1_db{u,7};
-    harmonic_mat = [harmonic_mat; mean(res{1,1}(:, 501:570),2)'];
-    nonharmonic_low_mat = [nonharmonic_low_mat; mean(res{3,1}(:, 501:570),2)'];
-    nonharmonic_high_mat = [nonharmonic_high_mat; mean(res{5,1}(:, 501:570),2)'];
 
-    harmonic_mat = [harmonic_mat; mean(res{2,1}(:, 501:570),2)'];
-    nonharmonic_low_mat = [nonharmonic_low_mat; mean(res{4,1}(:, 501:570),2)'];
-    nonharmonic_high_mat = [nonharmonic_high_mat; mean(res{6,1}(:, 501:570),2)'];
+    spont = [];
+    for f=1:6
+       spont = [spont; mean(res{f,1}(:,301:500),2)];
+    end % rep
+
+    mean_spont = mean(spont);
+    std_spont = std(spont);
+
+    if mean_spont == 0
+        continue
+    end
+    % 1 3 5
+    % harmonic_mat = [harmonic_mat; (mean(res{1,1}(:, 501:570),2)' - mean_spont) ./ std_spont];
+    % nonharmonic_low_mat = [nonharmonic_low_mat; (mean(res{3,1}(:, 501:570),2)' - mean_spont) ./ std_spont];
+    % nonharmonic_high_mat = [nonharmonic_high_mat; (mean(res{5,1}(:, 501:570),2)' - mean_spont) ./ std_spont];
+
+    % 2 4 6
+    harmonic_mat = [harmonic_mat; (mean(res{2,1}(:, 501:570),2)' - mean_spont) ./ std_spont];
+    nonharmonic_low_mat = [nonharmonic_low_mat; (mean(res{4,1}(:, 501:570),2)' - mean_spont)./std_spont];
+    nonharmonic_high_mat = [nonharmonic_high_mat; (mean(res{6,1}(:, 501:570),2)' - mean_spont)./std_spont];
     
     
 end

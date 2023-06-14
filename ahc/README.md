@@ -22,4 +22,5 @@
 15. Fig_near_far_enh_sup.m - In case of aharmonic, Near Far
 16. Fig_near_far_enh_sup_with_harmonic.m - Same as above, but with harmonic
 17. test_btn_near_far_in_hc_ahc.m - Chi square test, Fisher exact test for hc vs ahc in near far for num of cases - enh,sup,ne,ns
-    
+18. exp_pca.m - PCA of HC, AHC Low, AHC High rates
+19. number_of_sig_units.m - Number of units  responding to only HC, only AHC and both

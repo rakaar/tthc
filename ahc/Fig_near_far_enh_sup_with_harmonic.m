@@ -1,8 +1,12 @@
 % In near and far cases, enh/sup/no_eff, no sig diff
-clear;close all; clc;
+clear; clc;
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
+
+% situation = 'all';
+% situation = 'low_bf';
+situation = 'high_bf';
 
 near_far_data = zeros(2,4);
 
@@ -11,8 +15,18 @@ near_far_data = zeros(2,4);
 % 1 - enh, 2 - sup, 3 - ne, 4 - ns
 for u=1:size(stage3_db,1)
     tone_rates = stage3_db{u,6};
-    tone_bf = stage3_db{u,9};
+    % tone_bf = stage3_db{u,9};
+    % See with BF0 not BF
+    tone_bf = stage3_db{u,10};
     ahc_units = stage3_db{u,8};
+
+    % to categorize into low and high freqency bf
+    if strcmp(situation, 'low_bf') && tone_bf > 5
+        continue
+    end
+    if strcmp(situation, 'high_bf') && tone_bf <= 5
+        continue
+    end
 
     % spont
     spont = [];
@@ -230,7 +244,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title('Near - Harmonic');
+title(['Near - Harmonic' ' ' situation]);
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 
@@ -243,7 +257,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title('Far - Harmonic');
+title(['Far - Harmonic' ' ' situation]);
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 
@@ -251,6 +265,6 @@ xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 % for proportion test
 disp('---- Harmonic: HE,HS,NE,NS ----')
 disp('Near case')
-disp(near_far_data(1,:))
+disp([near_far_data(1,:) sum(near_far_data(1,:))])
 disp('Far Case')
-disp(near_far_data(2,:))
+disp([near_far_data(2,:) sum(near_far_data(2,:))])

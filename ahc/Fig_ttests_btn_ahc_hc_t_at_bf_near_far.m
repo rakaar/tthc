@@ -140,7 +140,7 @@ for u=1:size(stage1_db,1)
 %             end % for
 
             % 1 3 5
-            % all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5) mean(tone135_rates)] ];
+            all_sg_triples = [ all_sg_triples; [rates6(1) rates6(3) rates6(5) mean(tone135_rates)] ];
         end
 
         tone246_rates = [];

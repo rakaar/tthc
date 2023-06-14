@@ -15,9 +15,9 @@ near_far_data = zeros(2,4);
 % 1 - enh, 2 - sup, 3 - ne, 4 - ns
 for u=1:size(stage3_db,1)
     tone_rates = stage3_db{u,6};
-    % tone_bf = stage3_db{u,9};
+    tone_bf = stage3_db{u,9};
     % See with BF0 not BF
-    tone_bf = stage3_db{u,10};
+    % tone_bf = stage3_db{u,10};
     ahc_units = stage3_db{u,8};
 
     % to categorize into low and high freqency bf

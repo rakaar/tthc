@@ -12,8 +12,8 @@ rates_vs_bf = cell(27,5);
 % 4 - AHC 2^1.25(6)
 % 5 - AHC 2^1.75(5)
 zscores_or_rates = 'rates';
-bf_or_bf0 = 'BF0';
-
+bf_or_bf0 = 'BF';
+is_normalised = 1;
 for u=1:size(stage3_db,1)
     if strcmp(bf_or_bf0,'BF')
         tone_bf = stage3_db{u,9};
@@ -24,6 +24,15 @@ for u=1:size(stage3_db,1)
     if tone_bf == -1
         continue
     end
+
+    if strcmp(bf_or_bf0, 'BF')
+        tone_rates = stage3_db{u,6};
+    elseif strcmp(bf_or_bf0, 'BF0')
+        tone_rates = stage3_db{u,7};
+    end
+    
+    tone_bf_rates = tone_rates{tone_bf,1};
+    tone_bf_rates_mean = 1000*mean(mean(tone_bf_rates(:,501:570),2));
 
     ahc_units = stage3_db{u,8};
     for au=1:length(ahc_units)
@@ -75,9 +84,16 @@ for u=1:size(stage3_db,1)
                 stim_rates3_z_score = (stim_rates3 - mean_spont)./std_spont;
                 stim_rates5_z_score = (stim_rates5 - mean_spont)./std_spont;
             else
-                stim_rates1_z_score = 1000*stim_rates1;
-                stim_rates3_z_score = 1000*stim_rates3;
-                stim_rates5_z_score = 1000*stim_rates5;
+                if is_normalised == 0
+                    stim_rates1_z_score = 1000*stim_rates1;
+                    stim_rates3_z_score = 1000*stim_rates3;
+                    stim_rates5_z_score = 1000*stim_rates5;
+                else
+                    stim_rates1_z_score = 1000*stim_rates1./tone_bf_rates_mean;
+                    stim_rates3_z_score = 1000*stim_rates3./tone_bf_rates_mean;
+                    stim_rates5_z_score = 1000*stim_rates5./tone_bf_rates_mean;
+                    
+                end
             end
             rates_vs_bf{delta1_index,1} = [rates_vs_bf{delta1_index,1}; mean(stim_rates1_z_score)];
             rates_vs_bf{delta1_index,3} = [rates_vs_bf{delta1_index,3}; mean(stim_rates3_z_score)];
@@ -95,9 +111,16 @@ for u=1:size(stage3_db,1)
                 stim_rates4_z_score = (stim_rates4 - mean_spont)./std_spont;
                 stim_rates6_z_score = (stim_rates6 - mean_spont)./std_spont;
             else
-                stim_rates2_z_score = 1000*stim_rates2;
-                stim_rates4_z_score = 1000*stim_rates4;
-                stim_rates6_z_score = 1000*stim_rates6;
+                if is_normalised == 0
+                    stim_rates2_z_score = 1000*stim_rates2;
+                    stim_rates4_z_score = 1000*stim_rates4;
+                    stim_rates6_z_score = 1000*stim_rates6;
+                else
+                    stim_rates2_z_score = 1000*stim_rates2./tone_bf_rates_mean;
+                    stim_rates4_z_score = 1000*stim_rates4./tone_bf_rates_mean;
+                    stim_rates6_z_score = 1000*stim_rates6./tone_bf_rates_mean;
+                end
+
             end
             rates_vs_bf{delta2_index,1} = [rates_vs_bf{delta2_index,1}; mean(stim_rates2_z_score)];
             rates_vs_bf{delta2_index,2} = [rates_vs_bf{delta2_index,2}; mean(stim_rates4_z_score)];
@@ -128,7 +151,7 @@ errorbar(octaves_apart_with_data, mean_reduced_data(:,3), err_reduced_data(:,3),
 errorbar(octaves_apart_with_data, mean_reduced_data(:,4), err_reduced_data(:,4), 'm', 'LineWidth', 2)
 errorbar(octaves_apart_with_data, mean_reduced_data(:,5), err_reduced_data(:,5), 'k', 'LineWidth', 2)
 legend('HC', 'AHC 2*0.25(4)', 'AHC 2*0.5(3)', 'AHC 2*1.25(6)', 'AHC 2*1.75(5)')
-title([zscores_or_rates ' ---atleast 1/3 sig, with errorbar '] )
+title([zscores_or_rates ' ---atleast 1/3 sig, with errorbar ' ' Is Normalised by Tone BF rates = ' num2str(is_normalised)] )
 xlabel(['octaves from ' bf_or_bf0])
 ylabel(zscores_or_rates)
 % After plotting your graph, get the current axes with the `gca` function.

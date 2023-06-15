@@ -1,5 +1,5 @@
 % HC, AHC rates vs BF-0.25, BF, BF+0.25 
-clear;close all;clc;
+clear;clc;
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
@@ -11,8 +11,16 @@ rates_vs_bf = cell(27,5);
 % 3 - AHC 2^0.5(3)
 % 4 - AHC 2^1.25(6)
 % 5 - AHC 2^1.75(5)
+zscores_or_rates = 'rates';
+bf_or_bf0 = 'BF0';
+
 for u=1:size(stage3_db,1)
-    tone_bf = stage3_db{u,9};
+    if strcmp(bf_or_bf0,'BF')
+        tone_bf = stage3_db{u,9};
+    elseif strcmp(bf_or_bf0,'BF0')
+        tone_bf = stage3_db{u,10};
+    end
+
     if tone_bf == -1
         continue
     end
@@ -62,10 +70,15 @@ for u=1:size(stage3_db,1)
             stim_rates3 = mean(res{3,1}(:,501:570),2);
             stim_rates5 = mean(res{5,1}(:,501:570),2);
 
-            stim_rates1_z_score = (stim_rates1 - mean_spont)./std_spont;
-            stim_rates3_z_score = (stim_rates3 - mean_spont)./std_spont;
-            stim_rates5_z_score = (stim_rates5 - mean_spont)./std_spont;
-
+            if strcmp(zscores_or_rates, 'zscore')
+                stim_rates1_z_score = (stim_rates1 - mean_spont)./std_spont;
+                stim_rates3_z_score = (stim_rates3 - mean_spont)./std_spont;
+                stim_rates5_z_score = (stim_rates5 - mean_spont)./std_spont;
+            else
+                stim_rates1_z_score = 1000*stim_rates1;
+                stim_rates3_z_score = 1000*stim_rates3;
+                stim_rates5_z_score = 1000*stim_rates5;
+            end
             rates_vs_bf{delta1_index,1} = [rates_vs_bf{delta1_index,1}; mean(stim_rates1_z_score)];
             rates_vs_bf{delta1_index,3} = [rates_vs_bf{delta1_index,3}; mean(stim_rates3_z_score)];
             rates_vs_bf{delta1_index,5} = [rates_vs_bf{delta1_index,5}; mean(stim_rates5_z_score)];
@@ -77,13 +90,18 @@ for u=1:size(stage3_db,1)
             stim_rates4 = mean(res{4,1}(:,501:570),2);
             stim_rates6 = mean(res{6,1}(:,501:570),2);
 
-            stim_rates2_z_score = (stim_rates2 - mean_spont)./std_spont;
-            stim_rates4_z_score = (stim_rates4 - mean_spont)./std_spont;
-            stim_rates6_z_score = (stim_rates6 - mean_spont)./std_spont;
-
-            rates_vs_bf{delta1_index,1} = [rates_vs_bf{delta1_index,1}; mean(stim_rates2_z_score)];
-            rates_vs_bf{delta1_index,2} = [rates_vs_bf{delta1_index,2}; mean(stim_rates4_z_score)];
-            rates_vs_bf{delta1_index,4} = [rates_vs_bf{delta1_index,4}; mean(stim_rates6_z_score)];
+            if strcmp(zscores_or_rates, 'zscore')
+                stim_rates2_z_score = (stim_rates2 - mean_spont)./std_spont;
+                stim_rates4_z_score = (stim_rates4 - mean_spont)./std_spont;
+                stim_rates6_z_score = (stim_rates6 - mean_spont)./std_spont;
+            else
+                stim_rates2_z_score = 1000*stim_rates2;
+                stim_rates4_z_score = 1000*stim_rates4;
+                stim_rates6_z_score = 1000*stim_rates6;
+            end
+            rates_vs_bf{delta2_index,1} = [rates_vs_bf{delta2_index,1}; mean(stim_rates2_z_score)];
+            rates_vs_bf{delta2_index,2} = [rates_vs_bf{delta2_index,2}; mean(stim_rates4_z_score)];
+            rates_vs_bf{delta2_index,4} = [rates_vs_bf{delta2_index,4}; mean(stim_rates6_z_score)];
 
         end
 
@@ -94,7 +112,7 @@ end % for
 
 
 octaves_from_bf = -3.25:0.25:3.25;
-row_nums_with_data = 4:18;
+row_nums_with_data = 10:17;
 octaves_apart_with_data = octaves_from_bf(row_nums_with_data);
 
 reduced_data = rates_vs_bf(row_nums_with_data,:);
@@ -109,10 +127,10 @@ errorbar(octaves_apart_with_data, mean_reduced_data(:,2), err_reduced_data(:,2),
 errorbar(octaves_apart_with_data, mean_reduced_data(:,3), err_reduced_data(:,3), 'g', 'LineWidth', 2)
 errorbar(octaves_apart_with_data, mean_reduced_data(:,4), err_reduced_data(:,4), 'm', 'LineWidth', 2)
 errorbar(octaves_apart_with_data, mean_reduced_data(:,5), err_reduced_data(:,5), 'k', 'LineWidth', 2)
-legend('HC', 'AHC 2^0.25(4)', 'AHC 2^0.5(3)', 'AHC 2^1.25(6)', 'AHC 2^1.75(5)')
-title('z-scores from spont, atleast 1/3 sig, with errorbar')
-xlabel('octaves from BF')
-ylabel('z-score')
+legend('HC', 'AHC 2*0.25(4)', 'AHC 2*0.5(3)', 'AHC 2*1.25(6)', 'AHC 2*1.75(5)')
+title([zscores_or_rates ' ---atleast 1/3 sig, with errorbar '] )
+xlabel(['octaves from ' bf_or_bf0])
+ylabel(zscores_or_rates)
 % After plotting your graph, get the current axes with the `gca` function.
 ax = gca;
 

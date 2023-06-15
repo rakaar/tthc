@@ -10,14 +10,14 @@ stim = 'HC';
 % data_path = 'G:\TTHC_2p_21032023_data\sst_gf_21032023';
 % data_path = 'G:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
 data_path = 'D:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
-animals_dir_path = dir(data_path);
+animals_dir_path1 = dir(data_path);
 
 
 
 stage1_db = cell(1000,6);
 counter = 1;
-for i=3:length(animals_dir_path)
-    animal = animals_dir_path(i).name;
+for i=3:length(animals_dir_path1)
+    animal = animals_dir_path1(i).name;
     animal_dir_path = strcat(data_path, '\', animal);
     disp('---animal path is')
     disp(animal_dir_path)

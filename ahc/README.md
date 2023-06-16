@@ -25,3 +25,5 @@
 18. exp_pca.m - PCA of HC, AHC Low, AHC High rates
 19. number_of_sig_units.m - Number of units  responding to only HC, only AHC and both
 20. hc_ahc_rates_vs_bf.m - % HC, AHC rates vs ...BF-0.25, BF, BF+0.25 ...
+21. sig_btn_hc_and_others.m - For the graph generated from above, do unpaired tests btn HC and Non-HC
+22. average_tuning.m - Normalised rates vs BF-0.25, BF, BF + 0.25. Same for BF0 as well. Just a variable to be swtiched

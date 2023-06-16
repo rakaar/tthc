@@ -12,8 +12,9 @@ rates_vs_bf = cell(27,5);
 % 4 - AHC 2^1.25(6)
 % 5 - AHC 2^1.75(5)
 zscores_or_rates = 'rates';
-bf_or_bf0 = 'BF';
+bf_or_bf0 = 'BF0';
 is_normalised = 1;
+normalize_by = 'BF0'; % normalize by BF0 or BF
 for u=1:size(stage3_db,1)
     if strcmp(bf_or_bf0,'BF')
         tone_bf = stage3_db{u,9};
@@ -23,13 +24,30 @@ for u=1:size(stage3_db,1)
         tone_rates = stage3_db{u,7};
     end
 
+    % the scale is BF or BF0
     if tone_bf == -1
         continue
     end
 
+    if strcmp(normalize_by, 'BF')
+        bf = stage3_db{u,9};
+        if bf == -1
+            continue
+        end
+        rates = stage3_db{u,6};
+        tone_bf_rates = rates{bf,1};
+        tone_bf_rates_mean = 1000*mean(mean(tone_bf_rates(:,501:570),2));
+    elseif strcmp(normalize_by, 'BF0')
+        bf = stage3_db{u,10};
+        if bf == -1
+            continue
+        end
+        rates = stage3_db{u,7};
+        tone_bf_rates = rates{bf,1};
+        tone_bf_rates_mean = 1000*mean(mean(tone_bf_rates(:,501:570),2));
+    end
     
-    tone_bf_rates = tone_rates{tone_bf,1};
-    tone_bf_rates_mean = 1000*mean(mean(tone_bf_rates(:,501:570),2));
+    
 
     ahc_units = stage3_db{u,8};
     for au=1:length(ahc_units)
@@ -149,7 +167,7 @@ errorbar(octaves_apart_with_data, mean_reduced_data(:,3), err_reduced_data(:,3),
 errorbar(octaves_apart_with_data, mean_reduced_data(:,4), err_reduced_data(:,4), 'm', 'LineWidth', 2)
 errorbar(octaves_apart_with_data, mean_reduced_data(:,5), err_reduced_data(:,5), 'k', 'LineWidth', 2)
 legend('HC', 'AHC 2*0.25(4)', 'AHC 2*0.5(3)', 'AHC 2*1.25(6)', 'AHC 2*1.75(5)')
-title([zscores_or_rates ' ---atleast 1/3 sig, with errorbar ' ' Is Normalised by Tone BF rates = ' num2str(is_normalised)] )
+title([zscores_or_rates ' ---atleast 1/3 sig, with errorbar ' ' Is Normalised by rates of = ' normalize_by] )
 xlabel(['octaves from ' bf_or_bf0])
 ylabel(zscores_or_rates)
 % After plotting your graph, get the current axes with the `gca` function.

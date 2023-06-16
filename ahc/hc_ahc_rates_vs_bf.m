@@ -17,19 +17,16 @@ is_normalised = 1;
 for u=1:size(stage3_db,1)
     if strcmp(bf_or_bf0,'BF')
         tone_bf = stage3_db{u,9};
+        tone_rates = stage3_db{u,6};
     elseif strcmp(bf_or_bf0,'BF0')
         tone_bf = stage3_db{u,10};
+        tone_rates = stage3_db{u,7};
     end
 
     if tone_bf == -1
         continue
     end
 
-    if strcmp(bf_or_bf0, 'BF')
-        tone_rates = stage3_db{u,6};
-    elseif strcmp(bf_or_bf0, 'BF0')
-        tone_rates = stage3_db{u,7};
-    end
     
     tone_bf_rates = tone_rates{tone_bf,1};
     tone_bf_rates_mean = 1000*mean(mean(tone_bf_rates(:,501:570),2));
@@ -61,10 +58,11 @@ for u=1:size(stage3_db,1)
         mean_spont = mean(spont_for_mean);
         std_spont = std(spont_for_mean);
 
-        if std_spont == 0
-            continue
+        if strcmp(zscores_or_rates,'zscore')
+            if std_spont == 0
+                continue
+            end
         end
-
         sig6 = zeros(6,1);
         for s=1:6
             stim_rates = mean(res{s,1}(:,501:570),2);

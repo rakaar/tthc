@@ -12,9 +12,9 @@ rates_vs_bf = cell(27,5);
 % 4 - AHC 2^1.25(6)
 % 5 - AHC 2^1.75(5)
 zscores_or_rates = 'rates';
-bf_or_bf0 = 'BF0';
+bf_or_bf0 = 'BF';
 is_normalised = 1;
-normalize_by = 'BF0'; % normalize by BF0 or BF
+normalize_by = 'BF'; % normalize by BF0 or BF
 for u=1:size(stage3_db,1)
     if strcmp(bf_or_bf0,'BF')
         tone_bf = stage3_db{u,9};

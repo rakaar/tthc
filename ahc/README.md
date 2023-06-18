@@ -27,3 +27,5 @@
 20. hc_ahc_rates_vs_bf.m - % HC, AHC rates vs ...BF-0.25, BF, BF+0.25 ...
 21. sig_btn_hc_and_others.m - For the graph generated from above, do unpaired tests btn HC and Non-HC
 22. average_tuning.m - Normalised rates vs BF-0.25, BF, BF + 0.25. Same for BF0 as well. Just a variable to be swtiched
+23. hc_ahc_linear_checks.m - Linear index for all stim vs Octaves apart from BF or BF0
+24. sig_diff_in_hc_ahc_linear_check.m - Sig difference in the graph obtained above

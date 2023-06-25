@@ -1,5 +1,5 @@
 % HC, AHC rates vs BF-0.25, BF, BF+0.25 
-clear;clc;
+clc;
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')

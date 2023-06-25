@@ -3,7 +3,7 @@ clear;clc;
 load('stage3_db.mat')
 bf_tuning = cell(27,1);
 
-bf_or_bf0 = 'BF0'; % BF for Tone, BF0 for HC
+bf_or_bf0 = 'BF'; % BF for Tone, BF0 for HC
 
 for u=1:size(stage3_db,1)
     if strcmp(bf_or_bf0, 'BF')

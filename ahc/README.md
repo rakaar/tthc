@@ -29,3 +29,4 @@
 22. average_tuning.m - Normalised rates vs BF-0.25, BF, BF + 0.25. Same for BF0 as well. Just a variable to be swtiched
 23. hc_ahc_linear_checks.m - Linear index for all stim vs Octaves apart from BF or BF0
 24. sig_diff_in_hc_ahc_linear_check.m - Sig difference in the graph obtained above
+25. linearity_check_from_tuning_curive - compare AHC/HC in ideal linear case from BFtuning and two tone responses ratio normalised by BF

@@ -16,6 +16,9 @@ bf_or_bf0 = 'BF';
 is_normalised = 1;
 normalize_by = 'BF'; % normalize by BF0 or BF
 for u=1:size(stage3_db,1)
+    if isempty(stage3_db{u,1})
+        continue
+    end
     if strcmp(bf_or_bf0,'BF')
         tone_bf = stage3_db{u,9};
         tone_rates = stage3_db{u,6};
@@ -150,8 +153,27 @@ for u=1:size(stage3_db,1)
 end % for 
 
 
+% find rows with enough data
+threshold = 5;
+row_nums_greater_than_threshold = [];
+
+for r=1:size(rates_vs_bf,1)
+    is_all_above_threshold = 1;
+    for j=1:size(rates_vs_bf,2)
+       if length(rates_vs_bf{r,j}) < threshold
+           is_all_above_threshold = 0;
+           break
+       end 
+    end
+
+    if is_all_above_threshold == 1
+        row_nums_greater_than_threshold = [row_nums_greater_than_threshold; r];
+    end
+end
+
+
 octaves_from_bf = -3.25:0.25:3.25;
-row_nums_with_data = 10:17;
+row_nums_with_data = row_nums_greater_than_threshold;
 octaves_apart_with_data = octaves_from_bf(row_nums_with_data);
 
 reduced_data = rates_vs_bf(row_nums_with_data,:);

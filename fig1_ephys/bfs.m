@@ -20,6 +20,17 @@ for u=1:size(rms_match_db,1)
     
 end
 
+% chi square test before normalizing 
+% Your two arrays. Note: These should contain counts, not continuous numbers or probabilities.
+A = bf_counter;
+B = bf0_counter;
+
+
+%%  matlab file exchange
+[tbl,chi2,p,labels] = crosstab(A,B)
+disp('Chi square test 2 - file exchange')
+
+
 bf_counter = bf_counter./n;
 bf0_counter = bf0_counter./n;
 % bf_bf0 = bf_bf0./n;
@@ -80,3 +91,6 @@ figure
 
 %%
 [h,p] = kstest2(bf_counter, bf0_counter);
+disp('KS test 2')
+disp(['p = ', num2str(p)])
+disp(['h = ', num2str(h)])

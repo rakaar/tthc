@@ -151,12 +151,16 @@ end
 disp('done')
 %%
 close all
+corrmat = [tone_noise_corr_vec' hc_noise_corr_vec'];
+corr_val = corrmat(1,2);
 figure
        scatter(tone_noise_corr_vec, hc_noise_corr_vec)
        hold on
         plot(xlim, ylim, '-b')
        hold off
-       title('noise')
+       title([ 'correlation = ' num2str(corr_val)])
+       xlabel('tone noise corr')
+        ylabel('hc noise corr')
 
 
 figure

@@ -14,8 +14,14 @@ data_dir = dir(data_path);
 stage1_db = cell(100,7);
 counter = 1;
 
+M_or_F = 'F';
 for i=3:length(data_dir)
     animal = data_dir(i).name;
+    if strcmp(M_or_F, 'M') && contains(animal, '_F')
+        continue
+    elseif strcmp(M_or_F, 'F') && contains(animal, '_M')
+        continue
+    end
     animal_path = strcat(data_dir(i).folder, '\', data_dir(i).name);
     animal_path_dir = dir(animal_path);
     for j=3:length(animal_path_dir)

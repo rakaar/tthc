@@ -2,6 +2,9 @@ clear; close all;
 load('stage2_db.mat')
 
 for u=1:size(stage2_db,1)
+    if isempty(stage2_db{u,1})
+        continue
+    end
     tone_rates = stage2_db{u,6};
     tone_avg_res = zeros(13,1);
     tone_sig_vals = zeros(13,1);
@@ -41,6 +44,9 @@ end % u
 % NOT changing var names, just changing index
 
 for u=1:size(stage2_db,1)
+    if isempty(stage2_db{u,1})
+        continue
+    end
     tone_rates = stage2_db{u,7};
     tone_avg_res = zeros(13,1);
     tone_sig_vals = zeros(13,1);

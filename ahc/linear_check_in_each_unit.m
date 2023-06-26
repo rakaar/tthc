@@ -151,8 +151,26 @@ for u=1:size(stage3_db,1)
     end % au
 end
 
+% find rows with enough data
+threshold = 5;
+row_nums_greater_than_threshold = [];
+
+for r=1:size(linear_ratio_unit_wise,1)
+    is_all_above_threshold = 1;
+    for j=1:size(linear_ratio_unit_wise,2)
+       if length(linear_ratio_unit_wise{r,j}) < threshold
+           is_all_above_threshold = 0;
+           break
+       end 
+    end
+
+    if is_all_above_threshold == 1
+        row_nums_greater_than_threshold = [row_nums_greater_than_threshold; r];
+    end
+end
+
 %% plot
-rows_with_data = 10:17;
+rows_with_data = row_nums_greater_than_threshold;
 octaves_with_data = octaves_apart(rows_with_data);
 linear_ratio_unit_wise_enuf_data = linear_ratio_unit_wise(rows_with_data,:);
 

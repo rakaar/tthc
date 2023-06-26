@@ -6,6 +6,10 @@ bf_tuning = cell(27,1);
 bf_or_bf0 = 'BF'; % BF for Tone, BF0 for HC
 
 for u=1:size(stage3_db,1)
+    if isempty(stage3_db{u,1})
+        continue
+    end
+
     if strcmp(bf_or_bf0, 'BF')
         rates = stage3_db{u,6};
         bf = stage3_db{u,9};
@@ -59,8 +63,25 @@ for u=1:size(stage3_db,1)
 
 end % for u
 
+% find rows with enough data
+threshold = 5;
+row_nums_greater_than_threshold = [];
 
-rows_with_data = 5:26;
+for r=1:size(bf_tuning,1)
+    is_all_above_threshold = 1;
+    for j=1:size(bf_tuning,2)
+       if length(bf_tuning{r,j}) < threshold
+           is_all_above_threshold = 0;
+           break
+       end 
+    end
+
+    if is_all_above_threshold == 1
+        row_nums_greater_than_threshold = [row_nums_greater_than_threshold; r];
+    end
+end
+
+rows_with_data = row_nums_greater_than_threshold;
 all_octs = -3.25:0.25:3.25;
 octs_with_data = all_octs(rows_with_data);
 

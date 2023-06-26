@@ -94,6 +94,26 @@ figure
     xlabel(' # of Octaves apart BASE frequency from BF')
     ylabel('Ratio')
     legend('2^0.25','2^0.5','2^1.25','2^1.75')
+    
+% After plotting your graph, get the current axes with the `gca` function.
+ax = gca;
+
+% Now set the x-ticks. For example, to set 15 ticks:
+ax.XTick = linspace(min(octaves_apart_with_data), max(octaves_apart_with_data), length(octaves_apart_with_data)); % replace 'x' with your array
+
+% If you want to specify exactly which values to use as ticks, you can pass them as an array:
+ax.XTick = octaves_apart_with_data; % replace 'x' with your array
+
+% plot
+figure
+    hold on    
+    plot(octaves_apart_with_data,0.5*(ratio_from_harmonic_linear_ideal(:,1) + ratio_from_harmonic_linear_ideal(:,2)),'r', 'LineWidth', 2);
+    plot(octaves_apart_with_data,0.5*(ratio_from_harmonic_linear_ideal(:,3) + ratio_from_harmonic_linear_ideal(:,4)),'b', 'LineWidth', 2);
+    hold off
+    title('Ratio of two tone response to linear sum of two tones')
+    xlabel(' # of Octaves apart BASE frequency from BF')
+    ylabel('Ratio')
+    legend('NHC low', 'NHC High')
 % After plotting your graph, get the current axes with the `gca` function.
 ax = gca;
 

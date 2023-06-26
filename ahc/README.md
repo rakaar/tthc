@@ -30,3 +30,4 @@
 23. hc_ahc_linear_checks.m - Linear index for all stim vs Octaves apart from BF or BF0
 24. sig_diff_in_hc_ahc_linear_check.m - Sig difference in the graph obtained above
 25. linearity_check_from_tuning_curive - compare AHC/HC in ideal linear case from BFtuning and two tone responses ratio normalised by BF
+26. linear_check_in_each_unit.m - Calculate (non harmonic rate/ individual tone rates sum) // (harmonic rate/ individual tone rates sum)

@@ -1,6 +1,5 @@
 % map of filename - units
-% load('rms_match_db.mat')
-% TEMP commenting to take only few rows for Thy
+load('rms_match_db.mat')
 
 tone_map = containers.Map;
 
@@ -13,16 +12,17 @@ for u=1:size(rms_match_db,1)
     end
 end % u
 
-n_limit = 10;
-tone_map_keys = keys(tone_map);
-for k=1:length(tone_map_keys)
-    key = tone_map_keys{k};
-    units = tone_map(key);
-    if length(units) > n_limit
-        random_unit_indices = randperm(length(units), n_limit);
-        tone_map(key) = units(random_unit_indices);
-    end
-end
+% section to limit number of units in each location
+% n_limit = 10;
+% tone_map_keys = keys(tone_map);
+% for k=1:length(tone_map_keys)
+%     key = tone_map_keys{k};
+%     units = tone_map(key);
+%     if length(units) > n_limit
+%         random_unit_indices = randperm(length(units), n_limit);
+%         tone_map(key) = units(random_unit_indices);
+%     end
+% end
     
 
 %% each file, all cells rate
@@ -147,7 +147,7 @@ for k=1:length(keynames)
     rates_corr_distance{k,4} = unit_types;
 end
 
-save('rates_corr_distance', 'rates_corr_distance')
+% save('rates_corr_distance', 'rates_corr_distance')
 %% based on type, 4 x 4 matrix
 
 % 4 - connection exists or not

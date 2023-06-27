@@ -298,3 +298,18 @@ dof = 2*n - 4;
 
 p = 1 - tcdf(t,dof);
 
+%% check in each bin the number
+% nc_cell = tone_noise_corr_vs_dist;
+nc_cell = hc_noise_corr_vs_dist;
+count = zeros(9,1);
+for i=1:180
+    for j=1:9
+        if ~isempty(nc_cell{i,j})
+            count(j) = count(j) + 1;
+        end
+    end
+end
+
+
+disp('count is ')
+disp(count')

@@ -113,5 +113,20 @@ for d=1:max_no_of_bins
     err_corr_v_dist(d) = nanstd(corr_vs_dist{d,1})/sqrt(sum(~isnan(corr_vs_dist{d,1})));
 end
 
+% find bins with enough data
+rows_with_enuf_data = [];
+for i=1:size(corr_vs_dist,1)
+    if length(corr_vs_dist{i,1}) > 10
+        rows_with_enuf_data = [rows_with_enuf_data i];
+    end
+end % for
+x_labels = [];
+for i=1:length(rows_with_enuf_data)
+    x_labels = [x_labels (rows_with_enuf_data(i)-1)*10 + 1];
+end
+
 figure
-    errorbar(1:max_no_of_bins,mean_corr_v_dist,err_corr_v_dist)
+    errorbar(x_labels,mean_corr_v_dist(rows_with_enuf_data),err_corr_v_dist(rows_with_enuf_data))
+    title('Tone - Noise corr vs dist')
+    xlabel('Pixel dist')
+    ylabel('Noise corr')

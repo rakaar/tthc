@@ -249,11 +249,10 @@ figure
         plot(ahc_low1(stim_start_bin:end), 'LineWidth',2, 'Color','b')
         plot(ahc_high1(stim_start_bin:end), 'LineWidth',2, 'Color','g')
         plot(tone_all1(stim_start_bin:end), 'LineWidth',3, 'Color', 'k')
-    yline(mean(spont_for_hc_ahc), 'LineWidth',1, 'Color','r', 'LineStyle', '--')
-    yline(mean(spont_for_t), 'LineWidth',1, 'Color','b', 'LineStyle', '--')
+    yline(0, 'LineWidth',1, 'Color','r', 'LineStyle', '--')
     hold off
     title(['From stim start to end of 1s - ' 't end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])
-    legend('HC', 'AHC Low', 'AHC High', 'T all', 'HC AHC-L,H Spont', 'T all Spont')
+    legend('HC', 'AHC Low', 'AHC High', 'T all',  'Spont')
     xlabel('Bins (100 ms)')
     ylabel('Normalised firing rate')
 %%

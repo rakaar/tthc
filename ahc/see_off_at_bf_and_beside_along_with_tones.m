@@ -16,6 +16,9 @@ all_freq_at_once_rate = cell(25,7);
 % 1 - hc, 2 - ahc low, 3 - ahc high,
 % 4- Tone Base, 5 - Tone 2xBase, 6 - Tone low, 7 - Tone high
 
+spont_for_t = [];
+spont_for_hc_ahc = [];
+
 
 for u=1:size(stage3_db,1)
     % T BF
@@ -26,6 +29,12 @@ for u=1:size(stage3_db,1)
     end
 
     tone_rates = stage3_db{u,6};
+    for f=1:13
+        norm_spont = mean(mean(tone_rates{f,1}(:,301:500),2))/mean(mean(tone_rates{f,1}(501:600),2));
+        if ~isnan(norm_spont) && ~isinf(norm_spont)
+            spont_for_t = [spont_for_t; norm_spont];
+        end
+    end
 
     % AHC units
     ahc_units = stage3_db{u,8};
@@ -38,6 +47,13 @@ for u=1:size(stage3_db,1)
         for f=1:6
             spont = [spont; nanmean(ahc_rates{f,1}(:,431:500),2)];
         end % f
+
+        for f=1:6
+            norm_spont = mean(mean(ahc_rates{f,1}(:,301:500),2))/mean(mean(ahc_rates{f,1}(501:600),2));
+            if ~isnan(norm_spont) && ~isinf(norm_spont)
+                spont_for_hc_ahc = [spont_for_hc_ahc; norm_spont];
+            end
+        end
 
         % tests
         sig6 = zeros(6,1);
@@ -189,10 +205,10 @@ end % t
 %%
 figure
 hold on
-h1 = nanmean(h_t_each_row_norm);
-ahc_low1 = nanmean(ahc_low_each_row_norm);
-ahc_high1 = nanmean(ahc_high_each_row_norm);
-tone_all1 = nanmean(tone_all_each_row_norm);
+h1 = mean(h_t_each_row_norm);
+ahc_low1 = mean(ahc_low_each_row_norm);
+ahc_high1 = mean(ahc_high_each_row_norm);
+tone_all1 = mean(tone_all_each_row_norm);
 
 plot(h1, 'LineWidth',2)
 plot(ahc_low1, 'LineWidth',2)
@@ -223,6 +239,23 @@ end
 hold off
 legend('HC', 'AHC Low', 'AHC High', 'T all')
 title(['t end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])
+
+%%
+% figure to display
+stim_start_bin = 500/window_size + 1;
+figure
+    hold on
+        plot(h1(stim_start_bin:end), 'LineWidth',2, 'Color','r')
+        plot(ahc_low1(stim_start_bin:end), 'LineWidth',2, 'Color','b')
+        plot(ahc_high1(stim_start_bin:end), 'LineWidth',2, 'Color','g')
+        plot(tone_all1(stim_start_bin:end), 'LineWidth',3, 'Color', 'k')
+    yline(mean(spont_for_hc_ahc), 'LineWidth',1, 'Color','r', 'LineStyle', '--')
+    yline(mean(spont_for_t), 'LineWidth',1, 'Color','b', 'LineStyle', '--')
+    hold off
+    title(['From stim start to end of 1s - ' 't end = ', num2str(t_end),' bin size = ', num2str(bin_size), ' window size = ', num2str(window_size),' far from bf = ', num2str(n_quart_oct_from_bf)])
+    legend('HC', 'AHC Low', 'AHC High', 'T all', 'HC AHC-L,H Spont', 'T all Spont')
+    xlabel('Bins (100 ms)')
+    ylabel('Normalised firing rate')
 %%
 the_bin = 41;
 A = h_t_each_row_norm(:,the_bin)';
@@ -267,3 +300,4 @@ disp(['H & AHL, ', num2str(hvals(1,the_bin)), ' ', num2str(pvals(1,the_bin)) ])
 disp(['H & AHH, ', num2str(hvals(2,the_bin)), ' ', num2str(pvals(2,the_bin)) ])
 disp(['H & T ', num2str(hvals(4,the_bin)), ' ', num2str(pvals(4,the_bin))])
 disp(['AHL & AHH ', num2str(hvals(3,the_bin)), ' ', num2str(pvals(3,the_bin))])
+

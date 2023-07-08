@@ -1,6 +1,9 @@
-stim = 'hc';
 % stim = 'tone';
+stim = 'hc';
 
+% bonferoni correction
+bonferoni_factor = 1; % 7 or 1
+% bonferoni_factor = 1; % 7 or 1
 if strcmp(stim, 'tone')
     db_lvls = 0:10:40;
     units_db = load('ephys_tone_33.mat').ephys_tone_33;
@@ -51,7 +54,7 @@ for u=1:n_units
 
             % Commenting d_prime and using ttest
 %             d_prime = (mean_rates_f - mean_spont)/((std_rates_f^2  +  std_spont^2)^0.5);
-            if ttest2(rates_f, spont) == 1
+            if ttest2(rates_f, spont, 'alpha', 0.05/bonferoni_factor) == 1
                 sig_matrix(f,d) = 1;
             else
                 sig_matrix(f,d) = 0;

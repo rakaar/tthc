@@ -1,4 +1,3 @@
-close all
 rms_match_db_with_sig_bf = load('rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 
 tone_bf_counter = zeros(7,1);
@@ -39,6 +38,8 @@ figure
     title('bf bf0')
     caxis([0 0.032])
     colorbar()
+    ylabel('BF')
+    xlabel('BF0')
 
     %%
 octave_shift_counter = zeros(13,1);
@@ -52,5 +53,16 @@ for tf=1:7
     end
 end
 figure
-    bar(octave_shift_counter./sum(octave_shift_counter))
+    bar(-3:0.5:3,octave_shift_counter./sum(octave_shift_counter))
     title('octave shift counter')
+    xlabel('octave shift')
+
+
+%% statiscal tests
+disp('Chi square test using cross tab')
+[~, ~, p, ~] = crosstab(tone_bf_counter, hc_bf_counter);
+disp(['Chi sqaure test p = ' num2str(p)])
+
+disp('ks test')
+[h, p] = kstest2(tone_bf_counter, hc_bf_counter);
+disp(['ks test p = ' num2str(p) ' h = ' num2str(h)])

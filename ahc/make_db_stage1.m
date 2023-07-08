@@ -8,13 +8,13 @@
 % 7 - rates
 clear;
 close all;
-data_path = 'G:\aharmonic_01042023';
+data_path = 'D:\aharmonic_01042023';
 data_dir = dir(data_path);
 
 stage1_db = cell(100,7);
 counter = 1;
 
-M_or_F = 'F';
+M_or_F = 'all';% M, F, all
 for i=3:length(data_dir)
     animal = data_dir(i).name;
     if strcmp(M_or_F, 'M') && contains(animal, '_F')

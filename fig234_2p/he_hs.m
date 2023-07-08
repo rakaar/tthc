@@ -164,7 +164,7 @@ end
 % before normalising
 near_far_no_normalize = near_far_counter;
 
-close all
+
 figure
     bar(near_far_counter(1,:)./sum(near_far_counter(1,:)))
     title('near')

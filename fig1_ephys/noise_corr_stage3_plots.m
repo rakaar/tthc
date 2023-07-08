@@ -30,6 +30,13 @@ for u=1:size(tone_noise,1)
 end % u
 %%
 
+corr_mat = corrcoef(all_tone_nc', all_hc_nc');
+% chck if matrix size = 2
+if sum(size(corr_mat) == 2) ~= 2 || corr_mat(1,1) ~= 1 || corr_mat(2,2) ~= 1
+    disp('corrmat is not 2 x 2 OR corrmat diagonals are not 1')
+end
+corr_val = corr_mat(1,2);
+
 figure
     scatter(all_tone_nc,all_hc_nc)
     xlim([-1 1])
@@ -37,9 +44,14 @@ figure
     hold on
         plot(xlim, ylim, '-b')
     hold off
-    title('tone and hc noise')
+    title(['tone and hc noise, coeff =  ' num2str(corr_val) ])
 %%
  
+
+% test for normality
+[h,p] = ttest(all_tone_nc);
+disp(['Mean tone nc = ' num2str(mean(all_tone_nc)) ', err = ' num2str(std(all_tone_nc)/sqrt(length(all_tone_nc)))])
+
 figure
     histogram(all_tone_nc, 'Normalization', 'probability')
     hold on
@@ -47,8 +59,12 @@ figure
         xline(0,'LineStyle','--','LineWidth',2)
     hold off
     xlim([-1 1])
-    title('tone nc')
+    title(['tone nc, ttest: h = ' num2str(h) ', p = ' num2str(p)  ])
 %%
+
+% test for normality
+[h,p] = ttest(all_hc_nc);
+disp(['Mean hc nc = ' num2str(mean(all_hc_nc)) ', err = ' num2str(std(all_hc_nc)/sqrt(length(all_hc_nc)))])
 figure
     histogram(all_hc_nc, 'Normalization', 'probability')
     hold on
@@ -56,4 +72,4 @@ figure
         xline(0,'LineStyle','--','LineWidth',2)
     hold off
     xlim([-1 1])
-    title('HC nc')
+    title(['hc nc, ttest: h = ' num2str(h) ', p = ' num2str(p)])

@@ -9,6 +9,7 @@ location_index_map = containers.Map;
 % end
 % 0 5 15... 35 45
 stim_type = 'HC';
+% stim_type = 'TonePipSweep';
 if strcmp(stim_type, 'TonePipSweep')
     db_atts = 0:10:40;
     num_db_vals = length(db_atts);

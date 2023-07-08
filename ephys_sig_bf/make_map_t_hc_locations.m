@@ -1,5 +1,6 @@
 loc_map = containers.Map;
 stim = 'hc';
+% stim = 'tone';
 if strcmp(stim, 'tone')
     units_db = load('ephys_tone_33_5_and_6_sig_7_rates_8_bf.mat').ephys_tone_33_5_and_6_sig_7_rates_8_bf;
     n_units = 359;

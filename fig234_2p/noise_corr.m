@@ -150,7 +150,7 @@ for u=1:size(rms_match_noise_corr_db,1)
 end
 disp('done')
 %%
-close all
+
 corrmat = [tone_noise_corr_vec' hc_noise_corr_vec'];
 corr_val = corrmat(1,2);
 figure
@@ -162,7 +162,8 @@ figure
        xlabel('tone noise corr')
         ylabel('hc noise corr')
 
-
+% test for normality
+[h,p] = ttest(tone_noise_corr_vec);
 figure
     histogram(tone_noise_corr_vec, 'Normalization', 'probability')
     hold on
@@ -170,8 +171,9 @@ figure
         xline(0,'LineStyle','--','LineWidth',2)
     hold off
     xlim([-1 1])
-    title('tone nc')
+    title(['tone nc, ttest: h = ' num2str(h) ', p = ' num2str(p) ' mean = ' num2str(mean(tone_noise_corr_vec)) ])
 
+[h,p] = ttest(hc_noise_corr_vec);
     figure
     histogram(hc_noise_corr_vec, 'Normalization', 'probability')
     hold on
@@ -179,5 +181,5 @@ figure
         xline(0,'LineStyle','--','LineWidth',2)
     hold off
     xlim([-1 1])
-    title('hc nc')
+    title(['hc nc, ttest: h = ' num2str(h) ', p = ' num2str(p) ' mean = ' num2str(mean(hc_noise_corr_vec))])
 

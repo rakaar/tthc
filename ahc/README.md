@@ -32,3 +32,5 @@
 25. linearity_check_from_tuning_curive - compare AHC/HC in ideal linear case from BFtuning and two tone responses ratio normalised by BF
 26. linear_check_in_each_unit.m - Calculate (non harmonic rate/ individual tone rates sum) // (harmonic rate/ individual tone rates sum)
 27. make_all3_stages_db.m - Make db for all 3 stages
+28. Fig_ttests_btn_ahc_hc_t_at_bf_near_far_20.m - Compare rates btn 4 stimuli, Only for 20dB units
+29. number_of_sig_units_20 - number of units, count for 20 dB units

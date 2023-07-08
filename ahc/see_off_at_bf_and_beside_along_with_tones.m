@@ -36,13 +36,13 @@ for u=1:size(stage3_db,1)
         % spont
         spont = [];
         for f=1:6
-            spont = [spont; mean(ahc_rates{f,1}(:,431:500),2)];
+            spont = [spont; nanmean(ahc_rates{f,1}(:,431:500),2)];
         end % f
 
         % tests
         sig6 = zeros(6,1);
         for f=1:6
-            sig6(f) = ttest2(spont, mean(ahc_rates{f,1}(:, 501:570),2));
+            sig6(f) = ttest2(spont, nanmean(ahc_rates{f,1}(:, 501:570),2));
         end % f
 
         basef = my_find(f13,ahc_freqs(1,1));
@@ -51,8 +51,8 @@ for u=1:size(stage3_db,1)
         the_indices = [bfi, bfi+2, bfi+4];
         if sum(sig6(the_indices)) ~= 0
             for i=1:3
-                %                 r = mean(reshape(mean(ahc_rates{the_indices(i),1}(:,1:t_end)), bin_size, t_end/bin_size));
-                r = moving_mean(mean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
+                                % r = nanmean(reshape(nanmean(ahc_rates{the_indices(i),1}(:,1:t_end)), bin_size, t_end/bin_size));
+                r = moving_mean(nanmean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,i} = [all_freq_at_once_rate{octaves_apart_index,i}; r];
             end % for
         end % if
@@ -63,8 +63,8 @@ for u=1:size(stage3_db,1)
         the_indices = [bfi, bfi+2, bfi+4];
         if sum(sig6(the_indices)) ~= 0
             for i=1:3
-                %                 r = mean(reshape(mean(ahc_rates{the_indices(i),1}(:,1:t_end)), bin_size, t_end/bin_size));
-                r = moving_mean(mean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
+                                % r = nanmean(reshape(nanmean(ahc_rates{the_indices(i),1}(:,1:t_end)), bin_size, t_end/bin_size));
+                r = moving_mean(nanmean(ahc_rates{the_indices(i),1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,i} = [all_freq_at_once_rate{octaves_apart_index,i}; r];
             end % for
         end % if
@@ -72,36 +72,36 @@ for u=1:size(stage3_db,1)
         % Tones
         if ~ismember(u,tone_dup_counter)
             % Base
-            r = moving_mean(mean(tone_rates{tone_bf,1}(:,1:t_end)),   bin_size, window_size);
+            r = moving_mean(nanmean(tone_rates{tone_bf,1}(:,1:t_end)),   bin_size, window_size);
             all_freq_at_once_rate{octaves_apart_index,4} = [all_freq_at_once_rate{octaves_apart_index,4}; r];
 
             % 2 Base
             if tone_bf + 4 <= 13
-                r = moving_mean(mean(tone_rates{tone_bf+4,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(nanmean(tone_rates{tone_bf+4,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,5} = [all_freq_at_once_rate{octaves_apart_index,5}; r];
             end
 
             % 2 ^0.25 base
             if tone_bf - 1 >= 1
-                r = moving_mean(mean(tone_rates{tone_bf-1,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(nanmean(tone_rates{tone_bf-1,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,6} = [all_freq_at_once_rate{octaves_apart_index,6}; r];
             end
 
             % 2 ^0.5 base
             if tone_bf - 2 >= 1
-                r = moving_mean(mean(tone_rates{tone_bf-2,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(nanmean(tone_rates{tone_bf-2,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,6} = [all_freq_at_once_rate{octaves_apart_index,6}; r];
             end
 
             % 2 ^1.25 base
             if tone_bf + 1 <= 13
-                r = moving_mean(mean(tone_rates{tone_bf + 1,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(nanmean(tone_rates{tone_bf + 1,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,7} = [all_freq_at_once_rate{octaves_apart_index,7}; r];
             end
 
             % 2 ^1.75 base
             if tone_bf + 3 <= 13
-                r = moving_mean(mean(tone_rates{tone_bf + 3,1}(:,1:t_end)),   bin_size, window_size);
+                r = moving_mean(nanmean(tone_rates{tone_bf + 3,1}(:,1:t_end)),   bin_size, window_size);
                 all_freq_at_once_rate{octaves_apart_index,7} = [all_freq_at_once_rate{octaves_apart_index,7}; r];
             end
 
@@ -118,6 +118,7 @@ end % u
 
 
 %% averaging together
+% To decide at BF or not
 n_quart_oct_from_bf = 0;
 index_range = 13-n_quart_oct_from_bf:13+n_quart_oct_from_bf;
 hc = [];
@@ -154,22 +155,22 @@ ahc_low_each_row_norm = [];
 ahc_high_each_row_norm = [];
 tone_all_each_row_norm = [];
 for r=1:size(hc,1)
-    h_t_each_row_norm = [h_t_each_row_norm; ( hc(r,:) - mean(hc(r,spont_bin_start:spont_bin_end)) )./max(hc(r,:))];
-    ahc_low_each_row_norm = [ahc_low_each_row_norm; ( ahc_low(r,:) - mean(ahc_low(r,spont_bin_start:spont_bin_end)) )./max(ahc_low(r,:))];
-    ahc_high_each_row_norm = [ahc_high_each_row_norm; ( ahc_high(r,:) - mean(ahc_high(r,spont_bin_start:spont_bin_end)) )./max(ahc_high(r,:))];
+    h_t_each_row_norm = [h_t_each_row_norm; ( hc(r,:) - nanmean(hc(r,spont_bin_start:spont_bin_end)) )./max(hc(r,:))];
+    ahc_low_each_row_norm = [ahc_low_each_row_norm; ( ahc_low(r,:) - nanmean(ahc_low(r,spont_bin_start:spont_bin_end)) )./max(ahc_low(r,:))];
+    ahc_high_each_row_norm = [ahc_high_each_row_norm; ( ahc_high(r,:) - nanmean(ahc_high(r,spont_bin_start:spont_bin_end)) )./max(ahc_high(r,:))];
 end
 
 for r=1:size(tone_og,1)
-    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) )./max( ( tone_og(r,:) - mean(tone_og(r,spont_bin_start:spont_bin_end)) ) )];
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_og(r,:) - nanmean(tone_og(r,spont_bin_start:spont_bin_end)) )./max( ( tone_og(r,:) - nanmean(tone_og(r,spont_bin_start:spont_bin_end)) ) )];
 end
 for r=1:size(tone_2x,1)
-    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) )./max( ( tone_2x(r,:) - mean(tone_2x(r,spont_bin_start:spont_bin_end)) ) )];
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_2x(r,:) - nanmean(tone_2x(r,spont_bin_start:spont_bin_end)) )./max( ( tone_2x(r,:) - nanmean(tone_2x(r,spont_bin_start:spont_bin_end)) ) )];
 end
 for r=1:size(tone_low,1)
-    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) )./max( ( tone_low(r,:) - mean(tone_low(r,spont_bin_start:spont_bin_end)) ) )];
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_low(r,:) - nanmean(tone_low(r,spont_bin_start:spont_bin_end)) )./max( ( tone_low(r,:) - nanmean(tone_low(r,spont_bin_start:spont_bin_end)) ) )];
 end
 for r=1:size(tone_high,1)
-    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) )./max( ( tone_high(r,:) - mean(tone_high(r,spont_bin_start:spont_bin_end)) ) )];
+    tone_all_each_row_norm = [tone_all_each_row_norm; ( tone_high(r,:) - nanmean(tone_high(r,spont_bin_start:spont_bin_end)) )./max( ( tone_high(r,:) - nanmean(tone_high(r,spont_bin_start:spont_bin_end)) ) )];
 end
 
 
@@ -188,10 +189,10 @@ end % t
 %%
 figure
 hold on
-h1 = mean(h_t_each_row_norm);
-ahc_low1 = mean(ahc_low_each_row_norm);
-ahc_high1 = mean(ahc_high_each_row_norm);
-tone_all1 = mean(tone_all_each_row_norm);
+h1 = nanmean(h_t_each_row_norm);
+ahc_low1 = nanmean(ahc_low_each_row_norm);
+ahc_high1 = nanmean(ahc_high_each_row_norm);
+tone_all1 = nanmean(tone_all_each_row_norm);
 
 plot(h1, 'LineWidth',2)
 plot(ahc_low1, 'LineWidth',2)

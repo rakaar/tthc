@@ -7,7 +7,7 @@
 % ephys_db{unit_counter,5} = db;
 % ephys_db{unit_counter,6} = spikes_all_freqs;
 
-ephys_data_path = 'F:\RK_code_TTHC\ephys_arranged';
+ephys_data_path = 'D:\tthc_ephys_all_33\hc';
 animals_dir_path = dir(ephys_data_path);
 
 % stim_type = 'TonePipSweep';

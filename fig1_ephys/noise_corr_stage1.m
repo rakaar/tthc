@@ -1,4 +1,4 @@
-ephys_data_path = 'F:\RK_code_TTHC\ephys_arranged';
+ephys_data_path = 'D:\tthc_ephys_all_33\hc';
 animals_dir_path = dir(ephys_data_path);
 
 

@@ -13,3 +13,6 @@ To get noise corr db
 2. Save tone_noise_corr_db, hc_noise_corr_db
 3. Run noise_corr_db
 4. Then noise_corr_plots
+
+## Noise corr
+1. all_noise_corr_scripts_run.m - Run all noise corr scripts

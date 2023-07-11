@@ -1,4 +1,4 @@
-function [mean_nc, err_nc] = return_mean_and_err_nc(nc_vec, dist_vec, bin_size, max_dist)
+function [mean_nc, err_nc, len_nc] = return_mean_and_err_nc(nc_vec, dist_vec, bin_size, max_dist)
     threshold = 5;
     bins = 0:bin_size:max_dist-bin_size;
 
@@ -9,6 +9,7 @@ function [mean_nc, err_nc] = return_mean_and_err_nc(nc_vec, dist_vec, bin_size, 
         nc = nc_vec(d);
 
         bin = floor(dist/bin_size) + 1;
+        
        nc_binned{bin,1} = [nc_binned{bin,1} nc];
     end
 

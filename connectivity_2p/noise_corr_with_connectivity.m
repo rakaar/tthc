@@ -248,142 +248,65 @@ for u=1:counter_var
     end
 end
 
-% % for each type, plot the distance vs noise correlation
+% Plots for number of neurons vs distance
 % Right outliers
-figure
-    subplot(2,2,1)
-    hold on
-        plot(right_outlier_dist{1,1},right_outlier_noise_corr{1,1})
-        plot(right_outlier_dist{1,2},right_outlier_noise_corr{1,2})
-        plot(right_outlier_dist{1,3},right_outlier_noise_corr{1,3})
-        plot(right_outlier_dist{1,4},right_outlier_noise_corr{1,4})
-    hold off
-    title('Right outliers - HE connectivity vs distance')
-    legend('HE-HE', 'HE-HS', 'HE-NE', 'HE-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-
-    subplot(2,2,2)
-    hold on
-        plot(right_outlier_dist{2,1},right_outlier_noise_corr{2,1})
-        plot(right_outlier_dist{2,2},right_outlier_noise_corr{2,2})
-        plot(right_outlier_dist{2,3},right_outlier_noise_corr{2,3})
-        plot(right_outlier_dist{2,4},right_outlier_noise_corr{2,4})
-    hold off
-    title('Right outliers - HS connectivity vs distance')
-    legend('HS-HE', 'HS-HS', 'HS-NE', 'HS-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-    subplot(2,2,3)
-    hold on
-        plot(right_outlier_dist{3,1},right_outlier_noise_corr{3,1})
-        plot(right_outlier_dist{3,2},right_outlier_noise_corr{3,2})
-        plot(right_outlier_dist{3,3},right_outlier_noise_corr{3,3})
-        plot(right_outlier_dist{3,4},right_outlier_noise_corr{3,4})
-    hold off
-    title('Right outliers - NE connectivity vs distance')
-    legend('NE-HE', 'NE-HS', 'NE-NE', 'NE-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-    subplot(2,2,4)
-    hold on
-        plot(right_outlier_dist{4,1},right_outlier_noise_corr{4,1})
-        plot(right_outlier_dist{4,2},right_outlier_noise_corr{4,2})
-        plot(right_outlier_dist{4,3},right_outlier_noise_corr{4,3})
-        plot(right_outlier_dist{4,4},right_outlier_noise_corr{4,4})
-    hold off
-    title('Right outliers  - NS connectivity vs distance')
-    legend('NS-HE', 'NS-HS', 'NS-NE', 'NS-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-% Left outliers
-figure
-    subplot(2,2,1)
-    hold on
-        plot(left_outlier_dist{1,1},left_outlier_noise_corr{1,1})
-        plot(left_outlier_dist{1,2},left_outlier_noise_corr{1,2})
-        plot(left_outlier_dist{1,3},left_outlier_noise_corr{1,3})
-        plot(left_outlier_dist{1,4},left_outlier_noise_corr{1,4})
-    hold off
-    title('Left outliers - HE connectivity vs distance')
-    legend('HE-HE', 'HE-HS', 'HE-NE', 'HE-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-    subplot(2,2,2)
-    hold on
-        plot(left_outlier_dist{2,1},left_outlier_noise_corr{2,1})
-        plot(left_outlier_dist{2,2},left_outlier_noise_corr{2,2})
-        plot(left_outlier_dist{2,3},left_outlier_noise_corr{2,3})
-        plot(left_outlier_dist{2,4},left_outlier_noise_corr{2,4})
-    hold off
-    title('Left outliers - HS connectivity vs distance')
-    legend('HS-HE', 'HS-HS', 'HS-NE', 'HS-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-    subplot(2,2,3)
-    hold on
-        plot(left_outlier_dist{3,1},left_outlier_noise_corr{3,1})
-        plot(left_outlier_dist{3,2},left_outlier_noise_corr{3,2})
-        plot(left_outlier_dist{3,3},left_outlier_noise_corr{3,3})
-        plot(left_outlier_dist{3,4},left_outlier_noise_corr{3,4})
-    hold off
-    title('Left outliers - NE connectivity vs distance')
-    legend('NE-HE', 'NE-HS', 'NE-NE', 'NE-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-    subplot(2,2,4)
-    hold on
-        plot(left_outlier_dist{4,1},left_outlier_noise_corr{4,1})
-        plot(left_outlier_dist{4,2},left_outlier_noise_corr{4,2})
-        plot(left_outlier_dist{4,3},left_outlier_noise_corr{4,3})
-        plot(left_outlier_dist{4,4},left_outlier_noise_corr{4,4})
-    hold off
-    title('Left outliers  - NS connectivity vs distance')
-    legend('NS-HE', 'NS-HS', 'NS-NE', 'NS-NS')
-    xlabel('Distance in pixels')
-    ylabel('Noise correlation')
-
-% ------------ bin distances
-bin_size = 50; % pixels
+bin_size = 20;
 max_dist = 400;
 bins = 0:bin_size:max_dist-bin_size;
 
-
 colors = {'r', 'b', 'g', 'k'};
-type_strings = {'HE', 'HS', 'NE', 'NS'};
+type_str = {'HE', 'HS', 'HE', 'HS'};
+% Right outliers
 figure
     for f=1:4
         subplot(2,2,f)
         hold on
             for j=1:4
-                [mean_nc, err_nc] = return_mean_and_err_nc(right_outlier_noise_corr{f,j}, right_outlier_dist{f,j}, bin_size, max_dist);
-                errorbar(bins, mean_nc, err_nc, 'LineWidth', 2, 'Color', colors{j});
-            end
-        hold off
-        title(['Right outliers - ' type_strings{f} ' connectivity vs distance'])
-        legend('HE', 'HS', 'NE', 'NS')
-        xlabel('Distance in pixels')
-        ylabel('Noise correlation')
+                [~,~,len_nc] = return_mean_and_err_nc(right_outlier_noise_corr{f,j}, right_outlier_dist{f,j}, bin_size, max_dist);
+                plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})                 
 
-    end
+            end
+        hold off
+        title(['Right outliers ' type_str{f} ' connectivity prob was distance'])
+        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+        ylabel('Connectivity probability - sum of each color is 1')
+        legend('HE', 'HS', 'HE', 'HS')
+    end % f
+
+% Left outliers
 figure
     for f=1:4
         subplot(2,2,f)
         hold on
             for j=1:4
-                [mean_nc, err_nc] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
-                errorbar(bins, mean_nc, err_nc, 'LineWidth', 2, 'Color', colors{j});
+                [~,~,len_nc] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
+                plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})                 
+
             end
         hold off
-        title(['Left outliers - ' type_strings{f} ' connectivity vs distance'])
-        legend('HE', 'HS', 'NE', 'NS')
-        xlabel('Distance in pixels')
-        ylabel('Noise correlation')
-    end
+        title(['Left outliers ' type_str{f} ' connectivity prob was distance'])
+        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+        ylabel('Connectivity probability - sum of each color is 1')
+        legend('HE', 'HS', 'HE', 'HS')
+    end % f
+
+
+% Both outliers together
+figure
+    for f=1:4
+        subplot(2,2,f)
+        hold on
+            for j=1:4
+                [~,~,len_nc1] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
+                [~,~,len_nc2] = return_mean_and_err_nc(right_outlier_noise_corr{f,j},right_outlier_dist{f,j}, bin_size, max_dist);
+                len_nc = len_nc1 + len_nc2;
+                plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})
+            end
+        hold off
+        title(['Both outliers ' type_str{f} ' connectivity prob was distance'])
+        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+        ylabel('Connectivity probability - sum of each color is 1')
+        legend('HE', 'HS', 'HE', 'HS')
+    end % f
+
+

@@ -256,57 +256,155 @@ bins = 0:bin_size:max_dist-bin_size;
 
 colors = {'r', 'b', 'g', 'k'};
 type_str = {'HE', 'HS', 'HE', 'HS'};
+
+right_mat = zeros(4,4,length(bins));
+left_mat = zeros(4,4,length(bins));
+both_mat = zeros(4,4,length(bins));
+
+
+for f=1:4
+    for j=1:4
+        % right
+        [~,~,len_nc] = return_mean_and_err_nc(right_outlier_noise_corr{f,j}, right_outlier_dist{f,j}, bin_size, max_dist);
+        right_mat(f,j,:) = len_nc;
+
+        % left
+        [~,~,len_nc] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
+        left_mat(f,j,:) = len_nc;
+
+        % both
+        [~,~,len_nc1] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
+        [~,~,len_nc2] = return_mean_and_err_nc(right_outlier_noise_corr{f,j},right_outlier_dist{f,j}, bin_size, max_dist);
+        len_nc = len_nc1 + len_nc2;
+        both_mat(f,j,:) = len_nc;
+    end
+
+end
+
+% normalize across a distance bin
+% --- right outliers
+the_mat = right_mat;
+side = 'right';
+the_mat_norm = zeros(4, 4, length(bins));
+
+for t=1:length(bins)
+    for f=1:4
+        the_mat_norm(f,:,t) = the_mat(f,:,t)./sum(the_mat(f,:,t));
+    end
+end
+
+figure
+    for f=1:4
+        subplot(2,2,f)
+        hold on
+            for j=1:4
+                plot(bins, squeeze(the_mat_norm(f,j,:)), 'LineWidth', 2, 'Color', colors{j})                 
+            end
+        hold off
+        title([side ' outliers ' type_str{f} ' connectivity prob was distance'])
+        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+        ylabel('Connectivity probability - sum of each distance bin is 1')
+        legend('HE', 'HS', 'HE', 'NS')
+    end
+
+% --- left outliers
+the_mat = left_mat;
+side = 'left';
+the_mat_norm = zeros(4, 4, length(bins));
+for t=1:length(bins)
+    for f=1:4
+        the_mat_norm(f,:,t) = the_mat(f,:,t)./sum(the_mat(f,:,t));
+    end
+end
+
+figure
+    for f=1:4
+        subplot(2,2,f)
+        hold on
+            for j=1:4
+                plot(bins, squeeze(the_mat_norm(f,j,:)), 'LineWidth', 2, 'Color', colors{j})                 
+            end
+        hold off
+        title([side ' outliers ' type_str{f} ' connectivity prob was distance'])
+        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+        ylabel('Connectivity probability - sum of each distance bin is 1')
+        legend('HE', 'HS', 'HE', 'NS')
+    end
+
+% --- both outliers
+the_mat = both_mat;
+side = 'both';
+the_mat_norm = zeros(4, 4, length(bins));
+for t=1:length(bins)
+    for f=1:4
+        the_mat_norm(f,:,t) = the_mat(f,:,t)./sum(the_mat(f,:,t));
+    end
+end
+
+figure
+    for f=1:4
+        subplot(2,2,f)
+        hold on
+            for j=1:4
+                plot(bins, squeeze(the_mat_norm(f,j,:)), 'LineWidth', 2, 'Color', colors{j})                 
+            end
+        hold off
+        title([side ' outliers ' type_str{f} ' connectivity prob was distance'])
+        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+        ylabel('Connectivity probability - sum of each distance bin is 1')
+        legend('HE', 'HS', 'HE', 'NS')
+    end
 % Right outliers
-figure
-    for f=1:4
-        subplot(2,2,f)
-        hold on
-            for j=1:4
-                [~,~,len_nc] = return_mean_and_err_nc(right_outlier_noise_corr{f,j}, right_outlier_dist{f,j}, bin_size, max_dist);
-                plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})                 
+% figure
+%     for f=1:4
+%         subplot(2,2,f)
+%         hold on
+%             for j=1:4
+%                 [~,~,len_nc] = return_mean_and_err_nc(right_outlier_noise_corr{f,j}, right_outlier_dist{f,j}, bin_size, max_dist);
+%                 plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})                 
 
-            end
-        hold off
-        title(['Right outliers ' type_str{f} ' connectivity prob was distance'])
-        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
-        ylabel('Connectivity probability - sum of each color is 1')
-        legend('HE', 'HS', 'HE', 'HS')
-    end % f
+%             end
+%         hold off
+%         title(['Right outliers ' type_str{f} ' connectivity prob was distance'])
+%         xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+%         ylabel('Connectivity probability - sum of each color is 1')
+%         legend('HE', 'HS', 'HE', 'HS')
+%     end % f
 
-% Left outliers
-figure
-    for f=1:4
-        subplot(2,2,f)
-        hold on
-            for j=1:4
-                [~,~,len_nc] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
-                plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})                 
+% % Left outliers
+% figure
+%     for f=1:4
+%         subplot(2,2,f)
+%         hold on
+%             for j=1:4
+%                 [~,~,len_nc] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
+%                 plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})                 
 
-            end
-        hold off
-        title(['Left outliers ' type_str{f} ' connectivity prob was distance'])
-        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
-        ylabel('Connectivity probability - sum of each color is 1')
-        legend('HE', 'HS', 'HE', 'HS')
-    end % f
+%             end
+%         hold off
+%         title(['Left outliers ' type_str{f} ' connectivity prob was distance'])
+%         xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+%         ylabel('Connectivity probability - sum of each color is 1')
+%         legend('HE', 'HS', 'HE', 'HS')
+%     end % f
 
 
-% Both outliers together
-figure
-    for f=1:4
-        subplot(2,2,f)
-        hold on
-            for j=1:4
-                [~,~,len_nc1] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
-                [~,~,len_nc2] = return_mean_and_err_nc(right_outlier_noise_corr{f,j},right_outlier_dist{f,j}, bin_size, max_dist);
-                len_nc = len_nc1 + len_nc2;
-                plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})
-            end
-        hold off
-        title(['Both outliers ' type_str{f} ' connectivity prob was distance'])
-        xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
-        ylabel('Connectivity probability - sum of each color is 1')
-        legend('HE', 'HS', 'HE', 'HS')
-    end % f
+% % Both outliers together
+% figure
+%     for f=1:4
+%         subplot(2,2,f)
+%         hold on
+%             for j=1:4
+%                 [~,~,len_nc1] = return_mean_and_err_nc(left_outlier_noise_corr{f,j}, left_outlier_dist{f,j}, bin_size, max_dist);
+%                 [~,~,len_nc2] = return_mean_and_err_nc(right_outlier_noise_corr{f,j},right_outlier_dist{f,j}, bin_size, max_dist);
+%                 len_nc = len_nc1 + len_nc2;
+%                 plot(bins, len_nc./sum(len_nc), 'LineWidth', 2, 'Color', colors{j})
+%             end
+%         hold off
+%         title(['Both outliers ' type_str{f} ' connectivity prob was distance'])
+%         xlabel(['Distance in pixel, bin size ' num2str(bin_size)])
+%         ylabel('Connectivity probability - sum of each color is 1')
+%         legend('HE', 'HS', 'HE', 'HS')
+%     end % f
 
 

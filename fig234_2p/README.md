@@ -1,3 +1,8 @@
+## New files
+- indiv_he_hs_classifier.m - classify each case as he,hs
+- get_all_rows_frm_struct.m - function to get all rows from struct
+- each_neuron_enh_sup.m - for each neuron,see how many cases are HE, HS, NE, NS
+
 ## To get Sig and best freq of cells
 1. Copy rms_match_db.mat from `2p_db`
 2. Run `sig_bf_on_rms_match`.

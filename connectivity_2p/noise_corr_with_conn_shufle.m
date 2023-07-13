@@ -1,3 +1,6 @@
+clear;
+types_dist_norm = load('types_dist_norm').types_dist_norm;
+
 rms_match_db_with_sig_bf = load('rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 rms_match_db = load('rms_match_db.mat').rms_match_db;
 
@@ -139,6 +142,16 @@ for k=1:length(tone_keynames)
   rms_match_noise_corr_db{k,6} = cell_coords;
 end
 
+save('rms_match_noise_corr_db', 'rms_match_noise_corr_db')
+
+%% shuffle in an ROI
+prob_dist = types_dist_norm;
+for u=1:size(rms_match_noise_corr_db,1)
+    actual_neuron_types = rms_match_noise_corr_db{u,5};
+    n = length(actual_neuron_types);
+    samples = randsample(1:4, n, true, prob_dist);
+    rms_match_noise_corr_db{u,5} = samples';
+end % u
 save('rms_match_noise_corr_db', 'rms_match_noise_corr_db')
 
 
@@ -356,25 +369,3 @@ figure
     end
 
 
-% - distribution of four types of neurons
-types_dist = zeros(4,1);
-for i = 1:size(rms_match_noise_corr_db,1)
-    types_in_roi = rms_match_noise_corr_db{i,5};
-    for j=1:length(types_in_roi)
-        n_type = types_in_roi(j);
-        if n_type >= 1 && n_type <= 4
-            types_dist(n_type) = types_dist(n_type) + 1;
-        end 
-        
-    end
-end
-types_dist_norm = types_dist./sum(types_dist);
-figure
-    bar(types_dist_norm)
-    title('Distribution of four types of neurons')
-    ylabel('Fraction of neurons')
-    xlabel('Neuron type')
-    set(gca, 'XTickLabel', {'HE', 'HS', 'NE', 'NS'})
-
-
-save('types_dist_norm.mat', 'types_dist_norm')

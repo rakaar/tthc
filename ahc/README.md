@@ -35,3 +35,4 @@
 28. Fig_ttests_btn_ahc_hc_t_at_bf_near_far_20.m - Compare rates btn 4 stimuli, Only for 20dB units
 29. number_of_sig_units_20 - number of units, count for 20 dB units
 30. latencies_calc.m - calculate latencies of non hc units
+31. linear_index_sep_pos_neg.m - harmonic modulation index in positive and negative direction

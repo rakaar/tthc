@@ -32,8 +32,8 @@ for u = 1:size(rms_match_db,1)
         t2_rate = mean(mean(all_tone_rates{f+2,1}(:, 501:570),2));
         t1t2_rate = mean(mean(all_hc_rates{f,1}(:, 501:570),2));
 
-        linear_index_num = t1t2_rate - 0.5*(t1_rate + t2_rate);
-        linear_index_denom = t1t2_rate + 0.5*(t1_rate + t2_rate);
+        linear_index_num = t1t2_rate - max(t1_rate, t2_rate);
+        linear_index_denom = t1t2_rate + max(t1_rate, t2_rate);
         linear_index = linear_index_num/linear_index_denom;
 
         if ~isnan(linear_index)

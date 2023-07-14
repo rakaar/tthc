@@ -2,13 +2,13 @@ clear ;close all;
 load('rms_match_db.mat')
 
 % remove all rows where 4th col is not 20
-removing_indices = [];
-for u=1:size(rms_match_db,1)
-    if rms_match_db{u,4} ~= 20
-        removing_indices = [removing_indices; u];
-    end
-end
-rms_match_db(removing_indices,:) = [];
+% removing_indices = [];
+% for u=1:size(rms_match_db,1)
+%     if rms_match_db{u,4} ~= 20
+%         removing_indices = [removing_indices; u];
+%     end
+% end
+% rms_match_db(removing_indices,:) = [];
 
 bf_counter = zeros(7,1);
 bf0_counter = zeros(7,1);
@@ -135,3 +135,14 @@ figure
     title('For each frequency octave shift distribution')
     
 
+all_fs = {6, 8.5, 12, 17, 24, 34, 48};
+
+for f = 1:7
+    figure
+        bar(octaves_apart, freq_wise_oct_shift_norm(f,:))
+        title(['freq = ' num2str(all_fs{f}) ' kHz'])
+        xlabel('Octaves apart')
+        ylabel('Normalized count')
+        ylim([0 0.6])
+        
+end

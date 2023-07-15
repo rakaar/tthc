@@ -3,7 +3,7 @@ disp('Running 2p figures/bf_plots_gender_wise')
 rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 
 % decide only male or female
-animal_gender = 'M'; % M for Male, F for Female, all for both
+animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')

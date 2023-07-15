@@ -68,6 +68,10 @@ disp('ks test')
 [h, p] = kstest2(tone_bf_counter, hc_bf_counter);
 disp(['ks test p = ' num2str(p) ' h = ' num2str(h)])
 
+disp('coeff')
+bff0_counters = [tone_bf_counter./sum(tone_bf_counter) hc_bf_counter./sum(hc_bf_counter)];
+coeff = corrcoef(bff0_counters);
+disp(['coeff = ' num2str(coeff(1,2))])
 
 n = sum(sum(bf_bf0));
 bf_bf0_norm = bf_bf0./n;

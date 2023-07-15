@@ -3,6 +3,32 @@ load('stage1_db.mat')
 ahc_units = [];
 hc_units = [];
 
+
+
+animal_gender = 'all'; % M for Male, F for Female, all for both
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(stage1_db,1)
+        animal_name = stage1_db{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+
+    % remove rejected gender
+    stage1_db(removal_indices,:) = [];
+
+end % if
+
+
 total_ahc = 0;
 sig_ahc = 0;
 % for AHC

@@ -11,15 +11,39 @@ rms_match_db = load('rms_match_db.mat').rms_match_db;
 % end
 % rms_match_db(removal_indices,:) = [];
 
+% decide only male or female
+animal_gender = 'F'; % M for Male, F for Female, all for both
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(rms_match_db,1)
+        animal_name = rms_match_db{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+
+    % remove rejected gender
+    rms_match_db(removal_indices,:) = [];
+
+end % if
+
+
 octaves_apart = -3:0.5:3;
 n_octaves_apart = length(octaves_apart);
-
 
 num_cases_base_re_bf = zeros(n_octaves_apart,4); % base how far from BF
 num_cases_second_comp_re_bf = zeros(n_octaves_apart,4); % second comp from BF
 num_cases_min_re_bf = zeros((n_octaves_apart-1)/2 + 1, 4); % min distance of either components from BF
 
-bf_index = 13; % 12 for BF, 13 for BF0
+bf_index = 12; % 12 for BF, 13 for BF0
 
 for u = 1:size(rms_match_db,1)
     bf = rms_match_db{u,bf_index};
@@ -90,22 +114,22 @@ figure
         title(type_strs{i})
     end
 
-figure
-    for i = 1:4
-        subplot(2,2,i)
-        bar(octaves_apart, num_cases_second_comp_re_bf(:,i))
-        title(type_strs{i})
-        xlabel(['Second octaves apart from BF/BF0 - scale ' bf_str])
-        ylabel('Number of cases')
-        title(type_strs{i})
-    end
+% figure
+%     for i = 1:4
+%         subplot(2,2,i)
+%         bar(octaves_apart, num_cases_second_comp_re_bf(:,i))
+%         title(type_strs{i})
+%         xlabel(['Second octaves apart from BF/BF0 - scale ' bf_str])
+%         ylabel('Number of cases')
+%         title(type_strs{i})
+%     end
 
-figure
-    for i = 1:4
-        subplot(2,2,i)
-        bar(0:0.5:3, num_cases_min_re_bf(:,i))
-        title(type_strs{i})
-        xlabel(['Min octaves apart from BF/BF0 - scale ' bf_str])
-        ylabel('Number of cases')
-        title(type_strs{i})
-    end
+% figure
+%     for i = 1:4
+%         subplot(2,2,i)
+%         bar(0:0.5:3, num_cases_min_re_bf(:,i))
+%         title(type_strs{i})
+%         xlabel(['Min octaves apart from BF/BF0 - scale ' bf_str])
+%         ylabel('Number of cases')
+%         title(type_strs{i})
+%     end

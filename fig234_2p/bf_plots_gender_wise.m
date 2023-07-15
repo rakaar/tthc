@@ -1,5 +1,31 @@
-clc;clear;
+clear;clc;close all;
+disp('Running 2p figures/bf_plots_gender_wise')
 rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+
+% decide only male or female
+animal_gender = 'M'; % M for Male, F for Female, all for both
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(rms_match_db_with_sig_bf,1)
+        animal_name = rms_match_db_with_sig_bf{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+
+    % remove rejected gender
+    rms_match_db_with_sig_bf(removal_indices,:) = [];
+
+end % if
+
 
 tone_bf_counter = zeros(7,1);
 hc_bf_counter = zeros(7,1);
@@ -67,39 +93,3 @@ disp(['Chi sqaure test p = ' num2str(p)])
 disp('ks test')
 [h, p] = kstest2(tone_bf_counter, hc_bf_counter);
 disp(['ks test p = ' num2str(p) ' h = ' num2str(h)])
-
-
-n = sum(sum(bf_bf0));
-bf_bf0_norm = bf_bf0./n;
-bf_bf0_norm_minus_mean = bf_bf0_norm - mean(mean(bf_bf0_norm));
-% figure
-%     imagesc(abs(fft2(bf_bf0_norm_minus_mean)))
-%     title('fft2 of mean subtracted bf_bf0')
-%     xlabel('BF0')
-%     ylabel('BF')
-%     colorbar()
-
-
-    
-% figure
-%     imagesc(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean)))))
-%     title('fft2 shift of mean subtracted bf_bf0')
-%     xlabel('BF0')
-%     ylabel('BF')
-%     colorbar()
-%     caxis([-50 -5])
-
-% figure
-%     imagesc(angle(fftshift(fft2(bf_bf0_norm_minus_mean))))
-%     title('angle fft2 shift of mean subtracted bf_bf0')
-%     xlabel('BF0')
-%     ylabel('BF')
-%     colorbar()
-
-
-    figure
-    imagesc((abs(fftshift(fft2(bf_bf0_norm_minus_mean))))/norm((abs(fftshift(fft2(bf_bf0_norm_minus_mean))))))
-    title('norm fft2 shift of mean subtracted bf_bf0')
-    xlabel('BF0')
-    ylabel('BF')
-    colorbar()

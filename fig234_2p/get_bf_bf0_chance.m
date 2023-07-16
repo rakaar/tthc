@@ -1,8 +1,9 @@
 % load rms_match_db
 clear;clc;close all;
-rms_match_db = load('rms_match_db.mat').rms_match_db;
+rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\PV\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+rms_match_db = rms_match_db_with_sig_bf;
 
-bf_index = 12;
+bf_index = 11;
 bf0_index = 13;
 
 n_boots = 1000;

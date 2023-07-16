@@ -1,3 +1,4 @@
+- re_bf_dist_conn.m - rebf vs distance with connectivity OR rebf0 vs distance with connectivity
 - noise_corr_with_conn_shufle.m.m - shuffle neuron labels and see the conn prob vs distance
 0. noise_corr_with_connectivity.m - for each neuron type, noise corr vs distance with different bin size
 1. connectivity_2p_rates_corr.m - bootstrap, using noise corr, connectivity

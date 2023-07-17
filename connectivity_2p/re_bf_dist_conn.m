@@ -1,14 +1,38 @@
 % re BF vs num of connected pairs
 clear;clc;close all;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
-rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
-rms_match_db = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db.mat').rms_match_db;
+rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+rms_match_db = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db.mat').rms_match_db;
+
+
 
 % add 2 columns - x coord and y coord
 for u=1:size(rms_match_db_with_sig_bf,1)
    rms_match_db_with_sig_bf{u,17} = rms_match_db{u,10};
    rms_match_db_with_sig_bf{u,18} = rms_match_db{u,11};
 end
+
+% seperate gender wise
+animal_gender = 'F';
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(rms_match_db_with_sig_bf,1)
+        animal_name = rms_match_db_with_sig_bf{u,1};
+        if contains(animal_name, strcat('_', rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end
+
+    rms_match_db_with_sig_bf(removal_indices,:) = [];
+end
+
 
 % BF or BF0
 scale = 'BF0'; % 11-BF or 13-BF0
@@ -208,6 +232,9 @@ for i = 1:n_dist_bins_to_see
 end
 figure
     imagesc(all_pairs_rebf_vs_dist_norm)
+    alpha = double(~isnan(all_pairs_rebf_vs_dist_norm));
+    imagesc(all_pairs_rebf_vs_dist_norm, 'AlphaData', alpha);
+
     title('all pairs rebf vs dist norm: at a dist(d), sum of all 7 rebf = 1')
     ylabel('dist(d) bins')
     xlabel([scale ' bins'])
@@ -225,6 +252,9 @@ end
 
 figure
     imagesc(all_pairs_rebf_vs_dist_norm)
+    alpha = double(~isnan(all_pairs_rebf_vs_dist_norm));
+    imagesc(all_pairs_rebf_vs_dist_norm, 'AlphaData', alpha);
+
     title('all pairs rebf vs dist norm: at a rebf(r), sum of all 20 dist = 1')
     ylabel('dist(d) bins')
     xlabel([scale ' bins'])

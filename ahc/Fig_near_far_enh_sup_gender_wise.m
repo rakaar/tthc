@@ -6,7 +6,7 @@ load('stage1_db.mat')
 load('f13.mat')
 
 
-animal_gender = 'all';
+animal_gender = 'F';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -293,9 +293,14 @@ disp([near_far_data(2,:) sum(near_far_data(2,:))])
 
 
 % chi square test
-[h,p] = do_chi_sq(near_far_data(1,:), near_far_data(2,:));
+[h,p1] = do_chi_sq(near_far_data(1,:), near_far_data(2,:));
 disp('Chi sq btn frequencies')
-disp(['h = ' num2str(h) ' p = ' num2str(p)])
-[h,p] = do_chi_sq(near_far_data(1,:)./sum(near_far_data(1,:)), near_far_data(2,:)./sum(near_far_data(2,:)));
+disp(['h = ' num2str(h) ' p = ' num2str(p1)])
+[h,p2] = do_chi_sq(near_far_data(1,:)./sum(near_far_data(1,:)), near_far_data(2,:)./sum(near_far_data(2,:)));
 disp('Chi sq btn proportions')
-disp(['h = ' num2str(h) ' p = ' num2str(p)])
+disp(['h = ' num2str(h) ' p = ' num2str(p2)])
+
+
+% [~,~,~,tab] = crosstab(near_far_data(1,:), near_far_data(2,:));
+% [p,x2] = chisquarecont(tab);
+% disp(['p = ' num2str(p) ' x2 = ' num2str(x2)])

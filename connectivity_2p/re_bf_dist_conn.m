@@ -1,5 +1,5 @@
 % re BF vs num of connected pairs
-clear;clc;close all;
+clear;clc;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
 rms_match_db_with_sig_bf = load('rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 rms_match_db = load('rms_match_db.mat').rms_match_db;

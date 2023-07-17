@@ -36,3 +36,4 @@
 29. number_of_sig_units_20 - number of units, count for 20 dB units
 30. latencies_calc.m - calculate latencies of non hc units
 31. linear_index_sep_pos_neg.m - harmonic modulation index in positive and negative direction
+32. anova_btn_male_and_female.m - 3 way anova btn male and female near and far

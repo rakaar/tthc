@@ -1,3 +1,4 @@
+clear;clc;close all;
 %%%%% MEDIAL %%%%
 loc_mat=[[12 16 4 8];[11 15 3 7];[10 14 2 6];[9 13 1 5]];%%%%% CAUDAL %%%%   %%% TO CONVERT FROM ELECTRODE NUMBER TO LOATION
 %%%%% LATERAL %%%

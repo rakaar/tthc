@@ -10,7 +10,7 @@ stim = 'HC';
 % data_path = 'G:\TTHC_2p_21032023_data\sst_gf_21032023';
 % data_path = 'G:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
 % data_path = 'D:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
-data_path = 'D:\TTHC_2p_21032023_data\thy1_gcamp_6f_21032023';
+data_path = 'D:\TTHC_2p_21032023_data\sst_gf_21032023';
 animals_dir_path1 = dir(data_path);
 
 

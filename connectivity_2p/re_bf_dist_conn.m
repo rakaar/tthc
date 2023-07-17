@@ -1,8 +1,8 @@
 % re BF vs num of connected pairs
 clear;clc;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
-rms_match_db_with_sig_bf = load('rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
-rms_match_db = load('rms_match_db.mat').rms_match_db;
+rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+rms_match_db = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db.mat').rms_match_db;
 
 % add 2 columns - x coord and y coord
 for u=1:size(rms_match_db_with_sig_bf,1)
@@ -88,7 +88,7 @@ for k = 1:length(all_roi_keys)
     roi_noise_corr_mat = zeros(n_roi_units, n_roi_units);
 
     roi_noise_corr_vecs = zeros(35, n_roi_units);
-    bf_index = 11; % 11 for BF, 13 for BF0
+    bf_index = 13; % 11 for BF, 13 for BF0
     for ru = 1:length(roi_units)
         unit_index = roi_units(ru);
         

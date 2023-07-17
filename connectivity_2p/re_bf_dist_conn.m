@@ -1,5 +1,5 @@
 % re BF vs num of connected pairs
-clear;clc;
+clear;clc;close all;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
 rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 rms_match_db = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db.mat').rms_match_db;
@@ -8,6 +8,14 @@ rms_match_db = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\SOM\rms_match_db.ma
 for u=1:size(rms_match_db_with_sig_bf,1)
    rms_match_db_with_sig_bf{u,17} = rms_match_db{u,10};
    rms_match_db_with_sig_bf{u,18} = rms_match_db{u,11};
+end
+
+% BF or BF0
+scale = 'BF0'; % 11-BF or 13-BF0
+if strcmp(scale, 'BF')
+    bf_index = 11;
+elseif strcmp(scale, 'BF0')
+    bf_index = 13;
 end
 
 % remove rows where 11 or 13th column of cell is -1
@@ -88,7 +96,7 @@ for k = 1:length(all_roi_keys)
     roi_noise_corr_mat = zeros(n_roi_units, n_roi_units);
 
     roi_noise_corr_vecs = zeros(35, n_roi_units);
-    bf_index = 13; % 11 for BF, 13 for BF0
+    
     for ru = 1:length(roi_units)
         unit_index = roi_units(ru);
         
@@ -143,7 +151,7 @@ right_extreme = mean_noise_corr + 2*std_noise_corr;
 left_extreme = mean_noise_corr - 2*std_noise_corr;
 
 % get the matrix
-dist_bin_size = 20;
+dist_bin_size = 50;
 max_dist = 500; % microns
 dist_bins = 0:dist_bin_size:max_dist-dist_bin_size;
 rebf_bins = 0:0.5:3;
@@ -185,19 +193,24 @@ for i = 1:length(all_roi_info)
     
 end
 
+
+% less than threshold in all_pairs_rebf_vs_dist, make it nan
+threshold = 5;
+all_pairs_rebf_vs_dist(find(all_pairs_rebf_vs_dist < threshold)) = nan;
+
 %% all_pairs_rebf_vs_dist norm
-n_dist_bins_to_see = 20;
+n_dist_bins_to_see = size(all_pairs_rebf_vs_dist,1);
 all_pairs_rebf_vs_dist_norm = zeros(n_dist_bins_to_see, length(rebf_bins));
 
 % normalise such that sum of each row is 1
 for i = 1:n_dist_bins_to_see
-    all_pairs_rebf_vs_dist_norm(i,:) = all_pairs_rebf_vs_dist(i,:)./sum(all_pairs_rebf_vs_dist(i,:));
+    all_pairs_rebf_vs_dist_norm(i,:) = all_pairs_rebf_vs_dist(i,:)./nansum(all_pairs_rebf_vs_dist(i,:));
 end
 figure
     imagesc(all_pairs_rebf_vs_dist_norm)
     title('all pairs rebf vs dist norm: at a dist(d), sum of all 7 rebf = 1')
     ylabel('dist(d) bins')
-    xlabel('rebf bins')
+    xlabel([scale ' bins'])
     colorbar()
     xticks(1:length(rebf_bins))
     xticklabels(rebf_bins)
@@ -207,14 +220,14 @@ figure
 % normalise such that each column is 1
 all_pairs_rebf_vs_dist_norm = zeros(n_dist_bins_to_see, length(rebf_bins));
 for i = 1:length(rebf_bins)
-    all_pairs_rebf_vs_dist_norm(1:n_dist_bins_to_see,i) = all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i)./sum(all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i));
+    all_pairs_rebf_vs_dist_norm(1:n_dist_bins_to_see,i) = all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i)./nansum(all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i));
 end
 
 figure
     imagesc(all_pairs_rebf_vs_dist_norm)
     title('all pairs rebf vs dist norm: at a rebf(r), sum of all 20 dist = 1')
     ylabel('dist(d) bins')
-    xlabel('rebf bins')
+    xlabel([scale ' bins'])
     colorbar()
     xticks(1:length(rebf_bins))
     xticklabels(rebf_bins)

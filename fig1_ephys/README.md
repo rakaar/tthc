@@ -1,4 +1,5 @@
 ## New files
+- fig1_ephys\see_raster_for_he_hs.m - example figure of raster for HE, HS
 - bfs_20.m - in 20 dB only, bf figures
 - each_neuron_enh_sup.m - for each neuron,see how many cases are HE, HS, NE, NS
 - get_all_rows_frm_struct.m - function to get all rows from struct

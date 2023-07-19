@@ -1,9 +1,9 @@
 % re BF vs num of connected pairs
 clear;clc;close all;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
-rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
-rms_match_db = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db.mat').rms_match_db;
-
+neuron_type = 'SOM'; % PV or SOM or Thy
+rms_match_db_with_sig_bf = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\"+ neuron_type + "\rms_match_db_with_sig_bf.mat").rms_match_db_with_sig_bf;
+rms_match_db = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\" + neuron_type + "\rms_match_db.mat").rms_match_db;
 
 
 % add 2 columns - x coord and y coord
@@ -13,7 +13,7 @@ for u=1:size(rms_match_db_with_sig_bf,1)
 end
 
 % seperate gender wise
-animal_gender = 'F';
+animal_gender = 'all';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -35,7 +35,7 @@ end
 
 
 % BF or BF0
-scale = 'BF0'; % 11-BF or 13-BF0
+scale = 'BF'; % 11-BF or 13-BF0
 if strcmp(scale, 'BF')
     bf_index = 11;
 elseif strcmp(scale, 'BF0')
@@ -230,6 +230,9 @@ all_pairs_rebf_vs_dist_norm = zeros(n_dist_bins_to_see, length(rebf_bins));
 for i = 1:n_dist_bins_to_see
     all_pairs_rebf_vs_dist_norm(i,:) = all_pairs_rebf_vs_dist(i,:)./nansum(all_pairs_rebf_vs_dist(i,:));
 end
+
+
+save(neuron_type + "_rebf_vs_dist.mat", 'all_pairs_rebf_vs_dist_norm');
 figure
     imagesc(all_pairs_rebf_vs_dist_norm)
     alpha = double(~isnan(all_pairs_rebf_vs_dist_norm));
@@ -245,21 +248,21 @@ figure
     yticklabels(dist_bins)
 
 % normalise such that each column is 1
-all_pairs_rebf_vs_dist_norm = zeros(n_dist_bins_to_see, length(rebf_bins));
-for i = 1:length(rebf_bins)
-    all_pairs_rebf_vs_dist_norm(1:n_dist_bins_to_see,i) = all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i)./nansum(all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i));
-end
+% all_pairs_rebf_vs_dist_norm = zeros(n_dist_bins_to_see, length(rebf_bins));
+% for i = 1:length(rebf_bins)
+%     all_pairs_rebf_vs_dist_norm(1:n_dist_bins_to_see,i) = all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i)./nansum(all_pairs_rebf_vs_dist(1:n_dist_bins_to_see,i));
+% end
 
-figure
-    imagesc(all_pairs_rebf_vs_dist_norm)
-    alpha = double(~isnan(all_pairs_rebf_vs_dist_norm));
-    imagesc(all_pairs_rebf_vs_dist_norm, 'AlphaData', alpha);
+% figure
+%     imagesc(all_pairs_rebf_vs_dist_norm)
+%     alpha = double(~isnan(all_pairs_rebf_vs_dist_norm));
+%     imagesc(all_pairs_rebf_vs_dist_norm, 'AlphaData', alpha);
 
-    title('all pairs rebf vs dist norm: at a rebf(r), sum of all 20 dist = 1')
-    ylabel('dist(d) bins')
-    xlabel([scale ' bins'])
-    colorbar()
-    xticks(1:length(rebf_bins))
-    xticklabels(rebf_bins)
-    yticks(1:length(dist_bins))
-    yticklabels(dist_bins)
+%     title('all pairs rebf vs dist norm: at a rebf(r), sum of all 20 dist = 1')
+%     ylabel('dist(d) bins')
+%     xlabel([scale ' bins'])
+%     colorbar()
+%     xticks(1:length(rebf_bins))
+%     xticklabels(rebf_bins)
+%     yticks(1:length(dist_bins))
+%     yticklabels(dist_bins)

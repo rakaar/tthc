@@ -1,3 +1,4 @@
+- pca_of_pv_som_in_thy_basis
 - re_bf_dist_conn_for_he_hs.m - For HE..NS, rebf vs distance with connectivity OR rebf0 vs distance with connectivity
 - re_bf_dist_conn.m - rebf vs distance with connectivity OR rebf0 vs distance with connectivity
 - noise_corr_with_conn_shufle.m.m - shuffle neuron labels and see the conn prob vs distance

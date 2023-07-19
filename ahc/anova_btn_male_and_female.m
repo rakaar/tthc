@@ -16,8 +16,8 @@ category = repmat({'HE'; 'HS'; 'NE'; 'NS'}, 2, 1); % For each distance
 category = [category; category]; % Repeat for each gender
 
 % Perform three-way ANOVA using 'anovan'
-[p,t,stats] = anovan(data, {gender, distance, category}, 'varnames', {'Gender','Distance', 'Category'});
-
+[p,t,stats] = anovan(data, {gender, distance, category}, 'varnames', {'Gender','Distance', 'Category'}, 'Model', 'interaction');
+[c,m,h,gnames] = multcompare(stats, 'Dimension', [1 2]);
 
 % --- Taking proportions
 male_data(1,:) = male_data(1,:)./sum(male_data(1,:));
@@ -39,4 +39,5 @@ category = repmat({'HE'; 'HS'; 'NE'; 'NS'}, 2, 1); % For each distance
 category = [category; category]; % Repeat for each gender
 
 % Perform three-way ANOVA using 'anovan'
-[p,t,stats] = anovan(data, {gender, distance, category}, 'varnames', {'Gender','Distance', 'Category'});
+[p,t,stats] = anovan(data, {gender, distance, category}, 'varnames', {'Gender','Distance', 'Category'}, 'Model', 'interaction');
+[c,m,h,gnames] = multcompare(stats, 'Dimension', [1 2]);

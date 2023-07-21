@@ -34,7 +34,7 @@ for b = 1:n_boots
     % do pca of thy
     [coeff,score,latent] = pca(thy);
 
-    
+    weights_for_mean = latent(1:3)./sum(latent(1:3));
     % NOTE thy - mean(thy) = score x coeff'
 
     % Get scores of pv and som on thy basis
@@ -57,9 +57,9 @@ for b = 1:n_boots
 
     % Assuming A, B, and C are your 6 x 5 matrices
     % Take first 3 columns from each matrix
-    A = A(:, 1:3);
-    B = B(:, 1:3);
-    C = C(:, 1:3);
+    A = A(1:3, 1:3);
+    B = B(1:3, 1:3);
+    C = C(1:3, 1:3);
 
 
     % get distances of pv and som from thy (B,C from A)
@@ -67,8 +67,8 @@ for b = 1:n_boots
     dist_pv_from_thy = sqrt(sum((B - A).^2, 2));
     dist_som_from_thy = sqrt(sum((C - A).^2, 2));
 
-    chance_pv_from_thy(b) = mean(dist_pv_from_thy);
-    chance_som_from_thy(b) = mean(dist_som_from_thy);
+    chance_pv_from_thy(b) = sum(dist_pv_from_thy.*weights_for_mean);
+    chance_som_from_thy(b) = sum(dist_som_from_thy.*weights_for_mean);
 
     % actual
     thy = squeeze(thy_actual(b, 1:6, 1:7));

@@ -14,7 +14,7 @@ rms_match_db = rms_match_db_with_sig_bf;
 % end
 % rms_match_db(removal_indices,:) = [];
 % decide only male or female
-animal_gender = 'all'; % M for Male, F for Female, all for both
+animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -120,3 +120,8 @@ figure
         title(type_strs{i})
     end
 
+num_cases_base_re_bf_norm = zeros(n_octaves_apart,4);
+for i = 1:4
+    num_cases_base_re_bf_norm(:,i) = num_cases_base_re_bf(:,i)./sum(num_cases_base_re_bf(:,i));
+end
+save(strcat(animal_gender, '_hehs_rebf'), 'num_cases_base_re_bf_norm')

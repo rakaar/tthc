@@ -114,6 +114,11 @@ figure
         title(type_strs{i})
     end
 
+num_cases_base_re_bf_norm = zeros(n_octaves_apart,4);
+for i = 1:4
+    num_cases_base_re_bf_norm(:,i) = num_cases_base_re_bf(:,i)./sum(num_cases_base_re_bf(:,i));
+end
+save(strcat(animal_gender, '_hehs_rebf'), 'num_cases_base_re_bf_norm')
 % figure
 %     for i = 1:4
 %         subplot(2,2,i)

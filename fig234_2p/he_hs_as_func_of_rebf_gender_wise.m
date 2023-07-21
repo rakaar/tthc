@@ -1,5 +1,5 @@
 % Number of cases of HE, HS as a func of re BF
-clear;clc; close all
+clear;clc; 
 disp('Running he_hs_as_func_of_re_bf.m to find he hs as a function of re BF')
 rms_match_file_path = 'E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db_with_sig_bf.mat';
 rms_match_db_with_sig_bf = load(rms_match_file_path).rms_match_db_with_sig_bf;
@@ -14,7 +14,7 @@ rms_match_db = rms_match_db_with_sig_bf;
 % end
 % rms_match_db(removal_indices,:) = [];
 % decide only male or female
-animal_gender = 'F'; % M for Male, F for Female, all for both
+animal_gender = 'all'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -44,7 +44,7 @@ n_octaves_apart = length(octaves_apart);
 
 num_cases_base_re_bf = zeros(n_octaves_apart,4); % base how far from BF
 
-bf_index = 13; % 13 for BF, 13 for BF0
+bf_index = 11; % 11 for BF, 13 for BF0
 
 for u = 1:size(rms_match_db,1)
     bf = rms_match_db{u,bf_index};

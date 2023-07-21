@@ -1,12 +1,12 @@
 % In near and far cases, enh/sup/no_eff, no sig diff
 % clear;close all; clc;
-clear; clc;close all;
+clear; clc;
 load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
 
 
-animal_gender = 'F';
+animal_gender = 'M';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')

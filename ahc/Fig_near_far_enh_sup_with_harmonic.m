@@ -6,7 +6,31 @@ load('f13.mat')
 
 % situation = 'all';
 % situation = 'low_bf';
-situation = 'high_bf';
+situation = 'all';
+
+
+animal_gender = 'M'; % M for Male, F for Female, all for both
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(stage1_db,1)
+        animal_name = stage1_db{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+
+    % remove rejected gender
+    stage1_db(removal_indices,:) = [];
+
+end % if
 
 near_far_data = zeros(2,4);
 

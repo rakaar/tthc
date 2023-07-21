@@ -1,5 +1,5 @@
 % re BF vs num of connected pairs
-clear;clc;close all;
+clear;clc;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
 neuron_type = 'SOM'; % PV or SOM or Thy
 rms_match_db_with_sig_bf = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\"+ neuron_type + "\rms_match_db_with_sig_bf.mat").rms_match_db_with_sig_bf;
@@ -35,7 +35,7 @@ end
 
 
 % BF or BF0
-scale = 'BF'; % 11-BF or 13-BF0
+scale = 'BF0'; % 11-BF or 13-BF0
 if strcmp(scale, 'BF')
     bf_index = 11;
 elseif strcmp(scale, 'BF0')
@@ -238,7 +238,7 @@ figure
     alpha = double(~isnan(all_pairs_rebf_vs_dist_norm));
     imagesc(all_pairs_rebf_vs_dist_norm, 'AlphaData', alpha);
 
-    title('all pairs rebf vs dist norm: at a dist(d), sum of all 7 rebf = 1')
+    title([ neuron_type ' - all pairs rebf vs dist norm: at a dist(d), sum of all 7 rebf = 1'])
     ylabel('dist(d) bins')
     xlabel([scale ' bins'])
     colorbar()
@@ -246,6 +246,7 @@ figure
     xticklabels(rebf_bins)
     yticks(1:length(dist_bins))
     yticklabels(dist_bins)
+    caxis([0 0.35])
 
 % normalise such that each column is 1
 % all_pairs_rebf_vs_dist_norm = zeros(n_dist_bins_to_see, length(rebf_bins));

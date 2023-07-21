@@ -6,7 +6,7 @@ load('stage1_db.mat')
 load('f13.mat')
 
 
-animal_gender = 'M';
+animal_gender = 'F';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -265,7 +265,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title(['Near-NonHarmonic' ' ' situation]);
+title([ animal_gender ' gender Near-NonHarmonic' ' ' situation]);
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 ylim([0 1])
@@ -278,7 +278,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title(['Far-NonHarmonic' ' ' situation]);
+title([ animal_gender ' gender Far-NonHarmonic' ' ' situation]);
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 ylim([0 1])
@@ -301,6 +301,5 @@ disp('Chi sq btn proportions')
 disp(['h = ' num2str(h) ' p = ' num2str(p2)])
 
 
-% [~,~,~,tab] = crosstab(near_far_data(1,:), near_far_data(2,:));
-% [p,x2] = chisquarecont(tab);
-% disp(['p = ' num2str(p) ' x2 = ' num2str(x2)])
+save('non_hc_near_far', "near_far_data")
+

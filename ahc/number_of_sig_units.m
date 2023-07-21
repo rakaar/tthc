@@ -28,7 +28,7 @@ if ~isnan(rejected_gender)
 
 end % if
 
-
+disp(['animal gender ' animal_gender])
 total_ahc = 0;
 sig_ahc = 0;
 % for AHC

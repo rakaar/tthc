@@ -9,7 +9,7 @@ load('f13.mat')
 situation = 'all';
 
 
-animal_gender = 'M'; % M for Male, F for Female, all for both
+animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -19,8 +19,8 @@ else
 end
 if ~isnan(rejected_gender)
     removal_indices = [];
-    for u = 1:size(stage1_db,1)
-        animal_name = stage1_db{u,1};
+    for u = 1:size(stage3_db,1)
+        animal_name = stage3_db{u,1};
         % if animal name includes _{rejected_gender} add it to removal index
         if contains(animal_name, strcat('_',rejected_gender))
             removal_indices = [removal_indices; u];
@@ -28,7 +28,7 @@ if ~isnan(rejected_gender)
     end % u
 
     % remove rejected gender
-    stage1_db(removal_indices,:) = [];
+    stage3_db(removal_indices,:) = [];
 
 end % if
 
@@ -268,7 +268,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title(['Near - Harmonic' ' ' situation]);
+title([animal_gender ' Gender - Near - Harmonic' ' ' situation]);
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 
@@ -281,7 +281,7 @@ xlabel('Category');
 ylabel('Fraction');
 
 % Provide a title for the graph
-title(['Far - Harmonic' ' ' situation]);
+title([animal_gender ' Gender - Far - Harmonic' ' ' situation]);
 xticks(1:4);
 xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 
@@ -292,3 +292,15 @@ disp('Near case')
 disp([near_far_data(1,:) sum(near_far_data(1,:))])
 disp('Far Case')
 disp([near_far_data(2,:) sum(near_far_data(2,:))])
+
+
+% chi square test
+[h,p1] = do_chi_sq(near_far_data(1,:), near_far_data(2,:));
+disp('Chi sq btn frequencies')
+disp(['h = ' num2str(h) ' p = ' num2str(p1)])
+[h,p2] = do_chi_sq(near_far_data(1,:)./sum(near_far_data(1,:)), near_far_data(2,:)./sum(near_far_data(2,:)));
+disp('Chi sq btn proportions')
+disp(['h = ' num2str(h) ' p = ' num2str(p2)])
+
+
+save('hc_near_far', 'near_far_data')

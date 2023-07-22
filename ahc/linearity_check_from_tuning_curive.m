@@ -46,8 +46,8 @@ for i=1:length(octaves_apart_with_data)
         end
 
          % twoToneResp
-            hc_two_tone_resp = mean_reduced_data(i,1);
-            non_hc_two_tone_resp = mean_reduced_data(i,j+1);
+            hc_two_tone_resp = mean_reduced_data(i,1); % 1 value : average of m rates
+            non_hc_two_tone_resp = mean_reduced_data(i,j+1); % 1 value : average of m rates
             
             two_tone_ratio = non_hc_two_tone_resp/hc_two_tone_resp;
 

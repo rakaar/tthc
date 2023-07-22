@@ -18,6 +18,9 @@ chance_som_from_thy = zeros(n_boots, 1);
 actual_pv_from_thy = zeros(n_boots, 1);
 actual_som_from_thy = zeros(n_boots, 1);
 
+pcs_to_use = 4;
+cols_to_see = 1:2;
+
 for b = 1:n_boots
 
     disp(['Boots: ' num2str(b)])
@@ -34,7 +37,7 @@ for b = 1:n_boots
     % do pca of thy
     [coeff,score,latent] = pca(thy);
 
-    weights_for_mean = latent(1:3)./sum(latent(1:3));
+    weights_for_mean = latent(pcs_to_use)./sum(latent(pcs_to_use));
     % NOTE thy - mean(thy) = score x coeff'
 
     % Get scores of pv and som on thy basis
@@ -44,8 +47,8 @@ for b = 1:n_boots
     % coeff'coeff = 1
     % (pv - mean(pv))*coeff = score_pv_on_thy_basis
 
-    score_pv_on_thy_basis = (pv - mean(pv))*coeff;
-    score_som_on_thy_basis = (som - mean(som))*coeff;
+    score_pv_on_thy_basis = (pv - mean(thy))*coeff;
+    score_som_on_thy_basis = (som - mean(thy))*coeff;
     score_thy_on_thy_basis = score;
 
     % visualise take only first 3
@@ -57,9 +60,9 @@ for b = 1:n_boots
 
     % Assuming A, B, and C are your 6 x 5 matrices
     % Take first 3 columns from each matrix
-    A = A(1:3, 1:3);
-    B = B(1:3, 1:3);
-    C = C(1:3, 1:3);
+    A = A(pcs_to_use, cols_to_see);
+    B = B(pcs_to_use, cols_to_see);
+    C = C(pcs_to_use, cols_to_see);
 
 
     % get distances of pv and som from thy (B,C from A)
@@ -87,14 +90,14 @@ for b = 1:n_boots
     % NOTE thy - mean(thy) = score x coeff'
 
     % Get scores of pv and som on thy basis
-    % pv - mean(pv) = score_pv_on_thy_basis x coeff'
+    % pv - mean(thy) = score_pv_on_thy_basis x coeff'
     % Multiply by coeff on both sides
-    % (pv - mean(pv))*coeff = score_pv_on_thy_basis x coeff'coeff
+    % (pv - mean(thy))*coeff = score_pv_on_thy_basis x coeff'coeff
     % coeff'coeff = 1
-    % (pv - mean(pv))*coeff = score_pv_on_thy_basis
+    % (pv - mean(thy))*coeff = score_pv_on_thy_basis
 
-    score_pv_on_thy_basis = (pv - mean(pv))*coeff;
-    score_som_on_thy_basis = (som - mean(som))*coeff;
+    score_pv_on_thy_basis = (pv - mean(thy))*coeff;
+    score_som_on_thy_basis = (som - mean(thy))*coeff;
     score_thy_on_thy_basis = score;
 
     % visualise take only first 3
@@ -106,9 +109,9 @@ for b = 1:n_boots
 
     % Assuming A, B, and C are your 6 x 5 matrices
     % Take first 3 columns from each matrix
-    A = A(:, 1:3);
-    B = B(:, 1:3);
-    C = C(:, 1:3);
+    A = A(pcs_to_use, cols_to_see);
+    B = B(pcs_to_use, cols_to_see);
+    C = C(pcs_to_use, cols_to_see);
 
 
     % get distances of pv and som from thy (B,C from A)
@@ -116,8 +119,8 @@ for b = 1:n_boots
     dist_pv_from_thy = sqrt(sum((B - A).^2, 2));
     dist_som_from_thy = sqrt(sum((C - A).^2, 2));
 
-    actual_pv_from_thy(b) = mean(dist_pv_from_thy);
-    actual_som_from_thy(b) = mean(dist_som_from_thy);
+    actual_pv_from_thy(b) = mean(dist_pv_from_thy.*weights_for_mean);
+    actual_som_from_thy(b) = mean(dist_som_from_thy.*weights_for_mean);
 
 
 end % b

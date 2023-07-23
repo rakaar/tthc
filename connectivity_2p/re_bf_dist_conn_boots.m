@@ -1,7 +1,7 @@
 % Bootstrap re BF vs num of connected pairs
 clear;clc;close all;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
-neuron_type = 'Thy'; % PV or SOM or Thy
+neuron_type = 'SOM'; % PV or SOM or Thy
 rms_match_db_with_sig_bf = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\"+ neuron_type + "\rms_match_db_with_sig_bf.mat").rms_match_db_with_sig_bf;
 rms_match_db = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\" + neuron_type + "\rms_match_db.mat").rms_match_db;
 
@@ -238,6 +238,7 @@ n_boots = 1000;
 actual_all_pairs_rebf_vs_dist_boots = zeros(n_boots, length(dist_bins), length(rebf_bins));
 
 for b = 1:n_boots
+    disp(['Boot ' num2str(b)])
     random_indices = randi([1 num_extreme_pairs], num_extreme_pairs, 1);
     for r = 1:length(random_indices)
         rand_ind = random_indices(r);

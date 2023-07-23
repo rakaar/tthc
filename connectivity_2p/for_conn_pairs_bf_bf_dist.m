@@ -1,7 +1,9 @@
-% Bootstrap re BF vs num of connected pairs
-clear;clc;close all;
+% re BF vs num of connected pairs
+clear;clc;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
 neuron_type = 'Thy'; % PV or SOM or Thy
+scale = 'BF0'; % 11-BF or 13-BF0
+
 rms_match_db_with_sig_bf = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\"+ neuron_type + "\rms_match_db_with_sig_bf.mat").rms_match_db_with_sig_bf;
 rms_match_db = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\" + neuron_type + "\rms_match_db.mat").rms_match_db;
 
@@ -34,8 +36,7 @@ if ~isnan(rejected_gender)
 end
 
 
-% BF or BF0
-scale = 'BF'; % 11-BF or 13-BF0
+% bf index
 if strcmp(scale, 'BF')
     bf_index = 11;
 elseif strcmp(scale, 'BF0')
@@ -181,21 +182,15 @@ dist_bins = 0:dist_bin_size:max_dist-dist_bin_size;
 rebf_bins = 0:0.5:3;
 
 % all pairs rebf vs dist
-all_pairs_rebf_vs_dist = zeros(length(dist_bins), length(rebf_bins));
-
-
-% struct: roi_name, n1, n2
-roi_n1_n2 = struct('roi_no', {}, 'n1', {}, 'n2', {}, 'dist', {}, 'rebf', {});
+data = struct('b1', {}, 'b2', {}, 'dist', {});
 counter = 1;
-for i = 1:length(all_roi_info)
-    
-    all_bf = all_roi_info(i).rebf;
 
+for i = 1:length(all_roi_info)
+    all_bf = all_roi_info(i).rebf;
     all_x_cord = all_roi_info(i).x_coord;
     all_y_cord = all_roi_info(i).y_coord;
-    
     all_noise_corr = all_roi_info(i).noise_corr_mat;
-    
+
     n_cells = length(all_bf);
     for n1 = 1:n_cells-1
         for n2 = n1+1:n_cells
@@ -207,54 +202,23 @@ for i = 1:length(all_roi_info)
                 x2 = all_x_cord(n2);
                 y2 = all_y_cord(n2);
                 dist = sqrt((x1-x2)^2 + (y1-y2)^2)*1.17; % 1.17 microns per pixel
-                dist_bin = floor(dist/dist_bin_size) + 1;
+                
 
                 % get the rebf
                 bf1 = all_bf(n1);
                 bf2 = all_bf(n2);
-                rebf = abs(bf1 - bf2)*0.5;
-                rebf_bin = find(rebf_bins == rebf);
+                
 
-
-                roi_n1_n2(counter).roi_no = i;
-                roi_n1_n2(counter).n1 = n1;
-                roi_n1_n2(counter).n2 = n2;
-                roi_n1_n2(counter).dist = dist_bin;
-                roi_n1_n2(counter).rebf = rebf_bin;
+                data(counter).b1 = bf1;
+                data(counter).b2 = bf2;
+                data(counter).dist = dist;
                 counter = counter + 1;
             end 
         end
     end
-end % i
+
+    
+end
 
 
-disp(['Total pairs ' num2str(counter - 1)]);
-
-num_extreme_pairs = counter - 1;
-
-
-% bootstrapped data
-n_boots = 1000;
-actual_all_pairs_rebf_vs_dist_boots = zeros(n_boots, length(dist_bins), length(rebf_bins));
-
-for b = 1:n_boots
-    random_indices = randi([1 num_extreme_pairs], num_extreme_pairs, 1);
-    for r = 1:length(random_indices)
-        rand_ind = random_indices(r);
-        dist_bin = roi_n1_n2(rand_ind).dist;
-        rebf_bin = roi_n1_n2(rand_ind).rebf;
-
-        actual_all_pairs_rebf_vs_dist_boots(b, dist_bin, rebf_bin) = actual_all_pairs_rebf_vs_dist_boots(b, dist_bin, rebf_bin) + 1;
-        
-    end  % r
-end % b
-
-% % normalise each row in actual by nansum of each row
-for b = 1:n_boots
-    for r = 1:length(dist_bins)
-        actual_all_pairs_rebf_vs_dist_boots(b,r,:) = actual_all_pairs_rebf_vs_dist_boots(b,r,:)/nansum(actual_all_pairs_rebf_vs_dist_boots(b,r,:));
-    end
-end % b
-
-
-save(strcat(neuron_type, '_actual.mat'), 'actual_all_pairs_rebf_vs_dist_boots');
+save(strcat(neuron_type, '_', scale, '.mat'), 'data');

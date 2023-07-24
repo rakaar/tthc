@@ -1,5 +1,28 @@
-clear ;
+close all;clc;clear ;
 load('rms_match_db.mat')
+
+animal_gender = 'M'; % M for Male, F for Female, all for both
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(rms_match_db,1)
+        animal_name = rms_match_db{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+
+    % remove rejected gender
+    rms_match_db(removal_indices,:) = [];
+
+end % if
 
 bf_counter = zeros(7,1);
 bf0_counter = zeros(7,1);
@@ -54,11 +77,12 @@ figure
     title('bf0')
 
 figure
-    imagesc((bf_bf0./n))
+    imagesc((bf_bf0./sum(bf_bf0(:))))
     colorbar()
-    title('transpose')
+    title([ animal_gender ' BF BF0'])
     ylabel('BF')
     xlabel('BF0')
+    axis image
 
 %%
 octave_shift_counter = zeros(13,1);
@@ -76,61 +100,61 @@ figure
     title('octave shift counter')
 
     %%
-abs_octave_shift_counter = zeros(13,1);
+% abs_octave_shift_counter = zeros(13,1);
 
-for tf=1:7
-    for hf=1:7
-        shift = (hf - tf)*0.5;
-        shift_index = 7 + abs(shift)*2;
+% for tf=1:7
+%     for hf=1:7
+%         shift = (hf - tf)*0.5;
+%         shift_index = 7 + abs(shift)*2;
         
-        abs_octave_shift_counter(shift_index,1) = abs_octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
-    end
-end
+%         abs_octave_shift_counter(shift_index,1) = abs_octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+%     end
+% end
 
-figure
-    bar(abs_octave_shift_counter(7:13)./sum(abs_octave_shift_counter(7:13)))
-    title('abs octave shift')
+% figure
+%     bar(abs_octave_shift_counter(7:13)./sum(abs_octave_shift_counter(7:13)))
+%     title('abs octave shift')
 
-%%
-[h,p] = kstest2(bf_counter, bf0_counter);
-disp('KS test 2')
-disp(['p = ', num2str(p)])
-disp(['h = ', num2str(h)])
-
-
-bf_bf0_norm = bf_bf0./n;
-bf_bf0_norm_minus_mean = bf_bf0_norm - mean(mean(bf_bf0_norm));
-figure
-    imagesc(abs(fft2(bf_bf0_norm_minus_mean)))
-    title('fft2 of mean subtracted bf_bf0')
-    xlabel('BF0')
-    ylabel('BF')
-    colorbar()
-
-figure
-    imagesc(abs(fftshift(fft2(bf_bf0_norm_minus_mean))))
-    title('fft2 shift of mean subtracted bf_bf0')
-    xlabel('BF0')
-    ylabel('BF')
-    colorbar()
-    figure
-    imagesc(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean)))))
-    title('fft2 shift of mean subtracted bf_bf0')
-    xlabel('BF0')
-    ylabel('BF')
-    colorbar()
+% %%
+% [h,p] = kstest2(bf_counter, bf0_counter);
+% disp('KS test 2')
+% disp(['p = ', num2str(p)])
+% disp(['h = ', num2str(h)])
 
 
-    figure
-    imagesc(angle(fftshift(fft2(bf_bf0_norm_minus_mean))))
-    title('angle fft2 shift of mean subtracted bf_bf0')
-    xlabel('BF0')
-    ylabel('BF')
-    colorbar()
+% bf_bf0_norm = bf_bf0./n;
+% bf_bf0_norm_minus_mean = bf_bf0_norm - mean(mean(bf_bf0_norm));
+% figure
+%     imagesc(abs(fft2(bf_bf0_norm_minus_mean)))
+%     title('fft2 of mean subtracted bf_bf0')
+%     xlabel('BF0')
+%     ylabel('BF')
+%     colorbar()
 
-    figure
-    imagesc(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean))))/norm(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean))))))
-    title('norm fft2 shift of mean subtracted bf_bf0')
-    xlabel('BF0')
-    ylabel('BF')
-    colorbar()
+% figure
+%     imagesc(abs(fftshift(fft2(bf_bf0_norm_minus_mean))))
+%     title('fft2 shift of mean subtracted bf_bf0')
+%     xlabel('BF0')
+%     ylabel('BF')
+%     colorbar()
+%     figure
+%     imagesc(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean)))))
+%     title('fft2 shift of mean subtracted bf_bf0')
+%     xlabel('BF0')
+%     ylabel('BF')
+%     colorbar()
+
+
+%     figure
+%     imagesc(angle(fftshift(fft2(bf_bf0_norm_minus_mean))))
+%     title('angle fft2 shift of mean subtracted bf_bf0')
+%     xlabel('BF0')
+%     ylabel('BF')
+%     colorbar()
+
+%     figure
+%     imagesc(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean))))/norm(20.*log10(abs(fftshift(fft2(bf_bf0_norm_minus_mean))))))
+%     title('norm fft2 shift of mean subtracted bf_bf0')
+%     xlabel('BF0')
+%     ylabel('BF')
+%     colorbar()

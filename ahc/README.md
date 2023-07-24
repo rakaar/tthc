@@ -37,3 +37,4 @@
 30. latencies_calc.m - calculate latencies of non hc units
 31. linear_index_sep_pos_neg.m - harmonic modulation index in positive and negative direction
 32. anova_btn_male_and_female.m - 3 way anova btn male and female near and far
+33. linearity_check_from_tuning_curve_gender_wise - ratio of ratio gender wise

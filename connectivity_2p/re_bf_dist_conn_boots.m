@@ -1,10 +1,11 @@
 % Bootstrap re BF vs num of connected pairs
 clear;clc;close all;
 disp('Running re_bf_dist_conn.m - conn vs rebf vs dist')
-neuron_type = 'SOM'; % PV or SOM or Thy
+neuron_type = 'Thy'; % PV or SOM or Thy
 rms_match_db_with_sig_bf = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\"+ neuron_type + "\rms_match_db_with_sig_bf.mat").rms_match_db_with_sig_bf;
 rms_match_db = load("E:\RK_E_folder_TTHC_backup\RK TTHC Data\" + neuron_type + "\rms_match_db.mat").rms_match_db;
 
+normalise_along_what = 'dist'; % 'rebf' or 'dist'
 
 % add 2 columns - x coord and y coord
 for u=1:size(rms_match_db_with_sig_bf,1)
@@ -251,11 +252,19 @@ for b = 1:n_boots
 end % b
 
 % % normalise each row in actual by nansum of each row
-for b = 1:n_boots
-    for r = 1:length(dist_bins)
-        actual_all_pairs_rebf_vs_dist_boots(b,r,:) = actual_all_pairs_rebf_vs_dist_boots(b,r,:)/nansum(actual_all_pairs_rebf_vs_dist_boots(b,r,:));
-    end
-end % b
-
-
+if strcmp(normalise_along_what, 'rebf')
+    % - Normalise such that each row sums to 1 (sum of all rebf = 1)
+    for b = 1:n_boots
+        for r = 1:length(dist_bins(1:6))
+            actual_all_pairs_rebf_vs_dist_boots(b,r,:) = actual_all_pairs_rebf_vs_dist_boots(b,r,:)/nansum(actual_all_pairs_rebf_vs_dist_boots(b,r,:));
+        end
+    end % b
+elseif strcmp(normalise_along_what, 'dist')
+    % normalise each row in actual by nansum of each column (sum of all dist = 1)
+    for b = 1:n_boots
+        for r = 1:length(rebf_bins)
+            actual_all_pairs_rebf_vs_dist_boots(b,1:6,r) = actual_all_pairs_rebf_vs_dist_boots(b,1:6,r)/nansum(actual_all_pairs_rebf_vs_dist_boots(b,1:6,r));
+        end
+    end % b
+end
 save(strcat(neuron_type, '_actual.mat'), 'actual_all_pairs_rebf_vs_dist_boots');

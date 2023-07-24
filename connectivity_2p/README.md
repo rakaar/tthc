@@ -1,3 +1,5 @@
+- analyse_re_bf_dist_conn_boots.m - analyse the file mentioned below
+- re_bf_dist_conn_boots.m - bootstrap and get rebf vs dist matrices
 - pca_of_pv_som_in_thy_basis
 - re_bf_dist_conn_for_he_hs.m - For HE..NS, rebf vs distance with connectivity OR rebf0 vs distance with connectivity
 - re_bf_dist_conn.m - rebf vs distance with connectivity OR rebf0 vs distance with connectivity

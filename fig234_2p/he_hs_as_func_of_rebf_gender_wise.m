@@ -159,9 +159,10 @@ for n = 1:length(all_neuron_types)
                 bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
                 xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
                 ylabel('Prop of cases')
-                title(type_strs{i})
+                title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
             end
+            saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig2\' neuron_type '_' bf_str  '_he_hs_as_func_of_re_bf_histogram.fig'])
         
         figure
             for i = 1:4
@@ -179,6 +180,7 @@ for n = 1:length(all_neuron_types)
                 title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
             end
+        saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig2\' neuron_type '_' bf_str  '_he_hs_as_func_of_re_bf_cdf.fig'])
         
     end
 end % n

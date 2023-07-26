@@ -16,7 +16,7 @@ n_octaves_apart = length(octaves_apart);
 
 num_cases_base_re_bf = zeros(2, n_octaves_apart,4); % base how far from BF
 % 2 - M,F 3 - octaves apart, 4 - HE, HS, NE, NS
-bf_index = 12; % 12 for BF, 13 for BF0
+bf_index = 13; % 12 for BF, 13 for BF0
 
 for gender_no = 1:2
     rms_match_db = load('rms_match_db.mat').rms_match_db;
@@ -89,9 +89,29 @@ for gender_no = 1:2
 end % gender_no
 
 
+% tests
+type_strs = {'HE', 'HS', 'NE', 'NS'};
+
+for cat = 1:4
+    male_data = num_cases_base_re_bf(1,:,cat);
+    female_data = num_cases_base_re_bf(2,:,cat);
+
+     % kstest
+     male_data_for_kstest = [];
+     female_data_for_kstest = [];
+     for i = 1:n_octaves_apart
+        male_data_for_kstest = [male_data_for_kstest octaves_apart(i)*ones(1,male_data(i))];
+        female_data_for_kstest = [female_data_for_kstest octaves_apart(i)*ones(1, female_data(i))];
+    end
+    [h,p] = kstest2(male_data_for_kstest, female_data_for_kstest);
+     disp('kstest2 ')
+     disp(['h = ' num2str(h) ' p = ' num2str(p) ' for ' type_strs{cat}])
+ 
+    
+end % cat
 
 % plot
-type_strs = {'HE', 'HS', 'NE', 'NS'};
+
 if bf_index == 12
     bf_str = 'BF';
 else
@@ -99,17 +119,34 @@ else
 end
 
 figure
-    for i = 1:4
-        subplot(2,2,i)
-        both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
-        for j = 1:2
-            both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
-        end
-        bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
-        xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
-        ylabel('Number of cases')
-        title(type_strs{i})
-        legend('M', 'F')
+for i = 1:4
+    subplot(2,2,i)
+    both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    for j = 1:2
+        both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
     end
+    bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Prop of cases')
+    title([type_strs{i} ])
+    legend('M', 'F')
+end
+saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig1\' bf_str  '_he_hs_as_func_of_re_bf_histogram.fig'])
 
-
+figure
+for i = 1:4
+    subplot(2,2,i)
+    both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    for j = 1:2
+        both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
+    end
+    hold on
+        plot(cumsum(both_m_f_each_cat_data(:,1)), 'LineWidth', 2, 'Color', 'b')
+        plot(cumsum(both_m_f_each_cat_data(:,2)), 'LineWidth', 2, 'Color', 'r')
+    hold off
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Cum sum of prop')
+    title([type_strs{i}])
+    legend('M', 'F')
+end
+saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig1\' bf_str  '_he_hs_as_func_of_re_bf_cdf.fig'])

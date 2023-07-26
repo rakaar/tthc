@@ -98,6 +98,21 @@ end
 
 save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\BF BF0 Thy PV SOM Low High\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0')
 
+bf_bf0_norm = bf_bf0./sum(bf_bf0(:));
+save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\norm_mats\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0_norm')
+
+octs_apart = -3:0.5:3;
+shift_vec = zeros(length(octs_apart),1);
+for i = 1:7
+    for j = 1:7
+        shift = (j - i)*0.5;
+        shift_index = find(octs_apart == shift);
+        shift_vec(shift_index) = shift_vec(shift_index) + bf_bf0(i,j);
+    end
+end
+
+shift_vec = shift_vec./sum(shift_vec);
+save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\shift_vecs\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'shift_vec')
 % figure
 %     imagesc(bf_bf0./sum(sum(bf_bf0)))
 %     title([animal_gender 'bf bf0'])
@@ -107,30 +122,30 @@ save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\BF BF0 Thy PV SOM Low High\
 %     xlabel('BF0')
 
     %%
-octave_shift_counter = zeros(13,1);
+% octave_shift_counter = zeros(13,1);
 
-for tf=1:7
-    for hf=1:7
-        shift = (hf - tf)*0.5;
-        shift_index = 7 + shift*2;
+% for tf=1:7
+%     for hf=1:7
+%         shift = (hf - tf)*0.5;
+%         shift_index = 7 + shift*2;
         
-        octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
-    end
-end
-figure
-    bar(-3:0.5:3,octave_shift_counter./sum(octave_shift_counter))
-    title([neuron_type '  '  animal_gender  '  '  db_set   ' - octave shift counter'])
-    xlabel('octave shift')
+%         octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+%     end
+% end
+% figure
+%     bar(-3:0.5:3,octave_shift_counter./sum(octave_shift_counter))
+%     title([neuron_type '  '  animal_gender  '  '  db_set   ' - octave shift counter'])
+%     xlabel('octave shift')
 
 
 %% statiscal tests
-disp('Chi square test using cross tab')
-[~, ~, p, ~] = crosstab(tone_bf_counter, hc_bf_counter);
-disp(['Chi sqaure test p = ' num2str(p)])
+% disp('Chi square test using cross tab')
+% [~, ~, p, ~] = crosstab(tone_bf_counter, hc_bf_counter);
+% disp(['Chi sqaure test p = ' num2str(p)])
 
-disp('ks test')
-[h, p] = kstest2(tone_bf_counter, hc_bf_counter);
-disp(['ks test p = ' num2str(p) ' h = ' num2str(h)])
+% disp('ks test')
+% [h, p] = kstest2(tone_bf_counter, hc_bf_counter);
+% disp(['ks test p = ' num2str(p) ' h = ' num2str(h)])
 
         end
     end

@@ -1,6 +1,5 @@
 % Number of cases of HE, HS as a func of re BF
 clear;clc;close all;
-rms_match_db = load('rms_match_db.mat').rms_match_db;
 
 % remove non-20 dB from all rms values
 % removal_indices = [];
@@ -11,6 +10,7 @@ rms_match_db = load('rms_match_db.mat').rms_match_db;
 % end
 % rms_match_db(removal_indices,:) = [];
 
+rms_match_db = load('rms_match_db.mat').rms_match_db;
 % decide only male or female
 animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')

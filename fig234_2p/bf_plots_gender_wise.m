@@ -1,9 +1,22 @@
 clear;clc;close all;
 disp('Running 2p figures/bf_plots_gender_wise')
-rms_match_db_with_sig_bf = load('E:\RK_E_folder_TTHC_backup\RK TTHC Data\Thy\rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+
+
+all_neuron_types = {'PV', 'SOM', 'Thy'};
+all_animal_gender = {'M', 'F'};
+all_db_set = {'low', 'high'};
+
+
+for n = 1:3
+    for gender = 1:2
+        for spl = 1:2
+            neuron_type = all_neuron_types{n};
+            animal_gender = all_animal_gender{gender};
+            db_set = all_db_set{spl};
+
+            rms_match_db_with_sig_bf = load(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\', neuron_type ,'\rms_match_db_with_sig_bf.mat')).rms_match_db_with_sig_bf;
 
 % decide only male or female
-animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -26,7 +39,29 @@ if ~isnan(rejected_gender)
 
 end % if
 
+% if db set is low, remove high db = low atten = [0, 10]
+% if db set to high, remove low db = high atten = [20, 30, 40]
+if strcmp(db_set, 'low')
+    removal_db = [0, 10];
+elseif strcmp(db_set, 'high')
+    removal_db = [20, 30, 40];
+else
+    removal_db = nan;
+end
 
+if ~isnan(removal_db)
+    removal_indices = [];
+    for u=1:size(rms_match_db_with_sig_bf,1)
+        if sum(rms_match_db_with_sig_bf{u,6} == removal_db) == 1
+            removal_indices = [removal_indices u];
+        end
+    end
+    % remove them
+    rms_match_db_with_sig_bf(removal_indices,:) = [];
+end
+
+
+% return
 tone_bf_counter = zeros(7,1);
 hc_bf_counter = zeros(7,1);
 for u=1:size(rms_match_db_with_sig_bf,1)
@@ -39,13 +74,13 @@ for u=1:size(rms_match_db_with_sig_bf,1)
     end
 end
 
-figure
-    bar(tone_bf_counter./sum(tone_bf_counter))
-    title('t')
+% figure
+%     bar(tone_bf_counter./sum(tone_bf_counter))
+%     title('t')
 
-figure
-    bar(hc_bf_counter./sum(hc_bf_counter))
-    title('hc')
+% figure
+%     bar(hc_bf_counter./sum(hc_bf_counter))
+%     title('hc')
 
     %%
 bf_bf0 = zeros(7,7);
@@ -60,13 +95,16 @@ for u=1:size(rms_match_db_with_sig_bf,1)
     end
 end
 
-figure
-    imagesc(bf_bf0./sum(sum(bf_bf0)))
-    title('bf bf0')
-    caxis([0 0.032])
-    colorbar()
-    ylabel('BF')
-    xlabel('BF0')
+
+save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\BF BF0 Thy PV SOM Low High\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0')
+
+% figure
+%     imagesc(bf_bf0./sum(sum(bf_bf0)))
+%     title([animal_gender 'bf bf0'])
+%     caxis([0 0.032])
+%     colorbar()
+%     ylabel('BF')
+%     xlabel('BF0')
 
     %%
 octave_shift_counter = zeros(13,1);
@@ -81,7 +119,7 @@ for tf=1:7
 end
 figure
     bar(-3:0.5:3,octave_shift_counter./sum(octave_shift_counter))
-    title('octave shift counter')
+    title([neuron_type '  '  animal_gender  '  '  db_set   ' - octave shift counter'])
     xlabel('octave shift')
 
 
@@ -93,3 +131,12 @@ disp(['Chi sqaure test p = ' num2str(p)])
 disp('ks test')
 [h, p] = kstest2(tone_bf_counter, hc_bf_counter);
 disp(['ks test p = ' num2str(p) ' h = ' num2str(h)])
+
+        end
+    end
+end
+
+
+
+
+

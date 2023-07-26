@@ -57,24 +57,23 @@ disp('Chi square test 2 - file exchange')
 bf_counter = bf_counter./n;
 bf0_counter = bf0_counter./n;
 % bf_bf0 = bf_bf0./n;
-bf_bf0 = bf_bf0;
 
 %%
-figure
-    hold on
-        plot(bf_counter)
-        plot(bf0_counter)
-    hold off
-    legend('T','hc')
-    title('bf bf0')
-%%
-figure
-    bar(bf_counter)
-    title('bf')
+% figure
+%     hold on
+%         plot(bf_counter)
+%         plot(bf0_counter)
+%     hold off
+%     legend('T','hc')
+%     title('bf bf0')
+% %%
+% figure
+%     bar(bf_counter)
+%     title('bf')
 
-figure
-    bar(bf0_counter)
-    title('bf0')
+% figure
+%     bar(bf0_counter)
+%     title('bf0')
 
 figure
     imagesc((bf_bf0./sum(bf_bf0(:))))
@@ -82,9 +81,50 @@ figure
     title([ animal_gender ' BF BF0'])
     ylabel('BF')
     xlabel('BF0')
+    xticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+    yticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+
     axis image
 
-%%
+    figure
+    surfc((bf_bf0./sum(bf_bf0(:))))
+    colorbar()
+    title([ animal_gender ' BF BF0'])
+    ylabel('BF')
+    xlabel('BF0')
+    xticks(1:7) % Assuming the size of your matrix is 7x7
+    yticks(1:7) % Assuming the size of your matrix is 7x7
+    xticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+    yticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+    % axis image
+
+% Define Gaussian filter parameters
+sigma = 0.4; % Standard deviation. Adjust this to change the amount of smoothing.
+
+% Apply Gaussian filter
+B = imgaussfilt(bf_bf0./sum(bf_bf0(:)), sigma);
+
+% Display original and smoothed matrices
+figure;
+subplot(1,2,1);
+axis image
+imagesc(bf_bf0);
+
+title('Original');
+
+subplot(1,2,2);
+imagesc(B);
+axis image
+title('Smoothed');
+colorbar();
+figure
+    surfc(B)
+
+bfbf0_n = bf_bf0./sum(bf_bf0(:));
+figure 
+    plot(bfbf0_n, 'LineWidth', 2)
+    legend('6', '8.5', '12', '17', '24', '34', '48')
+    %%
 octave_shift_counter = zeros(13,1);
 
 for tf=1:7
@@ -98,6 +138,14 @@ end
 figure
     bar(octave_shift_counter)
     title('octave shift counter')
+% check
+oct_shift_norm = octave_shift_counter./sum(octave_shift_counter);
+sum_along_diag = 0;
+for i = 1:7
+    sum_along_diag = sum_along_diag + bfbf0_n(i,i);
+end
+disp(['sum along diag = ', num2str(sum_along_diag)])
+disp(['octave shift  0 ' num2str(oct_shift_norm(7)) ])
 
     %%
 % abs_octave_shift_counter = zeros(13,1);

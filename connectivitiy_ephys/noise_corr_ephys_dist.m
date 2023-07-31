@@ -1,4 +1,4 @@
-clear;clc;close all;
+clear;clc;
 %%%%% MEDIAL %%%%
 loc_mat=[[12 16 4 8];[11 15 3 7];[10 14 2 6];[9 13 1 5]];%%%%% CAUDAL %%%%   %%% TO CONVERT FROM ELECTRODE NUMBER TO LOATION
 %%%%% LATERAL %%%
@@ -16,7 +16,7 @@ dist = unique(nonzeros(dist));
 
 load('rms_match_db.mat')
 
-animal_gender = 'all';
+animal_gender = 'F';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -213,7 +213,7 @@ hold on
 errorbar(sqrt(dist)*125, mean_nc, err, 'LineWidth', 2)
 errorbar(sqrt(dist)*125, mean_nc1, err1, 'LineWidth', 2)
 hold off 
-title('mean')
+title(['Noise corr vs dist - gender - ' animal_gender])
 legend('tone', 'hc')
 xlabel('distance (um)')
 ylabel('noise corr')

@@ -60,7 +60,7 @@ for u = 1:size(data,1)
 end % u
 
 
-choose_type = 'HE'; % 'HE', 'HS', 'NE'
+choose_type = 'NE'; % 'HE', 'HS', 'NE'
 if strcmp(choose_type, 'HE')
     choose_units = major_he;
 elseif strcmp(choose_type, 'HS')
@@ -69,6 +69,7 @@ elseif strcmp(choose_type, 'NE')
     choose_units = major_ne;
 end % if
 
+% choose_units = [ 63 373 390 393 1460 1532 3184 4500 4537 4565 ]
 
 for u = 1:length(choose_units)
     unit = choose_units(u);

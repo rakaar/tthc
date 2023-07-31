@@ -60,57 +60,62 @@ disp('Chi square test 2 - file exchange')
 
 bf_counter = bf_counter./n;
 bf0_counter = bf0_counter./n;
-% bf_bf0 = bf_bf0./n;
 bf_bf0 = bf_bf0;
 
 %%
-figure
-    hold on
-        plot(bf_counter)
-        plot(bf0_counter)
-    hold off
-    legend('T','hc')
-    title('bf bf0')
-%%
-figure
-    bar(bf_counter)
-    title('bf')
+% figure
+%     hold on
+%         plot(bf_counter)
+%         plot(bf0_counter)
+%     hold off
+%     legend('T','hc')
+%     title('bf bf0')
+% %%
+% figure
+%     bar(bf_counter)
+%     title('bf')
+
+% figure
+%     bar(bf0_counter)
+%     title('bf0')
 
 figure
-    bar(bf0_counter)
-    title('bf0')
-
-figure
-    imagesc((bf_bf0./n)')
+    imagesc((bf_bf0./sum(bf_bf0(:))))
     colorbar()
-    title('transpose')
+    title([ animal_gender ' BF BF0'])
+    ylabel('BF')
+    xlabel('BF0')
+    xticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+    yticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+
+    axis image
 
 %%
-octave_shift_counter = zeros(13,1);
+% octave_shift_counter = zeros(13,1);
 
-for tf=1:7
-    for hf=1:7
-        shift = (hf - tf)*0.5;
-        shift_index = 7 + shift*2;
+% for tf=1:7
+%     for hf=1:7
+%         shift = (hf - tf)*0.5;
+%         shift_index = 7 + shift*2;
         
-        octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
-    end
-end
-figure
-    bar(-3:0.5:3,octave_shift_counter)
-    title('octave shift counter')
+%         octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+%     end
+% end
+% figure
+%     bar(-3:0.5:3,octave_shift_counter)
+%     title('octave shift counter')
 
-    %%
-abs_octave_shift_counter = zeros(13,1);
+%     %%
+% abs_octave_shift_counter = zeros(13,1);
 
-for tf=1:7
-    for hf=1:7
-        shift = (hf - tf)*0.5;
-        shift_index = 7 + abs(shift)*2;
+% for tf=1:7
+%     for hf=1:7
+%         shift = (hf - tf)*0.5;
+%         shift_index = 7 + abs(shift)*2;
         
-        abs_octave_shift_counter(shift_index,1) = abs_octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
-    end
-end
+%         abs_octave_shift_counter(shift_index,1) = abs_octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+%     end
+% end
 
 % figure
 %     bar(abs_octave_shift_counter(7:13)./sum(abs_octave_shift_counter(7:13)))

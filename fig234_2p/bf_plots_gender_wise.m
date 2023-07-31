@@ -4,12 +4,12 @@ disp('Running 2p figures/bf_plots_gender_wise')
 
 all_neuron_types = {'PV', 'SOM', 'Thy'};
 all_animal_gender = {'M', 'F'};
-all_db_set = {'low', 'high'};
-
+% all_db_set = {'low', 'high'};
+all_db_set = {'all'};
 
 for n = 1:3
     for gender = 1:2
-        for spl = 1:2
+        for spl = 1:1
             neuron_type = all_neuron_types{n};
             animal_gender = all_animal_gender{gender};
             db_set = all_db_set{spl};
@@ -96,10 +96,10 @@ for u=1:size(rms_match_db_with_sig_bf,1)
 end
 
 
-save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\BF BF0 Thy PV SOM Low High\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0')
+% save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\BF BF0 Thy PV SOM Low High\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0')
 
 bf_bf0_norm = bf_bf0./sum(bf_bf0(:));
-save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\norm_mats\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0_norm')
+% save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\norm_mats\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0_norm')
 
 octs_apart = -3:0.5:3;
 shift_vec = zeros(length(octs_apart),1);
@@ -112,15 +112,18 @@ for i = 1:7
 end
 
 shift_vec = shift_vec./sum(shift_vec);
-save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\shift_vecs\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'shift_vec')
-% figure
-%     imagesc(bf_bf0./sum(sum(bf_bf0)))
-%     title([animal_gender 'bf bf0'])
-%     caxis([0 0.032])
-%     colorbar()
-%     ylabel('BF')
-%     xlabel('BF0')
+% save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\shift_vecs\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'shift_vec')
+figure
+    imagesc(bf_bf0./sum(sum(bf_bf0)))
+    colorbar()
+    title([ animal_gender ' BF BF0 ' neuron_type ' ' db_set ' dB'])
+    ylabel('BF')
+    xlabel('BF0')
+    xticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
+    yticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
 
+    axis image
+    saveas( gcf, strcat('E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\', strcat('fig', neuron_type), '\',  animal_gender , '_', neuron_type, '_', db_set, 'DB_bfbf0', '.fig') )
     %%
 % octave_shift_counter = zeros(13,1);
 

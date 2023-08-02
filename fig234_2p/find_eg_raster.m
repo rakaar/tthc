@@ -70,30 +70,58 @@ elseif strcmp(choose_type, 'NE')
 end % if
 
 % choose_units = [ 63 373 390 393 1460 1532 3184 4500 4537 4565 ]
+% ########## Loop to see ################
+% for u = 1:length(choose_units)
+%     unit = choose_units(u);
+%     all_tone_rates = data{unit,8};
+%     all_hc_rates = data{unit,9};
 
-for u = 1:length(choose_units)
-    unit = choose_units(u);
-    all_tone_rates = data{unit,8};
-    all_hc_rates = data{unit,9};
+%     mean_tone_rates = zeros(7,1);
+%     mean_hc_rates = zeros(7,1);
+%     err_tone_rates = zeros(7,1);
+%     err_hc_rates = zeros(7,1);
 
-    mean_tone_rates = zeros(7,1);
-    mean_hc_rates = zeros(7,1);
-    err_tone_rates = zeros(7,1);
-    err_hc_rates = zeros(7,1);
-
-    for f = 1:7
-        mean_tone_rates(f) = mean(mean(all_tone_rates{f,1}(:, 10:14),2));
-        mean_hc_rates(f) = mean(mean(all_hc_rates{f,1}(:, 10:14),2));
-        err_tone_rates(f) = std(mean(all_tone_rates{f,1}(:, 10:14),2))/sqrt(size(all_tone_rates{f,1},1));
-        err_hc_rates(f) = std(mean(all_hc_rates{f,1}(:, 10:14),2))/sqrt(size(all_hc_rates{f,1},1));
-    end % f
+%     for f = 1:7
+%         mean_tone_rates(f) = mean(mean(all_tone_rates{f,1}(:, 10:14),2));
+%         mean_hc_rates(f) = mean(mean(all_hc_rates{f,1}(:, 10:14),2));
+%         err_tone_rates(f) = std(mean(all_tone_rates{f,1}(:, 10:14),2))/sqrt(size(all_tone_rates{f,1},1));
+%         err_hc_rates(f) = std(mean(all_hc_rates{f,1}(:, 10:14),2))/sqrt(size(all_hc_rates{f,1},1));
+%     end % f
     
-    errorbar(mean_tone_rates, err_tone_rates, 'LineWidth', 2, 'Color', 'b');
-    hold on
-    errorbar(mean_hc_rates, err_hc_rates, 'LineWidth', 2, 'Color', 'r');
-    hold off 
-    legend('Tone', 'HC');
-    title([choose_type, ' Unit ', num2str(unit) ' from ' choose_type]);
-    pause;
-    clf;
-end % u
+%     errorbar(mean_tone_rates, err_tone_rates, 'LineWidth', 2, 'Color', 'b');
+%     hold on
+%     errorbar(mean_hc_rates, err_hc_rates, 'LineWidth', 2, 'Color', 'r');
+%     hold off 
+%     legend('Tone', 'HC');
+%     title([choose_type, ' Unit ', num2str(unit) ' from ' choose_type]);
+%     pause;
+%     clf;
+% end % u
+
+
+% ########### To save the image ##############
+unit = 4500;
+choose_type = 'NE';
+
+all_tone_rates = data{unit,8};
+all_hc_rates = data{unit,9};
+
+mean_tone_rates = zeros(7,1);
+mean_hc_rates = zeros(7,1);
+err_tone_rates = zeros(7,1);
+err_hc_rates = zeros(7,1);
+
+for f = 1:7
+    mean_tone_rates(f) = mean(mean(all_tone_rates{f,1}(:, 10:14),2));
+    mean_hc_rates(f) = mean(mean(all_hc_rates{f,1}(:, 10:14),2));
+    err_tone_rates(f) = std(mean(all_tone_rates{f,1}(:, 10:14),2))/sqrt(size(all_tone_rates{f,1},1));
+    err_hc_rates(f) = std(mean(all_hc_rates{f,1}(:, 10:14),2))/sqrt(size(all_hc_rates{f,1},1));
+end % f
+figure
+errorbar(mean_tone_rates, err_tone_rates, 'LineWidth', 2, 'Color', 'b');
+hold on
+errorbar(mean_hc_rates, err_hc_rates, 'LineWidth', 2, 'Color', 'r');
+hold off 
+legend('Tone', 'HC');
+title([choose_type, ' Unit ', num2str(unit) ' from ' choose_type]);
+saveas(gcf, strcat('E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\figThy\', choose_type, '_unit_', num2str(unit), '.fig'))

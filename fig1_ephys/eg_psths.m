@@ -1,6 +1,6 @@
 clear;clc;close all
 
-unit = 105;
+unit = 94;
 
 
 
@@ -24,7 +24,7 @@ for f = 1:7
     title(['Tone Freq: ', num2str(freqs(f)) ' from unit ' num2str(unit)])
     xlabel('bin starting pt')  
     ylabel('spike rates')
-    
+    saveas(gcf, strcat('E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\figEphys\psths\', 'tone_', num2str(freqs(f)), '_unit_', num2str(unit), '.fig'))
 end 
 
 
@@ -37,5 +37,19 @@ for f = 1:7
     title(['HC Freq: ', num2str(freqs(f)) ' from unit ' num2str(unit)])
     xlabel('bin starting pt')  
     ylabel('spike rates')
-    
+    saveas(gcf, strcat('E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\figEphys\psths\', 'hc_', num2str(freqs(f)), '_unit_', num2str(unit), '.fig'))
 end 
+
+% test hc 48 err bar
+
+% ir = zeros(5,7);
+
+%     r1 = hc_rates{7,1};
+%     for i = 1:5
+%         x = r1(i, 501:570);
+%         xr = reshape(x, 10,7);
+%         xrm = mean(xr,1);
+%         ir(i,:) = xrm;
+        
+%     end
+

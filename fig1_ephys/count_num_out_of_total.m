@@ -6,6 +6,8 @@ data = load('E:\RK_code_TTHC\ephys_new_db\tone_db_stage1.mat').tone_db_stage1;
 all_dbs = unique(cell2mat(data(:,5)));
 
 num_data = zeros(2, length(all_dbs),2);
+num_male = 0;
+num_female = 0;
 
 for u = 1:size(data,1)
     resp = data{u,6};
@@ -25,8 +27,10 @@ for u = 1:size(data,1)
     
     if contains(animal_name, '_M')
         gender_index = 1;
+        num_male = num_male + 1;
     elseif contains(animal_name, '_F')
         gender_index = 2;
+        num_female = num_female + 1;
     end
 
 
@@ -91,7 +95,8 @@ data = load('E:\RK_code_TTHC\ephys_new_db\hc_db_stage1.mat').hc_db_stage1;
 all_dbs = unique(cell2mat(data(:,5)));
 
 num_data = zeros(2, length(all_dbs),2);
-
+num_male = 0;
+num_female = 0;
 for u = 1:size(data,1)
     resp = data{u,6};
     spont = [];
@@ -110,8 +115,10 @@ for u = 1:size(data,1)
     
     if contains(animal_name, '_M')
         gender_index = 1;
+        num_male = num_male + 1;
     elseif contains(animal_name, '_F')
         gender_index = 2;
+        num_female = num_female + 1;
     end
 
 

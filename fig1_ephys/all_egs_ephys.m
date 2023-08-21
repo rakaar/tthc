@@ -14,7 +14,7 @@ end
 data(removal_indices,:) = [];
 
 
-example_units = [105, 120, 94];
+example_units = [105, 81, 94];
 example_types = {'he', 'hs', 'ne'};
 
 examples_fig_path = 'E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\figEphys\examples\';
@@ -29,19 +29,33 @@ for e = 1:length(example_units)
     all_tone_rates = data{e_unit,6};
     all_hc_rates = data{e_unit,7};
 
-    for iter = 1:5
-        for f = 1:7
-            ind35 = (iter - 1)*7 + f;
+    % for iter = 1:5
+    %     for f = 1:7
+    %         ind35 = (iter - 1)*7 + f;
             
-            tone_f_iter_spikes = all_tone_rates{f,1}(iter, time_period);
-            hc_f_iter_spikes = all_hc_rates{f,1}(iter, time_period);
+    %         tone_f_iter_spikes = all_tone_rates{f,1}(iter, time_period);
+    %         hc_f_iter_spikes = all_hc_rates{f,1}(iter, time_period);
     
-            all_tone_dots(ind35,:) = tone_f_iter_spikes;
-            all_hc_dots(ind35,:) = hc_f_iter_spikes;
+    %         all_tone_dots(ind35,:) = tone_f_iter_spikes;
+    %         all_hc_dots(ind35,:) = hc_f_iter_spikes;
     
             
-        end % f
-    end % iter
+    %     end % f
+    % end % iter
+
+    
+    for ind35 = 1:35
+        freq_no = ceil(ind35/5);
+        iter_no = mod(ind35-1, 5) + 1;
+        
+        tone_f_iter_spikes = all_tone_rates{freq_no,1}(iter_no, time_period);
+        hc_f_iter_spikes = all_hc_rates{freq_no,1}(iter_no, time_period);
+    
+        all_tone_dots(ind35,:) = tone_f_iter_spikes;
+        all_hc_dots(ind35,:) = hc_f_iter_spikes;
+    
+    end
+    
 
     all_freqs = [6, 8.5, 12, 17, 24, 34, 48];
     freq_labels = strings(35,1);

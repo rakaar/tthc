@@ -67,30 +67,27 @@ for u = 1:size(rms_match_db,1)
 
 end % u
 
-
+return
 % plot raster of example neuron
 % 
-example_no = 120;
+example_no = 81;
 time_period = 400:650;
 all_tone_dots = zeros(35, length(time_period));
 all_hc_dots = zeros(35, length(time_period));
 
 all_tone_rates = rms_match_db{example_no,6};
 all_hc_rates = rms_match_db{example_no,7};
+for ind35 = 1:35
+    freq_no = ceil(ind35/5);
+    iter_no = mod(ind35-1, 5) + 1;
+    
+    tone_f_iter_spikes = all_tone_rates{freq_no,1}(iter_no, time_period);
+    hc_f_iter_spikes = all_hc_rates{freq_no,1}(iter_no, time_period);
 
-for iter = 1:5
-    for f = 1:7
-        ind35 = (iter - 1)*7 + f;
-        
-        tone_f_iter_spikes = all_tone_rates{f,1}(iter, time_period);
-        hc_f_iter_spikes = all_hc_rates{f,1}(iter, time_period);
+    all_tone_dots(ind35,:) = tone_f_iter_spikes;
+    all_hc_dots(ind35,:) = hc_f_iter_spikes;
 
-        all_tone_dots(ind35,:) = tone_f_iter_spikes;
-        all_hc_dots(ind35,:) = hc_f_iter_spikes;
-
-        
-    end % f
-end % iter
+end
 
 all_freqs = [6, 8.5, 12, 17, 24, 34, 48];
 freq_labels = strings(35,1);

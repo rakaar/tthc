@@ -106,7 +106,6 @@ for cat = 1:4
     [h,p] = kstest2(male_data_for_kstest, female_data_for_kstest);
      disp('kstest2 ')
      disp(['h = ' num2str(h) ' p = ' num2str(p) ' for ' type_strs{cat}])
- 
     
 end % cat
 
@@ -118,9 +117,9 @@ else
     bf_str = 'BF0';
 end
 
-figure
+
 for i = 1:4
-    subplot(2,2,i)
+    figure
     both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
     for j = 1:2
         both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
@@ -130,12 +129,13 @@ for i = 1:4
     ylabel('Prop of cases')
     title([type_strs{i} ])
     legend('M', 'F')
+    saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\figEphys\' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_histogram.fig'])
 end
-saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig1\' bf_str  '_he_hs_as_func_of_re_bf_histogram.fig'])
+
 
 figure
 for i = 1:4
-    subplot(2,2,i)
+    figure
     both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
     for j = 1:2
         both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
@@ -148,5 +148,6 @@ for i = 1:4
     ylabel('Cum sum of prop')
     title([type_strs{i}])
     legend('M', 'F')
+    saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\figEphys\' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_cdf.fig'])
 end
-saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig1\' bf_str  '_he_hs_as_func_of_re_bf_cdf.fig'])
+

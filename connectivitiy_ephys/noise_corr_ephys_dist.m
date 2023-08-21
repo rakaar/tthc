@@ -1,4 +1,4 @@
-clear;clc;
+clear;clc;close all;
 %%%%% MEDIAL %%%%
 loc_mat=[[12 16 4 8];[11 15 3 7];[10 14 2 6];[9 13 1 5]];%%%%% CAUDAL %%%%   %%% TO CONVERT FROM ELECTRODE NUMBER TO LOATION
 %%%%% LATERAL %%%
@@ -218,6 +218,32 @@ legend('tone', 'hc')
 xlabel('distance (um)')
 ylabel('noise corr')
 
+
+% %% check in each bin the number
+% nc_cell = tone_noise_corr_vs_dist;
+nc_cell = hc_noise_corr_vs_dist;
+count = zeros(9,1);
+for i=1:180
+    for j=1:9
+        if ~isempty(nc_cell{i,j})
+            count(j) = count(j) + 1;
+        end
+    end
+end
+
+
+disp('count is ')
+disp(count')
+
+% --- stats test
+disp('Ttest and ranksum')
+for i = 1:9
+    [h,p] = ttest(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') );
+    disp(['ttest h = ' num2str(h) ' p = ' num2str(p)])
+    [p,h] = ranksum(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') );
+    disp(['ranksum h = ' num2str(h) ' p = ' num2str(p)])
+end
+
 % figure
 %     hold on
 %        errorbar(sqrt(dist)*125, median_nc, mad_err)
@@ -362,18 +388,3 @@ ylabel('noise corr')
 
 % p = 1 - tcdf(t,dof);
 
-% %% check in each bin the number
-% nc_cell = tone_noise_corr_vs_dist;
-nc_cell = hc_noise_corr_vs_dist;
-count = zeros(9,1);
-for i=1:180
-    for j=1:9
-        if ~isempty(nc_cell{i,j})
-            count(j) = count(j) + 1;
-        end
-    end
-end
-
-
-disp('count is ')
-disp(count')

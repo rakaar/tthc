@@ -4,7 +4,7 @@ rms_match_db = load('rms_match_db.mat').rms_match_db;
 
 
 % decide only male or female
-animal_gender = 'F'; % M for Male, F for Female, all for both
+animal_gender = 'all'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -71,13 +71,13 @@ bf_bf0 = bf_bf0;
 %     legend('T','hc')
 %     title('bf bf0')
 % %%
-% figure
-%     bar(bf_counter)
-%     title('bf')
+figure
+    bar(bf_counter)
+    title(['bf animal gender ' animal_gender  ])
 
-% figure
-%     bar(bf0_counter)
-%     title('bf0')
+figure
+    bar(bf0_counter)
+    title(['bf0 animal gender ' animal_gender  ])
 
 figure
     imagesc((bf_bf0./sum(bf_bf0(:))))

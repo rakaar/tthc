@@ -4,7 +4,7 @@ rms_match_db = load('rms_match_db.mat').rms_match_db;
 
 
 % decide only male or female
-animal_gender = 'all'; % M for Male, F for Female, all for both
+animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -91,19 +91,19 @@ figure
     axis image
 
 %%
-% octave_shift_counter = zeros(13,1);
+octave_shift_counter = zeros(13,1);
 
-% for tf=1:7
-%     for hf=1:7
-%         shift = (hf - tf)*0.5;
-%         shift_index = 7 + shift*2;
+for tf=1:7
+    for hf=1:7
+        shift = (hf - tf)*0.5;
+        shift_index = 7 + shift*2;
         
-%         octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
-%     end
-% end
-% figure
-%     bar(-3:0.5:3,octave_shift_counter)
-%     title('octave shift counter')
+        octave_shift_counter(shift_index,1) = octave_shift_counter(shift_index,1) + bf_bf0(tf,hf);
+    end
+end
+figure
+    bar(-3:0.5:3,octave_shift_counter./sum(octave_shift_counter))
+    title(['Gender -  ' animal_gender ' octave shift counter'])
 
 %     %%
 % abs_octave_shift_counter = zeros(13,1);

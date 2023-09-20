@@ -7,7 +7,7 @@ clc; clear; close all;
 % ONLY BF
 
 situation = 'all'; % bf, near, far, all
-
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
 load('stage1_db.mat')
 tone_keys = containers.Map;
 hc_keys = containers.Map;
@@ -248,3 +248,4 @@ ylabel('rates')
 
 
 title([situation, ' unit rates normalised'])
+saveas(gcf, [figs_path 'boxplot_rates_norm.fig'])

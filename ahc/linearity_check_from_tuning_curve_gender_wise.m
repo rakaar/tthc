@@ -2,6 +2,7 @@
 clear;
 
 load('stage3_db.mat')
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
 
 animal_gender = 'F';
 if strcmp(animal_gender, 'M')
@@ -134,7 +135,8 @@ figure
     
     % If you want to specify exactly which values to use as ticks, you can pass them as an array:
     ax.XTick = octs_with_data; % replace 'x' with your array
-    
+    saveas(gcf, [figs_path animal_gender '_average_tuning_' bf_or_bf0 '.fig'])
+
     % ########## average_tuning ############
 disp(['scale bf_or_bf0 ' bf_or_bf0])
 % important vars
@@ -336,6 +338,7 @@ legend('HC', 'AHC 2*0.25(4)', 'AHC 2*0.5(3)', 'AHC 2*1.25(6)', 'AHC 2*1.75(5)')
 title([zscores_or_rates ' ---atleast 1/3 sig, with errorbar ' ' Is Normalised by rates of = ' normalize_by] )
 xlabel(['octaves from ' bf_or_bf0])
 ylabel(zscores_or_rates)
+saveas(gcf, [figs_path animal_gender '_hc_ahc_rates_vs_bf_' zscores_or_rates '_' bf_or_bf0 '_normalised_by_' normalize_by '.fig'])
 % After plotting your graph, get the current axes with the `gca` function.
 ax = gca;
 
@@ -439,7 +442,7 @@ ax.XTick = linspace(min(octaves_apart_with_data), max(octaves_apart_with_data), 
 
 % If you want to specify exactly which values to use as ticks, you can pass them as an array:
 ax.XTick = octaves_apart_with_data; % replace 'x' with your array
-
+saveas(gcf, [figs_path animal_gender '_ratio_from_harmonic_linear_ideal_' bf_or_bf0 '_normalised_by_' normalize_by '.fig'])
 % plot
 figure
     hold on    
@@ -458,3 +461,4 @@ ax.XTick = linspace(min(octaves_apart_with_data), max(octaves_apart_with_data), 
 
 % If you want to specify exactly which values to use as ticks, you can pass them as an array:
 ax.XTick = octaves_apart_with_data; % replace 'x' with your array
+saveas(gcf, [figs_path animal_gender '_ratio_from_harmonic_linear_ideal_' bf_or_bf0 '_normalised_by_' normalize_by '_clubbed.fig'])

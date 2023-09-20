@@ -3,6 +3,7 @@ clc; clear; close all;
 % ttest btn low ahc and hc
 % ttest btn high ahc and hc
 % - NO NORMALISATION
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
 load('stage1_db.mat')
 tone_keys = containers.Map;
 hc_keys = containers.Map;
@@ -215,3 +216,4 @@ ylabel('rates')
 
 
 title('unit rates-non normalised')
+saveas(gcf, [figs_path 'boxplot_rates_non_norm.fig'])

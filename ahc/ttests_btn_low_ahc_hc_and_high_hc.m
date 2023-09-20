@@ -2,6 +2,8 @@
 % ttest btn low ahc and hc
 % ttest btn high ahc and hc
 % - NO NORMALISATION
+
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
 clear;close all
 load('stage1_db.mat')
 all_sg_triples = [];
@@ -76,4 +78,6 @@ boxplot(data,'Labels', {'HC','AHC low', 'AHC high'},'Orientation', 'vertical')
 ylabel('rates')
 
 
+
 title('unit rates-non normalised')
+saveas(gcf, [figs_path 'boxplot_rates_non_norm.fig'])

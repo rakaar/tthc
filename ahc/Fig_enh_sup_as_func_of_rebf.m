@@ -5,13 +5,17 @@ load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
 
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
+
 situation = 'all';
 % situation = 'low_bf';
 % situation = 'high_bf';
-
-near_far_data = zeros(2,4);
+octaves_apart = -3:0.25:3;
+n_octaves_apart = length(octaves_apart);
+num_cases_base_re_bf = zeros(2, n_octaves_apart,4); % base how far from BF
 % 1 - near, 2 - far
 % 1 - enh, 2 - sup, 3 - ne, 4 - ns
+bf_index = 10; % 9 for BF, 10 for BF0
 for u=1:size(stage3_db,1)
     tone_rates = stage3_db{u,6};
     tone_bf = stage3_db{u,9}; 
@@ -48,6 +52,13 @@ for u=1:size(stage3_db,1)
     
 
     for au=ahc_units
+        animal_name = stage1_db{au,1};
+        if contains(animal_name, '_M')
+            gender_index = 1;
+        else
+            gender_index = 2;
+        end
+
         ahc_freqs = stage1_db{au,6};
         ahc_rates = stage1_db{au,7};
 
@@ -86,18 +97,13 @@ for u=1:size(stage3_db,1)
             end
 
            
-            near_or_far = -1;
+            
             enh_sup = -1;
 
             % near or far
-            t1_dist = abs(f1_index - tone_bf)*0.25;
-            t2_dist = abs(f2_index - tone_bf)*0.25;
-
-            if t1_dist <= 0.5 && t2_dist <= 0.5
-                near_or_far = 1;
-            else
-                near_or_far = 2;
-            end
+            rebf_index = find((f1_index - tone_bf)*0.25 == octaves_apart);
+            
+            
 
             if t1t2_sig + t1_sig + t2_sig == 0
                 enh_sup = 4;
@@ -224,47 +230,72 @@ for u=1:size(stage3_db,1)
            end 
                
 
-           near_far_data(near_or_far, enh_sup) = near_far_data(near_or_far, enh_sup) + 1;
+           num_cases_base_re_bf(gender_index, rebf_index, enh_sup) = num_cases_base_re_bf(gender_index, rebf_index, enh_sup) + 1;
                     
         end % col
     end % au
 end % u
-%% norm
-near_far_data_norm = zeros(2,4);
-near_far_data_norm(1,:) = near_far_data(1,:)./sum(near_far_data(1,:));
-near_far_data_norm(2,:) = near_far_data(2,:)./sum(near_far_data(2,:));
-%%
-
-% Create a vertical bar graph
-figure;
-bar(near_far_data_norm(1,:));
-
-% Label the x-axis and y-axis
-xlabel('Category');
-ylabel('Fraction');
-
-% Provide a title for the graph
-title(['Near-NonHarmonic' ' ' situation]);
-xticks(1:4);
-xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
 
 
-figure;
-bar(near_far_data_norm(2,:));
+% tests
+type_strs = {'HE', 'HS', 'NE', 'NS'};
 
-% Label the x-axis and y-axis
-xlabel('Category');
-ylabel('Fraction');
+for cat = 1:4
+    male_data = num_cases_base_re_bf(1,:,cat);
+    female_data = num_cases_base_re_bf(2,:,cat);
 
-% Provide a title for the graph
-title(['Far-NonHarmonic' ' ' situation]);
-xticks(1:4);
-xticklabels({'Enh', 'Sup', 'No Effect', 'No sig'});
+     % kstest
+     male_data_for_kstest = [];
+     female_data_for_kstest = [];
+     for i = 1:n_octaves_apart
+        male_data_for_kstest = [male_data_for_kstest octaves_apart(i)*ones(1,male_data(i))];
+        female_data_for_kstest = [female_data_for_kstest octaves_apart(i)*ones(1, female_data(i))];
+    end
+    [h,p] = kstest2(male_data_for_kstest, female_data_for_kstest);
+     disp('kstest2 ')
+     disp(['h = ' num2str(h) ' p = ' num2str(p) ' for ' type_strs{cat}])
+    
+end % cat
 
-% for proportion test
-disp('---- Non-Harmonic: HE,HS,NE,NS ----')
-disp('Near case')
-disp([near_far_data(1,:) sum(near_far_data(1,:))])
+% plot
 
-disp('Far Case')
-disp([near_far_data(2,:) sum(near_far_data(2,:))])
+if bf_index == 9
+    bf_str = 'BF';
+else
+    bf_str = 'BF0';
+end
+
+
+for i = 1:4
+    figure
+    both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    for j = 1:2
+        both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
+    end
+    bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Prop of cases')
+    title([type_strs{i} ])
+    legend('M', 'F')
+    saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_histogram.fig'])
+end
+
+
+figure
+for i = 1:4
+    figure
+    both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    for j = 1:2
+        both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
+    end
+    hold on
+        plot(cumsum(both_m_f_each_cat_data(:,1)), 'LineWidth', 2, 'Color', 'b')
+        plot(cumsum(both_m_f_each_cat_data(:,2)), 'LineWidth', 2, 'Color', 'r')
+    hold off
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Cum sum of prop')
+    title([type_strs{i}])
+    legend('M', 'F')
+    saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_cdf.fig'])
+end
+

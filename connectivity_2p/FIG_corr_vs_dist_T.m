@@ -1,19 +1,27 @@
 clear;close all; clc;
 
-data_path = 'E:\RK_E_folder_TTHC_backup\RK TTHC Data';
-
+data_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data';
+fig_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/';
 all_neruon_types = {'PV', 'SOM', 'Thy'};
 all_animal_gender = {'M', 'F'};
 
 
+min_num_pairs = 20;
 for n = 1:3
     for g = 1:2
         neuron_type = all_neruon_types{n};
+
+        if strcmp(neuron_type, 'Thy')
+            bin_size_in_microns = 20;
+        else
+            bin_size_in_microns = 40;
+        end
+
         animal_gender = all_animal_gender{g};
         disp(animal_gender)
         disp(neuron_type)
         disp('__________________________________')
-        rms_match_db = load(strcat(data_path, '\', neuron_type, '\rms_match_db.mat')).rms_match_db;
+        rms_match_db = load(strcat(data_path, '/', neuron_type, '/rms_match_db.mat')).rms_match_db;
         
         % decide only male or female
             if strcmp(animal_gender, 'M')
@@ -106,6 +114,10 @@ for n = 1:3
             keynames = keys(tone_map);
             for k=1:length(keynames)
                 fname = keynames{k};
+                % adjust filename for ubuntu
+                fname = strrep(fname, '\', '/');
+                fname = strrep(fname, 'D:', '/media/rka/Elements');
+
                 fdata = load(fname).CellData;
                 xcord = fdata.x;
                 ycord = fdata.y;
@@ -136,14 +148,14 @@ for n = 1:3
                 all_dist = [all_dist rates_corr_distance{u,3}];
             end
 
-            corr_vs_dist = cell(fix(max(all_dist)/10) + 1,1);
+            corr_vs_dist = cell(fix(max(all_dist)/bin_size_in_microns) + 1,1);
 
             for d=1:length(all_dist)
-                bin_no = fix(all_dist(d)/10) + 1;
+                bin_no = fix(all_dist(d)/bin_size_in_microns) + 1;
                 corr_vs_dist{bin_no,1} = [corr_vs_dist{bin_no,1} all_cors(d)];
             end
 
-            max_no_of_bins = fix(max(all_dist)/10) + 1;
+            max_no_of_bins = fix(max(all_dist)/bin_size_in_microns) + 1;
 
             mean_corr_v_dist = zeros(1,max_no_of_bins);
             err_corr_v_dist = zeros(1,max_no_of_bins);
@@ -155,13 +167,13 @@ for n = 1:3
             % find bins with enough data
             rows_with_enuf_data = [];
             for i=1:size(corr_vs_dist,1)
-                if length(corr_vs_dist{i,1}) > 10
+                if length(corr_vs_dist{i,1}) > min_num_pairs
                     rows_with_enuf_data = [rows_with_enuf_data i];
                 end
             end % for
             x_labels = [];
             for i=1:length(rows_with_enuf_data)
-                x_labels = [x_labels (rows_with_enuf_data(i)-1)*10 + 1];
+                x_labels = [x_labels (rows_with_enuf_data(i)-1)*bin_size_in_microns + 1];
             end
 
             figure
@@ -169,8 +181,9 @@ for n = 1:3
                 title(['Tone - Noise corr vs dist  ' animal_gender ' ' neuron_type])
                 xlabel('Pixel dist')
                 ylabel('Noise corr')
-                saveas(gcf, strcat('E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\', strcat('fig', neuron_type), '\' ,neuron_type, '_', animal_gender,  '_tone_nc.fig'))
-
+                saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_tone_nc.fig'))
+                saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_tone_nc.eps'))
+                
     end % g
 end % n
 

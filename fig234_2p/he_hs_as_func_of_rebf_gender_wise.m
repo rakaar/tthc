@@ -2,14 +2,9 @@
 clear;clc; 
 disp('Running he_hs_as_func_of_re_bf.m to find he hs as a function of re BF')
 
-% remove non-20 dB from all rms values
-% removal_indices = [];
-% for u = 1:size(rms_match_db,1)
-%     if rms_match_db{u,4} ~= 20
-%         removal_indices = [removal_indices u];
-%     end
-% end
-% rms_match_db(removal_indices,:) = [];
+data_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/';
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/';
+
 
 all_gender = {'M', 'F'};
 all_neuron_types = {'PV', 'SOM', 'Thy'};
@@ -28,7 +23,7 @@ for n = 1:length(all_neuron_types)
             neuron_type = all_neuron_types{n};
             bf_index = all_bf_indices(b); % 11 for BF, 13 for BF0
 
-            rms_match_file_path = strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\', neuron_type ,'\rms_match_db_with_sig_bf.mat');
+            rms_match_file_path = strcat(data_path, neuron_type ,'/rms_match_db_with_sig_bf.mat');
             rms_match_db_with_sig_bf = load(rms_match_file_path).rms_match_db_with_sig_bf;
             rms_match_db = rms_match_db_with_sig_bf;
         
@@ -149,9 +144,9 @@ for n = 1:length(all_neuron_types)
         
         
         
-        figure
+        
             for i = 1:4
-                subplot(2,2,i)
+                figure
                 both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
                 for j = 1:2
                     both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
@@ -161,12 +156,13 @@ for n = 1:length(all_neuron_types)
                 ylabel('Prop of cases')
                 title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
-            end
-            saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig2\' neuron_type '_' bf_str  '_he_hs_as_func_of_re_bf_histogram.fig'])
+                saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_histogram.fig'])
         
-        figure
+            end
+            
+       
             for i = 1:4
-                subplot(2,2,i)
+                figure
                 both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
                 for j = 1:2
                     both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
@@ -179,8 +175,9 @@ for n = 1:length(all_neuron_types)
                 ylabel('Cum sum of prop')
                 title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
+                saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_cdf.fig'])
             end
-        saveas(gcf,['E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\fig2\' neuron_type '_' bf_str  '_he_hs_as_func_of_re_bf_cdf.fig'])
+        
         
     end
 end % n

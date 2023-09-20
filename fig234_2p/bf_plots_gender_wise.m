@@ -1,20 +1,22 @@
 clear;clc;close all;
 disp('Running 2p figures/bf_plots_gender_wise')
 
+data_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/';
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/';
 
 all_neuron_types = {'PV', 'SOM', 'Thy'};
-all_animal_gender = {'M', 'F'};
+all_animal_gender = {'M', 'F', 'all'};
 % all_db_set = {'low', 'high'};
 all_db_set = {'all'};
 
 for n = 1:3
-    for gender = 1:2
+    for gender = 1:3
         for spl = 1:1
             neuron_type = all_neuron_types{n};
             animal_gender = all_animal_gender{gender};
             db_set = all_db_set{spl};
 
-            rms_match_db_with_sig_bf = load(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\', neuron_type ,'\rms_match_db_with_sig_bf.mat')).rms_match_db_with_sig_bf;
+            rms_match_db_with_sig_bf = load(strcat(data_path, neuron_type ,'/rms_match_db_with_sig_bf.mat')).rms_match_db_with_sig_bf;
 
 % decide only male or female
 if strcmp(animal_gender, 'M')
@@ -61,7 +63,7 @@ if ~isnan(removal_db)
 end
 
 
-% return
+
 tone_bf_counter = zeros(7,1);
 hc_bf_counter = zeros(7,1);
 for u=1:size(rms_match_db_with_sig_bf,1)
@@ -74,13 +76,15 @@ for u=1:size(rms_match_db_with_sig_bf,1)
     end
 end
 
-% figure
-%     bar(tone_bf_counter./sum(tone_bf_counter))
-%     title('t')
+figure
+    bar(tone_bf_counter./sum(tone_bf_counter))
+    title(['Tone BF Neuron: ' all_neuron_types{n} ' gender: ' all_animal_gender{gender}])
+    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_Tone_BF_counter', '.fig') )
 
-% figure
-%     bar(hc_bf_counter./sum(hc_bf_counter))
-%     title('hc')
+figure
+    bar(hc_bf_counter./sum(hc_bf_counter))
+    title(['HC BF Neuron: ' all_neuron_types{n} ' gender: ' all_animal_gender{gender}])
+    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_HC_BF0_counter', '.fig') )
 
     %%
 bf_bf0 = zeros(7,7);
@@ -94,12 +98,8 @@ for u=1:size(rms_match_db_with_sig_bf,1)
         bf_bf0(tbf, hbf) = bf_bf0(tbf, hbf) + 1;
     end
 end
-
-
-% save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\BF BF0 Thy PV SOM Low High\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0')
-
 bf_bf0_norm = bf_bf0./sum(bf_bf0(:));
-% save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\norm_mats\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'bf_bf0_norm')
+
 
 octs_apart = -3:0.5:3;
 shift_vec = zeros(length(octs_apart),1);
@@ -112,7 +112,11 @@ for i = 1:7
 end
 
 shift_vec = shift_vec./sum(shift_vec);
-% save(strcat('E:\RK_E_folder_TTHC_backup\RK TTHC Data\shift_vecs\', neuron_type, '_', animal_gender, '_', db_set, '.mat' ), 'shift_vec')
+figure
+    bar(shift_vec)
+    title(['Neuron: ' all_neuron_types{n} ' Gender: ' all_animal_gender{gender} ' Octave Shift' ])
+    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_octave_shift', '.fig') )
+
 figure
     imagesc(bf_bf0./sum(sum(bf_bf0)))
     colorbar()
@@ -123,7 +127,7 @@ figure
     yticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
 
     axis image
-    saveas( gcf, strcat('E:\RK_E_folder_TTHC_backup\RK TTHC figs eps\', strcat('fig', neuron_type), '\',  animal_gender , '_', neuron_type, '_', db_set, 'DB_bfbf0', '.fig') )
+    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_DB_bfbf0', '.fig') )
     %%
 % octave_shift_counter = zeros(13,1);
 

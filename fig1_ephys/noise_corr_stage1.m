@@ -1,4 +1,4 @@
-ephys_data_path = 'D:\tthc_ephys_all_33\hc';
+ephys_data_path = '/media/rka/Elements/tthc_ephys_all_33/hc';
 animals_dir_path = dir(ephys_data_path);
 
 
@@ -15,7 +15,7 @@ unit_counter = 1;
 
 for i=3:length(animals_dir_path)
     animal= animals_dir_path(i).name;
-    animal_dir_path = strcat(ephys_data_path, '\', animal);
+    animal_dir_path = strcat(ephys_data_path, '/', animal);
     disp('---animal path is')
     disp(animal_dir_path)
     animal_dir_contents = dir(animal_dir_path);
@@ -23,14 +23,14 @@ for i=3:length(animals_dir_path)
         location_dir_name = animal_dir_contents(j).name;
        
         if contains(location_dir_name, 'location')
-            location_dir_path = strcat(animal_dir_path, '\', location_dir_name, '\Single_units');
+            location_dir_path = strcat(animal_dir_path, '/', location_dir_name, '/Single_units');
             disp('location is:-')
             disp(location_dir_path)
             units_dir = dir(location_dir_path);
 
              for u=3:length(units_dir)
                 unit_filename = units_dir(u).name;
-                unit_path = strcat(location_dir_path, '\', unit_filename);
+                unit_path = strcat(location_dir_path, '/', unit_filename);
                 unit_data = load(unit_path);
                 
                 protochol_type = unit_data.PP_PARAMS.protocol.type;

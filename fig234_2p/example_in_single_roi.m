@@ -27,7 +27,7 @@ all_locs = keys(loc_units_map);
 % ############### For Looking one by one & also save #############
 % ####################################################
 freq_vals = {'6', '8.5', '12', '17', '24', '34', '48'};
-ex_type = 'HE';
+ex_type = 'NE';
 
 % for loc_no = 1:length(all_locs)
 for loc_no = [33]

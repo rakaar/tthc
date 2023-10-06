@@ -251,3 +251,16 @@ ylabel('rates')
 
 
 title([situation, ' unit rates-non normalised'])
+
+
+% Example assuming data is organized properly
+means = mean(1000.*data);
+errors = std(1000.*data)./sqrt(size(data,1));  % or use sem(data) for standard error
+figure
+bar(means)
+hold on
+errorbar(means, errors, 'k', 'LineStyle', 'none')
+hold off
+set(gca, 'XTickLabel', {'HC','AHC low', 'AHC high', 'T'})
+ylabel('rates')
+title([situation, ' unit rates-non normalised'])

@@ -14,9 +14,9 @@ end
 dist = unique(nonzeros(dist));
 %% map
 
-load('rms_match_db.mat')
+load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/SingleUnit/rms_match_db.mat')
 
-animal_gender = 'F';
+animal_gender = 'all';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')

@@ -249,3 +249,27 @@ ylabel('rates')
 
 title([situation, ' unit rates normalised'])
 saveas(gcf, [figs_path 'boxplot_rates_norm.fig'])
+
+%% bar plot with error bars
+figure
+
+% Combine data into a matrix
+data = [all_sg_triples(:,1), all_sg_triples(:,2), all_sg_triples(:,3), all_sg_triples(:,4)];
+
+% Calculate mean and standard error for each group
+means = mean(data);
+stderr = std(data) ./ sqrt(size(data, 1)); % standard error
+
+% Create bar plot
+bar(means)
+hold on
+% Add error bars
+errorbar(1:4, means, stderr, 'k', 'LineStyle', 'none', 'CapSize', 10)
+hold off
+
+% Set x-axis tick labels
+set(gca, 'XTickLabel', {'HC','AHC low', 'AHC high', 'T'})
+
+ylabel('rates')
+title([situation, ' unit rates normalised'])
+

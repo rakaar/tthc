@@ -1,15 +1,14 @@
 clear;close all; clc;
 
 data_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data';
-fig_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/';
-
+fig_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/all_gender_noise_corr_vs_dist/';
 all_neruon_types = {'PV', 'SOM', 'Thy'};
-all_animal_gender = {'M', 'F'};
+all_animal_gender = {'M', 'F', 'all'};
 
 min_num_pairs = 20;
 
-for n = 1:3
-    for g = 1:2
+for n = 3:3
+    for g = 3:3
         neuron_type = all_neruon_types{n};
         
         if strcmp(neuron_type, 'Thy')

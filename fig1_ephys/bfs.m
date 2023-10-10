@@ -1,7 +1,7 @@
 close all;clc;clear ;
 load('rms_match_db.mat')
 
-animal_gender = 'M'; % M for Male, F for Female, all for both
+animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -206,3 +206,77 @@ disp(['octave shift  0 ' num2str(oct_shift_norm(7)) ])
 %     xlabel('BF0')
 %     ylabel('BF')
 %     colorbar()
+
+% - Analyse off diagonal
+% This is just octave shift matrix
+% bfbf0_matrix_norm = (bf_bf0./sum(bf_bf0(:)));
+% % Given a 7x7 matrix A
+% A = bfbf0_matrix_norm;
+% % Size of the matrix
+% [n, m] = size(A);
+
+% % Initialize a container to hold the sum of each diagonal
+% diagonal_sums = zeros(1, n+m-1);
+
+% % Calculate the sum of each diagonal
+% for k = 1-m:n-1
+%     % Extract diagonal elements using diag function
+%     diagonal_elements = diag(A, k);
+%     % Sum the elements of the diagonal and store in the container
+%     diagonal_sums(k+m) = sum(diagonal_elements);
+% end
+
+% % Display the result
+% disp('Sums along each diagonal:');
+% disp(diagonal_sums);
+
+% Matrix decompositions
+% Given 7x7 matrix A
+% A = (bf_bf0./sum(bf_bf0(:))); % replace this with your 7x7 probability matrix
+
+% Load and preprocess your observed data
+observedMatrix = (bf_bf0./sum(bf_bf0(:))); % replace with your 7x7 probability matrix
+
+% Size of the observed matrix
+[n, m] = size(observedMatrix);
+
+% Generate 13 diagonal matrices as basis matrices
+basisMatrices = zeros(n, m, n+m-1);
+for k = 1-m:n-1
+    basisMatrices(:,:,k+m) = diag(ones(1, n-abs(k)), k);
+end
+
+% Vectorize matrices for regression analysis
+vectorizedObserved = observedMatrix(:);
+vectorizedBasis = reshape(basisMatrices, [], n+m-1);
+
+% Perform regression analysis
+beta = vectorizedBasis \ vectorizedObserved;
+
+% Compute SSE for the full model
+predicted = vectorizedBasis * beta;
+sseFullModel = sum((vectorizedObserved - predicted).^2);
+
+% Initialize CPD
+CPD = zeros(1, n+m-1);
+
+% Loop over basis matrices to compute CPD
+for i = 1:n+m-1
+    % Define a model without the ith basis
+    reducedBasis = vectorizedBasis;
+    reducedBasis(:, i) = [];
+    
+    % Perform regression for the reduced model
+    betaReduced = reducedBasis \ vectorizedObserved;
+    predictedReduced = reducedBasis * betaReduced;
+    
+    % Compute SSE for the reduced model
+    sseReduced = sum((vectorizedObserved - predictedReduced).^2);
+    
+    % Compute CPD for ith basis
+    CPD(i) = (sseReduced - sseFullModel) / sseReduced;
+end
+
+% Display the CPD
+disp('CPD for each basis matrix:');
+disp(CPD);

@@ -45,6 +45,8 @@ end
 
 combined_tab = [bf_counter bf0_counter];
 
+% temp for male
+% combined_tab = combined_tab(1:6,:);
 
 dof = (size(combined_tab,1) - 1) * (size(combined_tab,2) - 1);
 
@@ -61,3 +63,6 @@ diff_sq_by_obv = diff_sq./expected_tab;
 chi_sq_val = sum(diff_sq_by_obv(:));
 p = 1 - chi2cdf(chi_sq_val, dof);
 
+disp(['chi_sq_val: ', num2str(chi_sq_val)]);
+disp(['p: ', num2str(p)]);
+disp(['dof: ', num2str(dof)]);

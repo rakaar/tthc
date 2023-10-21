@@ -156,7 +156,7 @@ for n = 1:length(all_neuron_types)
                 ylabel('Prop of cases')
                 title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
-                saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_histogram.fig'])
+                % saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_histogram.fig'])
         
             end
             
@@ -175,9 +175,27 @@ for n = 1:length(all_neuron_types)
                 ylabel('Cum sum of prop')
                 title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
-                saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_cdf.fig'])
+                % saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_cdf.fig'])
             end
-        
+
+
+            disp('KS test btn CDFs')
+            disp(['Neuron type: ' all_neuron_types{n} ' Scale: '  bf_str])
+            for i = 1:4
+                
+                both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+                for j = 1:2
+                    both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
+                end
+                
+                male_cumsum = cumsum(both_m_f_each_cat_data(:,1));
+                female_cumsum = cumsum(both_m_f_each_cat_data(:,2));
+                
+                [h,p] = kstest2(male_cumsum, female_cumsum);
+                disp(['h = ' num2str(h) ' p = ' num2str(p) ' for ' type_strs{i}])
+            end
+            % TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP %
+            % close all;
         
     end
 end % n

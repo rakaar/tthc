@@ -16,7 +16,7 @@ n_octaves_apart = length(octaves_apart);
 
 num_cases_base_re_bf = zeros(2, n_octaves_apart,4); % base how far from BF
 % 2 - M,F 3 - octaves apart, 4 - HE, HS, NE, NS
-bf_index = 12; % 12 for BF, 13 for BF0
+bf_index = 13; % 12 for BF, 13 for BF0
 
 for gender_no = 1:2
     rms_match_db = load('rms_match_db.mat').rms_match_db;

@@ -26,6 +26,7 @@ elseif strcmp(animal_gender, 'F')
 else
     rejected_gender = nan;
 end
+
 if ~isnan(rejected_gender)
     removal_indices = [];
     for u = 1:size(rms_match_db_with_sig_bf,1)
@@ -79,12 +80,12 @@ end
 figure
     bar(tone_bf_counter./sum(tone_bf_counter))
     title(['Tone BF Neuron: ' all_neuron_types{n} ' gender: ' all_animal_gender{gender}])
-    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_Tone_BF_counter', '.fig') )
+    % saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_Tone_BF_counter', '.fig') )
 
 figure
     bar(hc_bf_counter./sum(hc_bf_counter))
     title(['HC BF Neuron: ' all_neuron_types{n} ' gender: ' all_animal_gender{gender}])
-    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_HC_BF0_counter', '.fig') )
+    % saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_HC_BF0_counter', '.fig') )
 
     %%
 bf_bf0 = zeros(7,7);
@@ -100,6 +101,34 @@ for u=1:size(rms_match_db_with_sig_bf,1)
 end
 bf_bf0_norm = bf_bf0./sum(bf_bf0(:));
 
+%% ---------- Chi Sq test of independence -------------------
+disp(['Neuron-type: ' all_neuron_types{n} ' Gender: ' all_animal_gender{gender}])
+combined_tab = [tone_bf_counter hc_bf_counter];
+
+% temp for male
+% combined_tab = combined_tab(1:6,:);
+
+dof = (size(combined_tab,1) - 1) * (size(combined_tab,2) - 1);
+
+expected_tab = zeros(size(combined_tab));
+for i=1:size(combined_tab,1)
+    for j=1:size(combined_tab,2)
+        expected_tab(i,j) = (sum(combined_tab(i,:))*sum(combined_tab(:,j)))/sum(combined_tab(:));
+    end
+end
+
+diff_sq = (combined_tab - expected_tab).^2;
+diff_sq_by_obv = diff_sq./expected_tab;
+
+chi_sq_val = sum(diff_sq_by_obv(:));
+p = 1 - chi2cdf(chi_sq_val, dof);
+
+disp(['chi_sq_val: ', num2str(chi_sq_val)]);
+disp(['p: ', num2str(p)]);
+disp(['dof: ', num2str(dof)]);
+
+
+% -----------------------------------------------------------
 
 octs_apart = -3:0.5:3;
 shift_vec = zeros(length(octs_apart),1);
@@ -115,7 +144,7 @@ shift_vec = shift_vec./sum(shift_vec);
 figure
     bar(shift_vec)
     title(['Neuron: ' all_neuron_types{n} ' Gender: ' all_animal_gender{gender} ' Octave Shift' ])
-    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_octave_shift', '.fig') )
+    % saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_octave_shift', '.fig') )
 
 figure
     imagesc(bf_bf0./sum(sum(bf_bf0)))
@@ -127,7 +156,11 @@ figure
     yticklabels({'6', '8.5', '12', '17', '24', '34', '48'})
 
     axis image
-    saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_DB_bfbf0', '.fig') )
+
+% --- TEMP -----------
+% close all;
+% ---- TEMP ---------
+    % saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_DB_bfbf0', '.fig') )
     %%
 % octave_shift_counter = zeros(13,1);
 

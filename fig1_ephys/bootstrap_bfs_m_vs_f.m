@@ -24,6 +24,8 @@ if ~isnan(rejected_gender)
 
 end % if
 
+female_rms_match = rms_match_db;
+save('female_rms_match', 'female_rms_match')
 
 % boots params
 n_boots = 1000;
@@ -50,18 +52,31 @@ for b = 1:n_boots
 
     % bf_bf0 = bf_bf0./sum(bf_bf0(:));
     % calculate ratio
-    all_ratios = zeros(length(f0_to_see),1);
-    for d = f0_to_see
-        on_diag = bf_bf0(d,d);
-        off_diag = bf_bf0(d, d-2);
-        off_diag1 = bf_bf0(d, d-1);
+    % all_ratios = zeros(length(f0_to_see),1);
 
-        % all_ratios(d-2) = (off_diag - off_diag1)/on_diag;
-        all_ratios(d-2) = off_diag/on_diag;
+    % off0_sum = zeros(length(f0_to_see),1);
+    % off1_sum = zeros(length(f0_to_see),1);
+    % off2_sum = zeros(length(f0_to_see),1);
 
-    end
-    all_ratios(isnan(all_ratios) | isinf(all_ratios)) = [];
-    original_ratio_mean(b) = mean(all_ratios); 
+    % for d = f0_to_see
+    %     on_diag = bf_bf0(d,d);
+    %     off_diag = bf_bf0(d, d-2);
+    %     off_diag1 = bf_bf0(d, d-1);
+
+    %     % all_ratios(d-2) = (off_diag - off_diag1)/on_diag;
+    %     % all_ratios(d-2) = off_diag/on_diag;
+    %     off0_sum(d-2) =  on_diag;
+    %     off2_sum(d-2) =  off_diag;
+    %     off1_sum(d-2) =  off_diag1;
+
+    % end
+
+
+    % all_ratios(isnan(all_ratios) | isinf(all_ratios)) = [];
+    % original_ratio_mean(b) = mean(all_ratios)
+    % original_ratio_mean(b) = (sum(off2_sum) - sum(off1_sum))/sum(off0_sum); 
+
+    original_ratio_mean(b) = (sum(diag(bf_bf0,-2)) - sum(diag(bf_bf0,-1))) / sum(diag(bf_bf0));
 end % b
 
 female_original_ratio = original_ratio_mean;
@@ -91,7 +106,8 @@ if ~isnan(rejected_gender)
 
 end % if
 
-
+male_rms_match = rms_match_db;
+save('male_rms_match', 'male_rms_match');
 % boots params
 original_ratio_mean = zeros(n_boots,1);
 n = size(rms_match_db,1);
@@ -115,18 +131,29 @@ for b = 1:n_boots
 
     % bf_bf0 = bf_bf0./sum(bf_bf0(:));
     % calculate ratio
-    all_ratios = zeros(length(f0_to_see),1);
-    for d = f0_to_see
-        on_diag = bf_bf0(d,d);
-        off_diag = bf_bf0(d, d-2);
-        off_diag1 = bf_bf0(d, d-1);
+    % all_ratios = zeros(length(f0_to_see),1);
 
-        % all_ratios(d-2) = (off_diag - off_diag1)/on_diag;
-        all_ratios(d-2) = off_diag/on_diag;
+    % off0_sum = zeros(length(f0_to_see),1);
+    % off1_sum = zeros(length(f0_to_see),1);
+    % off2_sum = zeros(length(f0_to_see),1);
 
-    end
-    all_ratios(isnan(all_ratios) | isinf(all_ratios)) = [];
-    original_ratio_mean(b) = mean(all_ratios); 
+    % for d = f0_to_see
+    %     on_diag = bf_bf0(d,d);
+    %     off_diag = bf_bf0(d, d-2);
+    %     off_diag1 = bf_bf0(d, d-1);
+
+    %     % all_ratios(d-2) = (off_diag - off_diag1)/on_diag;
+    %     % all_ratios(d-2) = off_diag/on_diag;
+
+    %     off0_sum(d-2) = on_diag;
+    %     off2_sum(d-2) =  off_diag;
+    %     off1_sum(d-2) =  off_diag1;
+
+    % end
+    % all_ratios(isnan(all_ratios) | isinf(all_ratios)) = [];
+    % original_ratio_mean(b) = mean(all_ratios); 
+    % original_ratio_mean(b) = (sum(off2_sum) - sum(off1_sum))/sum(off0_sum);
+    original_ratio_mean(b) = (sum(diag(bf_bf0,-2)) - sum(diag(bf_bf0,-1))) / sum(diag(bf_bf0));
 end % b
 
 male_original_ratio = original_ratio_mean;

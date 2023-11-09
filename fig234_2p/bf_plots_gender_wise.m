@@ -139,8 +139,9 @@ for i = 1:7
         shift_vec(shift_index) = shift_vec(shift_index) + bf_bf0(i,j);
     end
 end
-
+save([all_animal_gender{gender} '_' all_neuron_types{n} '_octave_shift'], 'shift_vec')
 shift_vec = shift_vec./sum(shift_vec);
+
 figure
     bar(shift_vec)
     title(['Neuron: ' all_neuron_types{n} ' Gender: ' all_animal_gender{gender} ' Octave Shift' ])

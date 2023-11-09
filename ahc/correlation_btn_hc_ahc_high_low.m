@@ -46,8 +46,10 @@ scatter(x, y);
 xlabel('HC');
 ylabel('AHC Low');
 title('HC, AHC Low')
+disp('HC, AHC Low')
 % Add a line of best fit
 coefficients = polyfit(x, y, 1);
+disp(coefficients)
 x_fit = linspace(min(x), max(x), 100);
 y_fit = polyval(coefficients, x_fit);
 hold on;
@@ -70,8 +72,10 @@ scatter(x, y);
 xlabel('AHC Low');
 ylabel('AHC High');
 title('AHC Low, AHC High')
+disp('AHC Low, AHC High')
 % Add a line of best fit
 coefficients = polyfit(x, y, 1);
+disp(coefficients)
 x_fit = linspace(min(x), max(x), 100);
 y_fit = polyval(coefficients, x_fit);
 hold on;
@@ -94,8 +98,10 @@ scatter(x, y);
 xlabel('HC');
 ylabel('AHC High');
 title('HC, AHC High')
+disp('HC, AHC High')
 % Add a line of best fit
 coefficients = polyfit(x, y, 1);
+disp(coefficients)
 x_fit = linspace(min(x), max(x), 100);
 y_fit = polyval(coefficients, x_fit);
 hold on;

@@ -108,6 +108,9 @@ for n = 1:length(all_neuron_types)
             bf_str = 'BF0';
         end
 
+        % save - gender_neuron_bf_str
+        save([all_gender{gender_no} '_' all_neuron_types{n} '_' bf_str '_cats'], 'num_cases_base_re_bf')
+        disp([all_gender{gender_no} '_' all_neuron_types{n} '_' bf_str '_cats'])
         % chi sq tests
         disp(['Neuron Type = ' neuron_type ' BF index = ' bf_str ])
         for cat = 1:4

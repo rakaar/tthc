@@ -8,7 +8,7 @@
 % 7 - rates
 clear;
 close all;
-data_path = 'D:\aharmonic_01042023';
+data_path = '/media/rka/Elements/aharmonic_01042023';
 data_dir = dir(data_path);
 
 stage1_db = cell(100,7);
@@ -22,16 +22,16 @@ for i=3:length(data_dir)
     elseif strcmp(M_or_F, 'F') && contains(animal, '_M')
         continue
     end
-    animal_path = strcat(data_dir(i).folder, '\', data_dir(i).name);
+    animal_path = strcat(data_dir(i).folder, '/', data_dir(i).name);
     animal_path_dir = dir(animal_path);
     for j=3:length(animal_path_dir)
         loc_name = animal_path_dir(j).name;
         if contains(loc_name, 'location')
-            loc_path = strcat(animal_path_dir(j).folder, '\', animal_path_dir(j).name, '\Single_units');
+            loc_path = strcat(animal_path_dir(j).folder, '/', animal_path_dir(j).name, '/Single_units');
             units_dir = dir(loc_path);
            
             for u=3:length(units_dir)
-                fpath = strcat(units_dir(u).folder, '\', units_dir(u).name);
+                fpath = strcat(units_dir(u).folder, '/', units_dir(u).name);
                 
                 PP_PARAMS = load(fpath).PP_PARAMS;
                 

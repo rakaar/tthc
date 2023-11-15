@@ -176,14 +176,17 @@ for n = 1:3
                 x_labels = [x_labels (rows_with_enuf_data(i)-1)*bin_size_in_microns + 1];
             end
 
+            save(strcat(all_neruon_types{n}, '_', all_animal_gender{g}, '_noise_corr_T'), 'corr_vs_dist')
+
             figure
                 errorbar(x_labels,mean_corr_v_dist(rows_with_enuf_data),err_corr_v_dist(rows_with_enuf_data), 'LineWidth', 2, 'Color', 'b')
                 title(['Tone - Noise corr vs dist  ' animal_gender ' ' neuron_type])
                 xlabel('Pixel dist')
                 ylabel('Noise corr')
-                saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_tone_nc.fig'))
-                saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_tone_nc.eps'))
+                % saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_tone_nc.fig'))
+                % saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_tone_nc.eps'))
                 
+            close all
     end % g
 end % n
 

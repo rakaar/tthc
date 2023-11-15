@@ -15,7 +15,7 @@ end
 
 dist = unique(nonzeros(dist));
 
-animal_gender = 'all';
+animal_gender = 'F';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -221,6 +221,7 @@ end
 % plot mean Tone noise corr with error bars in 9 bins
 % mean of tone noise corr in 9 bins using cell fun
 tone_noise_corr = cellfun(@(x) x(~isnan(x)), tone_noise_corr, 'UniformOutput', false);
+
 mean_nc = cellfun(@mean, tone_noise_corr);
 % err - std/sqrt(len)
 err_nc = cellfun(@(x) std(x)/sqrt(length(x)), tone_noise_corr);
@@ -232,7 +233,7 @@ figure;
     title(['Tone Noise Correlation' ' ' animal_gender]);
     xlabel('Distance');
     ylabel('Correlation');
-    saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_tone_high_noise_corr.fig']);
+    % saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_tone_high_noise_corr.fig']);
 
 % same plot for hc noise corr
 hc_noise_corr = cellfun(@(x) x(~isnan(x)), hc_noise_corr, 'UniformOutput', false);
@@ -247,7 +248,7 @@ figure;
     title(['Harmonic Noise Correlation ' animal_gender ]);
     xlabel('Distance');
     ylabel('Correlation');
-    saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_hc_noise_corr.fig']);
+    % saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_hc_noise_corr.fig']);
 
 % same for low ahc
 % filter nan in each cell block before taking mean
@@ -263,7 +264,7 @@ figure;
     title(['Low AHC Noise Correlation ' animal_gender ]);
     xlabel('Distance');
     ylabel('Correlation');
-    saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_ahc_low_noise_corr.fig']);
+    % saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_ahc_low_noise_corr.fig']);
 % same for high ahc
 ahc_high_noise_corr = cellfun(@(x) x(~isnan(x)), ahc_high_noise_corr, 'UniformOutput', false);
 mean_nc = cellfun(@mean, ahc_high_noise_corr);
@@ -277,11 +278,38 @@ figure;
     title(['High AHC Noise Correlation ' animal_gender]);
     xlabel('Distance');
     ylabel('Correlation');
-    saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_ahc_high_noise_corr.fig']);
+    % saveas(gcf, ['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/' animal_gender  '_ahc_high_noise_corr.fig']);
 
 
 
 
+
+    figure;
+    hold on
+    % Tone
+        mean_nc = cellfun(@mean, tone_noise_corr);
+        err_nc = cellfun(@(x) std(x)/sqrt(length(x)), tone_noise_corr);
+        errorbar(mean_nc, err_nc, 'LineWidth', 2);
+    % HC
+        mean_nc = cellfun(@mean, hc_noise_corr);
+        err_nc = cellfun(@(x) std(x)/sqrt(length(x)), hc_noise_corr);
+        errorbar(mean_nc, err_nc, 'LineWidth', 2);
+
+    % AHC low
+        mean_nc = cellfun(@mean, ahc_low_noise_corr);
+        err_nc = cellfun(@(x) std(x)/sqrt(length(x)), ahc_low_noise_corr);
+        errorbar(mean_nc, err_nc, 'LineWidth', 2);
+    
+    % AHC high
+        mean_nc = cellfun(@mean, ahc_high_noise_corr);
+        err_nc = cellfun(@(x) std(x)/sqrt(length(x)), ahc_high_noise_corr);
+        errorbar(mean_nc, err_nc, 'LineWidth', 2);
+    hold off
+
+    legend('T', 'HC', 'NHC-LOW', 'NHC-HIGH');
+    title(['Noise corr vs dist -  Gender: ' animal_gender])
+    xlabel('Distance');
+    ylabel('Correlation');
 function noise_from_rates = get_noise_vec(rates_cell)
     noise_from_rates = [];
      for c = 1:size(rates_cell,1)

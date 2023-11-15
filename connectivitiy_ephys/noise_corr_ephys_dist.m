@@ -16,7 +16,7 @@ dist = unique(nonzeros(dist));
 
 load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/SingleUnit/rms_match_db.mat')
 
-animal_gender = 'all';
+animal_gender = 'F';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -238,9 +238,13 @@ disp(count')
 % --- stats test
 disp('Ttest and ranksum')
 for i = 1:9
-    [h,p] = ttest(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') );
+    % [h,p] = ttest(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') );
+    [h,p] = ttest(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') , 'alpha', 0.05/length(cell2mat(hc_noise_corr_vs_dist(1:180, i)')));
+
     disp(['ttest h = ' num2str(h) ' p = ' num2str(p)])
-    [p,h] = ranksum(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') );
+    % [p,h] = ranksum(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') );
+    [p,h] = ranksum(cell2mat(tone_noise_corr_vs_dist(1:180, i)')  ,   cell2mat(hc_noise_corr_vs_dist(1:180, i)') , 'alpha', 0.05/length(cell2mat(hc_noise_corr_vs_dist(1:180, i)')));
+
     disp(['ranksum h = ' num2str(h) ' p = ' num2str(p)])
 end
 

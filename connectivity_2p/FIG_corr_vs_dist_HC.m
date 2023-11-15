@@ -7,8 +7,8 @@ all_animal_gender = {'M', 'F', 'all'};
 
 min_num_pairs = 20;
 
-for n = 3:3
-    for g = 3:3
+for n = 1:3
+    for g = 1:3
         neuron_type = all_neruon_types{n};
         
         if strcmp(neuron_type, 'Thy')
@@ -177,13 +177,58 @@ for n = 3:3
             x_labels = [x_labels (rows_with_enuf_data(i)-1)*bin_size_in_microns + 1];
         end
 
+        save(strcat(all_neruon_types{n}, '_', all_animal_gender{g}, '_noise_corr_HC'), 'corr_vs_dist')
         figure
             errorbar(x_labels,mean_corr_v_dist(rows_with_enuf_data),err_corr_v_dist(rows_with_enuf_data),  'LineWidth', 2, 'Color', 'r')
             title(['HC - Noise corr vs dist  ' animal_gender ' ' neuron_type])
             xlabel('dist(um)')
             ylabel('Noise corr')
-            saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_hc_nc.fig'))
-            saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_hc_nc.eps'))
-    end % g
+            % saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_hc_nc.fig'))
+            % saveas(gcf, strcat(fig_path, strcat('fig', neuron_type), '/' ,neuron_type, '_', animal_gender,'_min_pairs_', num2str(min_num_pairs), '_bin_size_', num2str(bin_size_in_microns),  '_hc_nc.eps'))
+            close all;
+        end % g
 end % n
 
+% s1 = thy_m_hc;
+% s2 = thy_f_hc;
+% for i = 1:min(length(s1), length(s2))
+%     disp(i)
+%     l1 = length(s1{i,1}); l2 = length(s2{i,1}); 
+%     disp([ 'length of bins: ' num2str(l1) ', ' num2str(l2) ])
+%     [h,p] = ttest2(s1{i,1}, s2{i,1});
+%     disp([' h = ' num2str(h)   ' p value: ' num2str(p)])
+%     [p,h] = ranksum(s1{i,1}, s2{i,1});
+%     disp([' h = ' num2str(h)   ' p value: ' num2str(p)]);
+%     disp('_________________________')
+% end
+
+all_gender = {'M', 'F', 'all'};
+all_neuron_types = {'PV', 'SOM', 'Thy'};
+for g = 1:3
+    for n = 1:3
+        neuron_type = all_neuron_types{n};
+        gender_type = all_gender{g};
+
+        disp('#########################################################################')
+        disp(neuron_type)
+        disp(gender_type)
+
+        tone_file_name = sprintf('%s_%s_noise_corr_T', neuron_type, gender_type);
+        hc_file_name = sprintf('%s_%s_noise_corr_HC', neuron_type, gender_type);
+
+        s1 = load(tone_file_name).corr_vs_dist;
+        s2 = load(hc_file_name).corr_vs_dist;
+
+         for i = 1:min(length(s1), length(s2))
+            disp(i)
+            l1 = length(s1{i,1}); l2 = length(s2{i,1}); 
+            disp([ 'length of bins: ' num2str(l1) ', ' num2str(l2) ])
+            [h,p] = ttest2(s1{i,1}, s2{i,1});
+            disp([' Ttest - h = ' num2str(h)   ' p value: ' num2str(p)])
+            [p,h] = ranksum(s1{i,1}, s2{i,1});
+            disp([' Ranksum - h = ' num2str(h)   ' p value: ' num2str(p)]);
+            disp('_________________________')
+        end
+        disp('#########################################################################')
+    end
+end

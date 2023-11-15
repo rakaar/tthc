@@ -203,3 +203,38 @@ for n = 1:length(all_neuron_types)
     end
 end % n
 
+all_neuron_types = {'PV', 'SOM', 'Thy'};
+for n = 1:3
+    neuron_type = all_neuron_types{n};
+    % F_PV_BF_cats.mat
+    filename = sprintf('F_%s_BF_cats', neuron_type);
+    data = load(filename).num_cases_base_re_bf;
+
+    disp('------------------')
+    disp(neuron_type)
+    disp('!!! Male !!!')
+    data1 = squeeze(data(1,:,:));
+    data1_sum = sum(data1,1);
+    disp(['HE % = ' num2str(data1_sum(1)/sum(data1_sum))])
+    disp(['HS % = ' num2str(data1_sum(2)/sum(data1_sum))])
+    disp(['NE % = ' num2str(data1_sum(3)/sum(data1_sum))])
+    disp(['NS % = ' num2str(data1_sum(4)/sum(data1_sum))])
+
+    disp('!!! Female !!!')
+    data1 = squeeze(data(2,:,:));
+    data1_sum = sum(data1,1);
+    disp(['HE % = ' num2str(data1_sum(1)/sum(data1_sum))])
+    disp(['HS % = ' num2str(data1_sum(2)/sum(data1_sum))])
+    disp(['NE % = ' num2str(data1_sum(3)/sum(data1_sum))])
+    disp(['NS % = ' num2str(data1_sum(4)/sum(data1_sum))])
+
+    disp('!!! All !!!')
+    data1 = squeeze(sum(data,1));
+    data1_sum = sum(data1,1);
+    disp(['HE % = ' num2str(data1_sum(1)/sum(data1_sum))])
+    disp(['HS % = ' num2str(data1_sum(2)/sum(data1_sum))])
+    disp(['NE % = ' num2str(data1_sum(3)/sum(data1_sum))])
+    disp(['NS % = ' num2str(data1_sum(4)/sum(data1_sum))])
+
+    disp('----------------')
+end

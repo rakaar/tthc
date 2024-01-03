@@ -15,7 +15,7 @@ end
 
 dist = unique(nonzeros(dist));
 
-animal_gender = 'F';
+animal_gender = 'all';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -310,7 +310,58 @@ figure;
     title(['Noise corr vs dist -  Gender: ' animal_gender])
     xlabel('Distance');
     ylabel('Correlation');
-function noise_from_rates = get_noise_vec(rates_cell)
+ % stats test
+  for i = 1:9
+    disp(['== Dist num ' num2str(i) '=='])
+    hc_corr = hc_noise_corr{i,1};
+    ahc_low_corr = ahc_low_noise_corr{i,1};
+    ahc_high_corr = ahc_high_noise_corr{i,1};
+
+    disp('--HC vs AHC low--');
+    [h,p] = ttest2(hc_corr, ahc_low_corr);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+    [p,h] = ranksum(hc_corr, ahc_low_corr);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+
+    disp('--HC vs AHC high--');
+    [h,p] = ttest2(hc_corr, ahc_high_corr);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+    [p,h] = ranksum(hc_corr, ahc_high_corr);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+
+ end
+    
+ hc_corr_4bins = [];
+ ahc_low_corr_4bins = [];
+ ahc_high_corr_4bins = [];
+
+ for i = 1:4
+    hc_corr_4bins = [hc_corr_4bins hc_noise_corr{i,1}];
+    ahc_low_corr_4bins = [ahc_low_corr_4bins ahc_low_noise_corr{i,1}];
+    ahc_high_corr_4bins = [ahc_high_corr_4bins ahc_high_noise_corr{i,1}];
+ end
+
+ disp('4 bins - HC vs AHC low');
+    [h,p] = ttest2(hc_corr_4bins, ahc_low_corr_4bins);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+    [p,h] = ranksum(hc_corr_4bins, ahc_low_corr_4bins);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+ disp('4 bins - HC vs AHC high');
+    [h,p] = ttest2(hc_corr_4bins, ahc_high_corr_4bins);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+    [p,h] = ranksum(hc_corr_4bins, ahc_high_corr_4bins);
+    disp(['h = ' num2str(h) ' p = ' num2str(p)]);
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ function noise_from_rates = get_noise_vec(rates_cell)
     noise_from_rates = [];
      for c = 1:size(rates_cell,1)
          rates_per_stim = rates_cell{c,1};

@@ -15,10 +15,10 @@ n_octaves_apart = length(octaves_apart);
 num_cases_base_re_bf = zeros(2, n_octaves_apart,4); % base how far from BF
 % 1 - near, 2 - far
 % 1 - enh, 2 - sup, 3 - ne, 4 - ns
-bf_index = 10; % 9 for BF, 10 for BF0
+bf_index = 9; % 9 for BF, 10 for BF0
 for u=1:size(stage3_db,1)
     tone_rates = stage3_db{u,6};
-    tone_bf = stage3_db{u,9}; 
+    tone_bf = stage3_db{u,bf_index}; 
     % See with BF0 not BF
     % tone_bf = stage3_db{u,10};
     ahc_units = stage3_db{u,8};
@@ -257,8 +257,10 @@ for cat = 1:4
     
 end % cat
 
-% plot
 
+return
+% ---- Return to stop plotting ---- 
+% plot
 if bf_index == 9
     bf_str = 'BF';
 else
@@ -277,7 +279,7 @@ for i = 1:4
     ylabel('Prop of cases')
     title([type_strs{i} ])
     legend('M', 'F')
-    saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_histogram.fig'])
+    % saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_histogram.fig'])
 end
 
 
@@ -296,6 +298,45 @@ for i = 1:4
     ylabel('Cum sum of prop')
     title([type_strs{i}])
     legend('M', 'F')
-    saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_cdf.fig'])
+    % saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_cdf.fig'])
 end
 
+%% - Print the percentage of cases
+% male 
+g_id = 1;
+data = squeeze(num_cases_base_re_bf(g_id,:,:));
+disp('***Male***')
+for c = 1:4
+    disp(['Type = ' type_strs{c}])
+    counts = data(:,c);
+    percents = 100*counts./sum(counts);
+    disp(percents')
+end
+
+g_id = 2;
+data = squeeze(num_cases_base_re_bf(g_id,:,:));
+disp('***Female***')
+for c = 1:4
+    disp(['Type = ' type_strs{c}])
+    counts = data(:,c);
+    percents = 100*counts./sum(counts);
+    disp(percents')
+end
+
+
+data = squeeze(sum(num_cases_base_re_bf,1));
+disp('***All gender***')
+for c = 1:4
+    disp(['Type = ' type_strs{c}])
+    counts = data(:,c);
+    percents = 100*counts./sum(counts);
+    disp(percents')
+end
+
+%% - Chi sq btn 
+both_gender_data = squeeze(sum(num_cases_base_re_bf,1));
+en = both_gender_data(:,1);
+su = both_gender_data(:,2);
+ne = both_gender_data(:,3);
+
+[h,p] = chi_sq_test_of_ind([en(4:20)'; ne(4:20)'])

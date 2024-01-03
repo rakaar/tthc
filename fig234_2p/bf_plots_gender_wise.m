@@ -4,14 +4,17 @@ disp('Running 2p figures/bf_plots_gender_wise')
 data_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/';
 figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/';
 
-all_neuron_types = {'PV', 'SOM', 'Thy'};
+all_neuron_types = {'Thy'};
+% all_neuron_types = {'PV', 'SOM', 'Thy'};
 all_animal_gender = {'M', 'F', 'all'};
+% all_animal_gender = {'all'};
+
 % all_db_set = {'low', 'high'};
 all_db_set = {'all'};
 
-for n = 1:3
-    for gender = 1:3
-        for spl = 1:1
+for n = 1:length(all_neuron_types)
+    for gender = 1:length(all_animal_gender)
+        for spl = 1:length(all_db_set)
             neuron_type = all_neuron_types{n};
             animal_gender = all_animal_gender{gender};
             db_set = all_db_set{spl};
@@ -77,6 +80,10 @@ for u=1:size(rms_match_db_with_sig_bf,1)
     end
 end
 
+tone_bf_norm = tone_bf_counter./sum(tone_bf_counter);
+hc_bf_norm = hc_bf_counter./sum(hc_bf_counter);
+
+diff_inc = 100*(hc_bf_norm - tone_bf_norm) ./ tone_bf_norm
 figure
     bar(tone_bf_counter./sum(tone_bf_counter))
     title(['Tone BF Neuron: ' all_neuron_types{n} ' gender: ' all_animal_gender{gender}])
@@ -86,6 +93,7 @@ figure
     bar(hc_bf_counter./sum(hc_bf_counter))
     title(['HC BF Neuron: ' all_neuron_types{n} ' gender: ' all_animal_gender{gender}])
     % saveas( gcf, strcat(figs_path, strcat('fig', neuron_type, '_sept13'), '/',  animal_gender , '_', neuron_type, '_', db_set, '_db_HC_BF0_counter', '.fig') )
+
 
     %%
 bf_bf0 = zeros(7,7);
@@ -140,7 +148,9 @@ for i = 1:7
     end
 end
 save([all_animal_gender{gender} '_' all_neuron_types{n} '_octave_shift'], 'shift_vec')
+
 shift_vec = shift_vec./sum(shift_vec);
+
 
 figure
     bar(shift_vec)
@@ -158,6 +168,10 @@ figure
 
     axis image
 
+
+    % TEMP
+    close all;
+    
 % --- TEMP -----------
 % close all;
 % ---- TEMP ---------

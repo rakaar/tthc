@@ -6,6 +6,15 @@ clc; clear; close all;
 % NOTE-THIS WILL NOT INCLUDE ALL TONES - T, 2T, 1.25T, 1.75T, 
 % ONLY BF
 
+gender = 'F'; 
+if strcmp(gender, 'M')
+    filter_gender = 'F';
+elseif strcmp(gender, 'F')
+    filter_gender = 'M';
+else 
+    filter_gender = nan;
+end
+
 situation = 'all'; % bf, near, far, all
 figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
 load('stage1_db.mat')
@@ -44,8 +53,21 @@ for u=1:size(stage1_db,1)
     end
 end
 
+
 %% keys of bfs
+%%  Filter gender 
 load('stage3_db.mat')
+removal_indices = [];
+if ~isnan(filter_gender)
+    for u = 1:size(stage3_db,1)
+        animal = stage3_db{u,1};
+        if contains(animal, strcat('_', filter_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end
+    stage3_db(removal_indices,:) = [];
+end
+
 tone_bf_keys = containers.Map;
 for u=1:size(stage3_db,1)
     animal = stage3_db{u,1};
@@ -185,7 +207,7 @@ end % i
 % rechange name for convenience
 all_sg_triples = non_nan_sg_quadples;
 %% tttests and ranksum
-disp(['---------------- ', situation])
+disp(['---------------- ', situation, ' Gender: ' gender])
 % hc , ahc low
 test = [1,2];
 t1 = test(1);
@@ -248,7 +270,7 @@ ylabel('rates')
 
 
 title([situation, ' unit rates normalised'])
-saveas(gcf, [figs_path 'boxplot_rates_norm.fig'])
+% saveas(gcf, [figs_path 'boxplot_rates_norm.fig'])
 
 %% bar plot with error bars
 figure
@@ -271,5 +293,5 @@ hold off
 set(gca, 'XTickLabel', {'HC','AHC low', 'AHC high', 'T'})
 
 ylabel('rates')
-title([situation, ' unit rates normalised'])
+title([situation, ' unit rates normalised. Gender: ' gender ])
 

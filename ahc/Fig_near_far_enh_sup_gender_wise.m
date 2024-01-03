@@ -1,3 +1,4 @@
+% - OLD STUFF- Near and far - not octvs apart
 % In near and far cases, enh/sup/no_eff, no sig diff
 % clear;close all; clc;
 clear; clc;
@@ -6,7 +7,7 @@ load('stage1_db.mat')
 load('f13.mat')
 
 
-animal_gender = 'F';
+animal_gender = 'all';
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -250,6 +251,28 @@ for u=1:size(stage3_db,1)
         end % col
     end % au
 end % u
+
+% ks test
+% tests
+type_strs = {'HE', 'HS', 'NE', 'NS'};
+
+for cat = 1:4
+    male_data = num_cases_base_re_bf(1,:,cat);
+    female_data = num_cases_base_re_bf(2,:,cat);
+
+     % kstest
+     male_data_for_kstest = [];
+     female_data_for_kstest = [];
+     for i = 1:n_octaves_apart
+        male_data_for_kstest = [male_data_for_kstest octaves_apart(i)*ones(1,male_data(i))];
+        female_data_for_kstest = [female_data_for_kstest octaves_apart(i)*ones(1, female_data(i))];
+    end
+    [h,p] = kstest2(male_data_for_kstest, female_data_for_kstest);
+     disp('kstest2 ')
+     disp(['h = ' num2str(h) ' p = ' num2str(p) ' for ' type_strs{cat}])
+    
+end % cat
+
 %% norm
 near_far_data_norm = zeros(2,4);
 near_far_data_norm(1,:) = near_far_data(1,:)./sum(near_far_data(1,:));
@@ -290,6 +313,7 @@ disp([near_far_data(1,:) sum(near_far_data(1,:))])
 
 disp('Far Case')
 disp([near_far_data(2,:) sum(near_far_data(2,:))])
+
 
 
 % chi square test

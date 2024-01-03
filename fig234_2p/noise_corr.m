@@ -1,4 +1,4 @@
-rms_match_db_with_sig_bf = load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/Thy/rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+rms_match_db_with_sig_bf = load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/PV/rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 
 for u=1:size(rms_match_db_with_sig_bf,1)
     tbf = rms_match_db_with_sig_bf{u,11};

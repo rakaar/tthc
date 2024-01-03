@@ -1,5 +1,5 @@
 close all;clc;clear ;
-rms_file_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/SOM/rms_match_db_with_sig_bf.mat';
+rms_file_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/PV/rms_match_db_with_sig_bf.mat';
 rms_match_db = load(rms_file_path).rms_match_db_with_sig_bf;
 
 animal_gender = 'F'; % M for Male, F for Female, all for both
@@ -77,7 +77,9 @@ for b = 1:n_boots
     % original_ratio_mean(b) = mean(all_ratios)
     % original_ratio_mean(b) = (sum(off2_sum) - sum(off1_sum))/sum(off0_sum); 
 
-    original_ratio_mean(b) = ( sum(diag(bf_bf0,-1))  - sum(diag(bf_bf0)) ) / sum(diag(bf_bf0));
+    % bf_bf0 = bf_bf0(1:5, 1:5);
+
+    original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0)) ) / mean(diag(bf_bf0));
 end % b
 
 female_original_ratio = original_ratio_mean;
@@ -154,7 +156,8 @@ for b = 1:n_boots
     % all_ratios(isnan(all_ratios) | isinf(all_ratios)) = [];
     % original_ratio_mean(b) = mean(all_ratios); 
     % original_ratio_mean(b) = (sum(off2_sum) - sum(off1_sum))/sum(off0_sum);
-    original_ratio_mean(b) = ( sum(diag(bf_bf0,-1))  - sum(diag(bf_bf0)) ) / sum(diag(bf_bf0));
+    % bf_bf0 = bf_bf0(1:5, 1:5);
+    original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0)) ) / mean(diag(bf_bf0));
 end % b
 
 male_original_ratio = original_ratio_mean;

@@ -1,4 +1,4 @@
-rms_match_db_with_sig_bf = load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/Thy/rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+rms_match_db_with_sig_bf = load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/SOM/rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 locations_map = containers.Map;
 combiner = '***';
 for u = 1:size(rms_match_db_with_sig_bf,1)
@@ -87,10 +87,23 @@ hc_minus_t_noise_corr = hc_noise_corr_all - tone_noise_corr_all;
 figure
 subplot(1,2,1)
 histogram(avg_sig_corr)
-title('avg sig corr')
+% xline mean and 0
+hold on
+xline(mean(avg_sig_corr))
+xline(0)
+hold off
+% put mean in title
+title(sprintf('avg sig corr, mean = %.4f', mean(avg_sig_corr)))
 subplot(1,2,2)
 histogram(hc_minus_t_noise_corr)
-title('hc minus t noise corr')
+hold on
+xline(mean(hc_minus_t_noise_corr))
+xline(0)
+hold off
+% put mean in title
+title(sprintf('avg sig corr, mean = %.4f', mean(hc_minus_t_noise_corr)))
+
+
 
 % scatter of the above 2, with corr value in title
 figure
@@ -102,3 +115,8 @@ ylabel('hc minus t noise corr')
 [r,p] = corr(avg_sig_corr, hc_minus_t_noise_corr);
 title(sprintf('r = %.2f, p = %.2f', r, p))
 
+% are each of the distr sig > 0
+[h,p] = ttest(avg_sig_corr);
+disp(sprintf('avg sig corr ~ 0: h = %d, p = %.4f', h, p))
+[h,p] = ttest(hc_minus_t_noise_corr);
+disp(sprintf('hc minus t noise corr ~ 0: h = %d, p = %.4f', h, p))

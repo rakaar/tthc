@@ -115,8 +115,27 @@ ylabel('hc minus t noise corr')
 [r,p] = corr(avg_sig_corr, hc_minus_t_noise_corr);
 title(sprintf('r = %.2f, p = %.2f', r, p))
 
+close all
 % are each of the distr sig > 0
 [h,p] = ttest(avg_sig_corr);
 disp(sprintf('avg sig corr ~ 0: h = %d, p = %.4f', h, p))
 [h,p] = ttest(hc_minus_t_noise_corr);
 disp(sprintf('hc minus t noise corr ~ 0: h = %d, p = %.4f', h, p))
+% tone sig corr > 0
+[h,p] = ttest(tone_sig_corr_all);
+disp(sprintf('tone sig corr ~ 0: h = %d, p = %.4f', h, p))
+% hc sig corr > 0
+[h,p] = ttest(hc_sig_corr_all);
+disp(sprintf('hc sig corr ~ 0: h = %d, p = %.4f', h, p))
+% tone noise corr > 0
+[h,p] = ttest(tone_noise_corr_all);
+disp(sprintf('tone noise corr ~ 0: h = %d, p = %.4f', h, p))
+% hc noise corr > 0
+[h,p] = ttest(hc_noise_corr_all);
+disp(sprintf('hc noise corr ~ 0: h = %d, p = %.4f', h, p))
+% ttest 2 btn tone sig corr and hc sig corr
+[h,p] = ttest2(tone_sig_corr_all, hc_sig_corr_all);
+disp(sprintf('tone sig corr ~ hc sig corr: h = %d, p = %.4f', h, p))
+% ttest 2 btn tone noise corr and hc noise corr
+[h,p] = ttest2(tone_noise_corr_all, hc_noise_corr_all);
+disp(sprintf('tone noise corr ~ hc noise corr: h = %d, p = %.4f', h, p))

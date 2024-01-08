@@ -83,6 +83,11 @@ hc_noise_corr_all = cell2mat(db(2:end,7));
 avg_sig_corr = (tone_sig_corr_all + hc_sig_corr_all)/2;
 hc_minus_t_noise_corr = hc_noise_corr_all - tone_noise_corr_all;
 
+% remove nan from avg_sig_corr 
+avg_sig_corr = avg_sig_corr(~isnan(avg_sig_corr));
+hc_minus_t_noise_corr = hc_minus_t_noise_corr(~isnan(hc_minus_t_noise_corr));
+
+
 % plot histogram of above 2
 figure
 subplot(1,2,1)

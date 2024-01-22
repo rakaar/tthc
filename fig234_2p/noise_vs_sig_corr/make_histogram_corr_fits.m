@@ -1,4 +1,32 @@
 rms_match_db_with_sig_bf = load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/SOM/rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
+
+% GENDER
+animal_gender = 'F'; % M for Male, F for Female, all for both
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(rms_match_db_with_sig_bf,1)
+        animal_name = rms_match_db_with_sig_bf{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+
+    % remove rejected gender
+    rms_match_db_with_sig_bf(removal_indices,:) = [];
+
+end % if
+
+disp(['Gender is ' animal_gender])
+
 locations_map = containers.Map;
 combiner = '***';
 for u = 1:size(rms_match_db_with_sig_bf,1)
@@ -121,6 +149,15 @@ ylabel('hc minus t noise corr')
 title(sprintf('r = %.2f, p = %.2f', r, p))
 
 close all
+
+
+% disp mean value of tone correlation
+disp(sprintf('tone sig corr mean = %.4f', mean(tone_sig_corr_all)))
+disp(sprintf('tone noise corr mean = %.4f', mean(tone_noise_corr_all)))
+disp(sprintf('hc sig corr mean = %.4f', mean(hc_sig_corr_all)))
+disp(sprintf('hc noise corr mean = %.4f', mean(hc_noise_corr_all)))
+
+return 
 % are each of the distr sig > 0
 [h,p] = ttest(avg_sig_corr);
 disp(sprintf('avg sig corr ~ 0: h = %d, p = %.4f', h, p))

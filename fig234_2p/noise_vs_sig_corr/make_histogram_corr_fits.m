@@ -1,7 +1,7 @@
 rms_match_db_with_sig_bf = load('/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/SOM/rms_match_db_with_sig_bf.mat').rms_match_db_with_sig_bf;
 
 % GENDER
-animal_gender = 'F'; % M for Male, F for Female, all for both
+animal_gender = ''; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -93,6 +93,7 @@ end
 
 save('all_corr_vals', 'all_corr_vals')
 
+return
 clear;
 
 db = load('all_corr_vals.mat').all_corr_vals;

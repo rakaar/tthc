@@ -236,7 +236,7 @@ for u=1:size(stage3_db,1)
     end % au
 end % u
 
-
+return % TEMP, no add
 % tests
 type_strs = {'HE', 'HS', 'NE', 'NS'};
 
@@ -340,3 +340,23 @@ su = both_gender_data(:,2);
 ne = both_gender_data(:,3);
 
 [h,p] = chi_sq_test_of_ind([en(4:20)'; ne(4:20)'])
+
+for t = 1:4
+    disp([' type = ' type_strs{t}])
+    total_data = sum(squeeze(num_cases_base_re_bf(:,:,t)),1);
+    percent = 100*total_data./sum(total_data);
+    disp(percent)
+end    
+
+return
+total = sum(num_cases_base_re_bf(:));
+en_cases = sum(num_cases_base_re_bf(:,:,1), 'all');
+su_cases = sum(num_cases_base_re_bf(:,:,2), 'all');
+ne_cases = sum(num_cases_base_re_bf(:,:,3), 'all');
+ns_cases = sum(num_cases_base_re_bf(:,:,4), 'all');
+
+disp(['Total = ' num2str(total)])
+disp(['Enh = ' num2str(en_cases) ' ' num2str(100*en_cases/total)])
+disp(['Sup = ' num2str(su_cases) ' ' num2str(100*su_cases/total)])
+disp(['NE = ' num2str(ne_cases) ' ' num2str(100*ne_cases/total)])
+disp(['NS = ' num2str(ns_cases) ' ' num2str(100*ns_cases/total)])

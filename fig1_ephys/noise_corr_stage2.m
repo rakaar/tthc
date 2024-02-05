@@ -1,6 +1,43 @@
 tone_db = load('tone_noise_corr_db.mat').tone_noise_corr_db;
 hc_db = load('hc_noise_corr_db.mat').hc_noise_corr_db;
 
+
+animal_gender = 'F';
+if strcmp(animal_gender, 'M')
+    rejected_gender = 'F';
+elseif strcmp(animal_gender, 'F')
+    rejected_gender = 'M';
+else
+    rejected_gender = nan;
+end
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(tone_db,1)
+        animal_name = tone_db{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+end
+
+tone_db(removal_indices,:) = [];
+
+
+% same for harmonic
+if ~isnan(rejected_gender)
+    removal_indices = [];
+    for u = 1:size(hc_db,1)
+        animal_name = hc_db{u,1};
+        % if animal name includes _{rejected_gender} add it to removal index
+        if contains(animal_name, strcat('_',rejected_gender))
+            removal_indices = [removal_indices; u];
+        end
+    end % u
+end
+
+hc_db(removal_indices,:) = [];
+
 % for tone 
 str = 't';
 if strcmp(str,'t')
@@ -123,3 +160,11 @@ function non_diag = get_non_diag(corr_matrix)
         end
     end
 end
+
+% all_hc_nc = [];
+% for u = 1:size(hc_noise, 1)
+%     all_hc_nc = [all_hc_nc hc_noise{u,1}];
+
+% end
+
+% nanmean(all_hc_nc)

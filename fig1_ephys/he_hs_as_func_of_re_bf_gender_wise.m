@@ -88,6 +88,7 @@ for gender_no = 1:2
 
 end % gender_no
 
+return
 
 % tests
 type_strs = {'HE', 'HS', 'NE', 'NS'};

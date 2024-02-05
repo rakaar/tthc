@@ -79,7 +79,12 @@ for b = 1:n_boots
 
     % bf_bf0 = bf_bf0(1:5, 1:5);
 
-    original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0)) ) / mean(diag(bf_bf0));
+    % original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0)) ) / mean(diag(bf_bf0));
+    bf_bf0 = bf_bf0(1:4, 1:4);
+    % original_ratio_mean(b) = ( sum(diag(bf_bf0,-1))  - sum(diag(bf_bf0, -2)) ) / sum(diag(bf_bf0));
+    original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0, -2)) ) / mean(diag(bf_bf0));
+
+
 end % b
 
 female_original_ratio = original_ratio_mean;
@@ -157,7 +162,12 @@ for b = 1:n_boots
     % original_ratio_mean(b) = mean(all_ratios); 
     % original_ratio_mean(b) = (sum(off2_sum) - sum(off1_sum))/sum(off0_sum);
     % bf_bf0 = bf_bf0(1:5, 1:5);
-    original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0)) ) / mean(diag(bf_bf0));
+    % original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0)) ) / mean(diag(bf_bf0));
+    % original_ratio_mean(b) = ( sum(diag(bf_bf0,-1))  - sum(diag(bf_bf0, -2)) ) / sum(diag(bf_bf0));
+    bf_bf0 = bf_bf0(1:4, 1:4);
+    % original_ratio_mean(b) = ( sum(diag(bf_bf0,-1))  - sum(diag(bf_bf0, -2)) ) / sum(diag(bf_bf0));
+    original_ratio_mean(b) = ( mean(diag(bf_bf0,-1))  - mean(diag(bf_bf0, -2)) ) / mean(diag(bf_bf0));
+
 end % b
 
 male_original_ratio = original_ratio_mean;

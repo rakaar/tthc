@@ -25,6 +25,10 @@ female_all_corr_vals(remove_male,:) = [];
 male_hc_noise_corr_all = cell2mat(male_all_corr_vals(2:end,5));
 female_hc_noise_corr_all = cell2mat(female_all_corr_vals(2:end, 5));
 
+disp(['Male mean of Tone noise corr ' num2str(nanmean(male_hc_noise_corr_all)) ] )
+disp(['Female mean of Tone noise corr ' num2str(nanmean(female_hc_noise_corr_all))])
+
+return
 % t-test between the above 2
 [h, p] = ttest2(male_hc_noise_corr_all, female_hc_noise_corr_all);
 

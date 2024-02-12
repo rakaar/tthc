@@ -16,7 +16,7 @@ n_octaves_apart = length(octaves_apart);
 
 num_cases_base_re_bf = zeros(2, n_octaves_apart,4); % base how far from BF
 % 2 - M,F 3 - octaves apart, 4 - HE, HS, NE, NS
-bf_index = 12; % 12 for BF, 13 for BF0
+bf_index = 13; % 12 for BF, 13 for BF0
 
 for gender_no = 1:2
     rms_match_db = load('rms_match_db.mat').rms_match_db;
@@ -88,10 +88,35 @@ for gender_no = 1:2
 
 end % gender_no
 
+
+% - SUPPLEMENTARY FIGURE 1
+type_strs = {'HE', 'HS', 'NE', 'NS'};
+
+if bf_index == 12
+    bf_str = 'BF';
+else
+    bf_str = 'BF0';
+end
+
+
+for i = 1:4
+    figure
+    both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    for j = 1:2
+        both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data, 'all');
+    end
+    bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Prop of cases')
+    title([type_strs{i} ])
+    legend('M', 'F')
+    saveas(gcf,['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/supplmentary_he_hs_ne_ns/su/' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_norm_by_total.fig'])
+end
+
 return
 
 % tests
-type_strs = {'HE', 'HS', 'NE', 'NS'};
+
 
 disp('Repeating numbers ks test')
 for cat = 1:4

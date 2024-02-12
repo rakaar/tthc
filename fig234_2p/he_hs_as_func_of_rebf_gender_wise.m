@@ -108,6 +108,20 @@ for n = 1:length(all_neuron_types)
             bf_str = 'BF0';
         end
 
+        for i = 1:4
+            figure
+            both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+            for j = 1:2
+                both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data, 'all');
+            end
+            bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+            xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+            ylabel('Prop of cases')
+            title([type_strs{i} ])
+            legend('M', 'F')
+            saveas(gcf,['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/supplmentary_he_hs_ne_ns/' all_neuron_types{n}, '/' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_norm_by_total.fig'])
+        end
+
         % save - gender_neuron_bf_str
         save([all_gender{gender_no} '_' all_neuron_types{n} '_' bf_str '_cats'], 'num_cases_base_re_bf')
         disp([all_gender{gender_no} '_' all_neuron_types{n} '_' bf_str '_cats'])
@@ -198,10 +212,12 @@ for n = 1:length(all_neuron_types)
                 disp(['h = ' num2str(h) ' p = ' num2str(p) ' for ' type_strs{i}])
             end
             % TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP %
-            % close all;
+            close all;
         
     end
 end % n
+
+return
 
 all_neuron_types = {'PV', 'SOM', 'Thy'};
 for n = 1:3

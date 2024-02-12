@@ -110,10 +110,10 @@ for n = 1:length(all_neuron_types)
 
         for i = 1:4
             figure
-            both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
-            for j = 1:2
-                both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data, 'all');
-            end
+            % both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+            
+            both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
+            
             bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
             xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
             ylabel('Prop of cases')
@@ -173,6 +173,7 @@ for n = 1:length(all_neuron_types)
                 ylabel('Prop of cases')
                 title([type_strs{i} ' ' neuron_type])
                 legend('M', 'F')
+       
                 % saveas(gcf,[figs_path, 'fig', neuron_type, '_sept13/'  'neuron_'  neuron_type, '_base_'  bf_str '_case_' type_strs{i} '_he_hs_as_func_of_re_bf_histogram.fig'])
         
             end

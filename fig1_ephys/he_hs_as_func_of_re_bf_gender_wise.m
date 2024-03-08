@@ -1,5 +1,5 @@
 % Number of cases of HE, HS as a func of re BF
-clear;clc;close all;
+clear;close all;
 
 % remove non-20 dB from all rms values
 % removal_indices = [];
@@ -16,7 +16,7 @@ n_octaves_apart = length(octaves_apart);
 
 num_cases_base_re_bf = zeros(2, n_octaves_apart,4); % base how far from BF
 % 2 - M,F 3 - octaves apart, 4 - HE, HS, NE, NS
-bf_index = 12; % 12 for BF, 13 for BF0
+bf_index = 13; % 12 for BF, 13 for BF0
 
 for gender_no = 1:2
     rms_match_db = load('rms_match_db.mat').rms_match_db;
@@ -98,19 +98,35 @@ else
     bf_str = 'BF0';
 end
 
+% bar(-3:0.5:3, sum(sum(num_cases_base_re_bf(:,:,:), 1),3))
 
+
+    % return
 for i = 1:4
+    disp(['i= ' num2str(i)])
     figure
     % both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
     % for j = 1:2
     %     both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data, 'all');
     % end
-    both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
-    bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    both_m_f_each_cat_data = zeros(13,1);
+    for r = 1:13
+        mf_sum = sum(num_cases_base_re_bf(:,r,i));
+        if sum(num_cases_base_re_bf(:,r,:), 'all') >= 50
+            both_m_f_each_cat_data(r) = mf_sum/sum(num_cases_base_re_bf(:,r,:), 'all');
+        else
+            disp(['Not enuf ' num2str(r)])
+            both_m_f_each_cat_data(r) = nan;
+        end
+        
+    end
+    % both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
+    % bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    bar(-2:0.5:2, both_m_f_each_cat_data(3:11))
     xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
     ylabel('Prop of cases')
     title([type_strs{i} ])
-    legend('M', 'F')
+    % legend('M', 'F')
     saveas(gcf,['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/supplmentary_he_hs_ne_ns/su/' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_norm_by_total.fig'])
 end
 

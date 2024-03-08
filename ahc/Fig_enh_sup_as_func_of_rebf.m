@@ -5,7 +5,7 @@ load('stage3_db.mat')
 load('stage1_db.mat')
 load('f13.mat')
 
-figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/';
+figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/figNonHC/supp/';
 
 situation = 'all';
 % situation = 'low_bf';
@@ -236,9 +236,70 @@ for u=1:size(stage3_db,1)
     end % au
 end % u
 
-return % TEMP, no add
+
 % tests
 type_strs = {'HE', 'HS', 'NE', 'NS'};
+
+% plot
+if bf_index == 9
+    bf_str = 'BF';
+else
+    bf_str = 'BF0';
+end
+
+% both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
+
+
+
+% ---
+for i = 1:4
+    disp(['i= ' num2str(i)])
+    figure
+    % both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    % for j = 1:2
+    %     both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data, 'all');
+    % end
+    both_m_f_each_cat_data = zeros(25,1);
+    for r = 1:25
+        mf_sum = sum(num_cases_base_re_bf(:,r,i));
+        if sum(num_cases_base_re_bf(:,r,:), 'all') >= 10
+            both_m_f_each_cat_data(r) = mf_sum/sum(num_cases_base_re_bf(:,r,:), 'all');
+        else
+            disp(['Not enuf ' num2str(r)])
+            both_m_f_each_cat_data(r) = nan;
+        end
+        
+    end
+    % both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
+    % bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    bar(-2:0.25:2, both_m_f_each_cat_data(5:21))
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Prop of cases')
+    title([type_strs{i} ])
+    % legend('M', 'F')
+    saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_histogram.fig'])
+
+end
+
+% ----
+
+return
+for i = 1:4
+    figure
+    % both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+    % for j = 1:2
+    %     both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data(:,j));
+    % end
+    both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
+    bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+    xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+    ylabel('Prop of cases')
+    title([type_strs{i} ])
+    legend('M', 'F')
+    saveas(gcf,[figs_path bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_histogram.fig'])
+end
+
+return 
 
 for cat = 1:4
     male_data = num_cases_base_re_bf(1,:,cat);
@@ -258,14 +319,6 @@ for cat = 1:4
 end % cat
 
 
-return
-% ---- Return to stop plotting ---- 
-% plot
-if bf_index == 9
-    bf_str = 'BF';
-else
-    bf_str = 'BF0';
-end
 
 
 for i = 1:4

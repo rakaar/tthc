@@ -109,6 +109,34 @@ for n = 1:length(all_neuron_types)
         end
 
         for i = 1:4
+            disp(['i= ' num2str(i)])
+            figure
+            % both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
+            % for j = 1:2
+            %     both_m_f_each_cat_data(:,j) = both_m_f_each_cat_data(:,j)./sum(both_m_f_each_cat_data, 'all');
+            % end
+            both_m_f_each_cat_data = zeros(13,1);
+            for r = 1:13
+                mf_sum = sum(num_cases_base_re_bf(:,r,i));
+                if sum(num_cases_base_re_bf(:,r,:), 'all') >= 50
+                    both_m_f_each_cat_data(r) = mf_sum/sum(num_cases_base_re_bf(:,r,:), 'all');
+                else
+                    disp(['Not enuf ' num2str(r)])
+                    both_m_f_each_cat_data(r) = nan;
+                end
+                
+            end
+            % both_m_f_each_cat_data = (num_cases_base_re_bf(1:2, :, i)./sum(num_cases_base_re_bf(:, :, i), 'all'))';
+            % bar(octaves_apart, both_m_f_each_cat_data, 'grouped')
+            bar(-2:0.5:2, both_m_f_each_cat_data(3:11))
+            xlabel(['Base octaves apart from BF/BF0 - scale ' bf_str])
+            ylabel('Prop of cases')
+            title([type_strs{i} ])
+            % legend('M', 'F')
+            saveas(gcf,['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/supplmentary_he_hs_ne_ns/' all_neuron_types{n}, '/' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_norm_by_total.fig'])
+        end
+        continue
+        for i = 1:4
             figure
             % both_m_f_each_cat_data = squeeze(num_cases_base_re_bf(:,:,i))';
             

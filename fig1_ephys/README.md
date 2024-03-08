@@ -1,3 +1,23 @@
+# Figures
+- BF, BF0 plots: `bfs_gender_wise`
+- HE, HS, NE, NS plots: `he_hs_as_func_of_re_bf_gender_wise`
+
+# rms_match_db - Database - Column descriptions
+1. Animal name(Male name contain '_M', female '_F') `contains(animal_name, '_M') for male`
+2. location of electrode
+3. Channel Number. Type string
+4. Tone stim attenuation(dB SPL)
+5. HC stim attenuation(dB SPL)
+6. TONE Stimuli: 7 x 1 cell.  7 - for 7 freq stimulus. Each cell is 5 x 2500. 5 iters and 2500 ms bins. 1/0 - spike or not
+7. Same as above, but for HC stimuli
+8. TONE stimuli: 7 x 1 vec. 1 - response signigicantly > spont. 0- Not
+9. Same as above, but for HC stimuli
+10. Tone stimulus: 7 x 1 vector. Mean response for a each stimulus. In spikes/ms
+11. Same as above for HC stimulus
+12. Best Frequency(BF). -1 indicates no BF, as sig response to No Tone stim
+13. Best fundamental Frequency(BF0). -1 indicates no BF0, as sig responses to No HC
+
+
 ## New files
 - fig1_ephys\see_raster_for_he_hs.m - example figure of raster for HE, HS
 - bfs_20.m - in 20 dB only, bf figures

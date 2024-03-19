@@ -4,8 +4,8 @@ disp('Running 2p figures/bf_plots_gender_wise')
 data_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC Data/';
 figs_path = '/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/';
 
-all_neuron_types = {'Thy'};
-% all_neuron_types = {'PV', 'SOM', 'Thy'};
+% all_neuron_types = {'PV'};
+all_neuron_types = {'PV', 'SOM', 'Thy'};
 all_animal_gender = {'M', 'F', 'all'};
 % all_animal_gender = {'all'};
 
@@ -170,7 +170,7 @@ figure
 
 
     % TEMP
-    close all;
+    
     
 % --- TEMP -----------
 % close all;

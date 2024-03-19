@@ -101,7 +101,7 @@ end
 % bar(-3:0.5:3, sum(sum(num_cases_base_re_bf(:,:,:), 1),3))
 
 
-    % return
+    
 for i = 1:4
     disp(['i= ' num2str(i)])
     figure
@@ -130,7 +130,7 @@ for i = 1:4
     saveas(gcf,['/media/rka/Elements/RK_E_folder_TTHC_backup/RK TTHC figs eps/supplmentary_he_hs_ne_ns/su/' bf_str '_' type_strs{i}  '_he_hs_as_func_of_re_bf_norm_by_total.fig'])
 end
 
-return
+
 
 % tests
 

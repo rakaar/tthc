@@ -1,3 +1,6 @@
+# Figure
+- `Fig_enh_sup_as_func_of_rebf.m` - enh sup
+- 
 ## Database making
 1. make_db_stage1.m 
 2. make_db_stage2.m

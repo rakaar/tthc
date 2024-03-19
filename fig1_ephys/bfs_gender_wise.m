@@ -4,7 +4,7 @@ rms_match_db = load('rms_match_db.mat').rms_match_db;
 
 
 % decide only male or female
-animal_gender = 'all'; % M for Male, F for Female, all for both
+animal_gender = 'F'; % M for Male, F for Female, all for both
 if strcmp(animal_gender, 'M')
     rejected_gender = 'F';
 elseif strcmp(animal_gender, 'F')
@@ -12,7 +12,7 @@ elseif strcmp(animal_gender, 'F')
 else
     rejected_gender = nan;
 end
-if ~isnan(rejected_gender)sorry
+if ~isnan(rejected_gender)
     removal_indices = [];
     for u = 1:size(rms_match_db,1)
         animal_name = rms_match_db{u,1};

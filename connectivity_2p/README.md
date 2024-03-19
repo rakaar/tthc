@@ -1,3 +1,7 @@
+# Figures
+- `FIG_corr_vs_dist_T.m` - Noise corr vs dist for T
+- `FIG_corr_vs_dist_HC` - Noise corr vs dist for HC
+
 - analyse_re_bf_dist_conn_boots.m - analyse the file mentioned below
 - re_bf_dist_conn_boots.m - bootstrap and get rebf vs dist matrices
 - pca_of_pv_som_in_thy_basis
